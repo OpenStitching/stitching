@@ -1,5 +1,6 @@
 from collections import namedtuple
 import cv2 as cv
+import numpy as np
 
 from .blender import Blender
 from .stitching_error import StitchingError
@@ -52,7 +53,6 @@ class Cropper:
     def prepare(self, imgs, masks, corners, sizes):
         if self.do_crop:
             mask = self.estimate_panorama_mask(imgs, masks, corners, sizes)
-            self.compile_numba_functionality()
             lir = self.estimate_largest_interior_rectangle(mask)
             corners = self.get_zero_center_corners(corners)
             rectangles = self.get_rectangles(corners, sizes)
@@ -88,18 +88,18 @@ class Cropper:
         _, mask = Blender.create_panorama(imgs, masks, corners, sizes)
         return mask
 
-    def compile_numba_functionality(self):
-        # numba functionality is only imported if cropping
-        # is explicitely desired
-        try:
-            import numba
-        except ModuleNotFoundError:
-            raise StitchingError("Numba is needed for cropping but not installed")
-        from .largest_interior_rectangle import largest_interior_rectangle
-        self.largest_interior_rectangle = largest_interior_rectangle
-
     def estimate_largest_interior_rectangle(self, mask):
-        lir = self.largest_interior_rectangle(mask)
+        # largestinteriorrectangle is only imported if cropping
+        # is explicitely desired (needs some time to compile at the first run!)
+        import largestinteriorrectangle
+
+        contours, hierarchy = \
+            cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+        if not hierarchy.shape == (1, 1, 4) or not np.all(hierarchy == -1):
+            raise StitchingError("Invalid Contour. Try without cropping.")
+        contour = contours[0][:, 0, :]
+
+        lir = largestinteriorrectangle.lir(mask > 0, contour)
         lir = Rectangle(*lir)
         return lir
 
