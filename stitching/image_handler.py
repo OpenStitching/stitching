@@ -45,8 +45,8 @@ class ImageHandler:
         for img, size in self.input_images():
             yield self.resize_img_by_scaler(scaler, size, img)
 
-    def resize_imgs_by_scaler(self, medium_imgs, scaler):
-        for img, size in zip(medium_imgs, self.img_sizes):
+    def resize_imgs_by_scaler(self, imgs, scaler):
+        for img, size in zip(imgs, self.img_sizes):
             yield self.resize_img_by_scaler(scaler, size, img)
 
     @staticmethod
