@@ -15,7 +15,7 @@ class TestStitcher(unittest.TestCase):
         os.chdir(os.path.join(TEST_DIR, "testdata"))
 
     def test_stitcher_aquaduct(self):
-        stitcher = Stitcher(nfeatures=250)
+        stitcher = Stitcher(nfeatures=250, crop=False)
         result = stitcher.stitch(["s1.jpg", "s2.jpg"])
         cv.imwrite("result.jpg", result)
 
@@ -30,7 +30,8 @@ class TestStitcher(unittest.TestCase):
                     "wave_correct_kind": "no",
                     "finder": "dp_colorgrad",
                     "compensator": "no",
-                    "confidence_threshold": 0.3}
+                    "confidence_threshold": 0.3,
+                    "crop": False}
 
         stitcher = Stitcher(**settings)
         result = stitcher.stitch(["boat5.jpg", "boat2.jpg",
@@ -49,7 +50,8 @@ class TestStitcher(unittest.TestCase):
         settings = {"warper_type": "compressedPlaneA2B1",
                     "finder": "dp_colorgrad",
                     "compensator": "channel_blocks",
-                    "confidence_threshold": 0.3}
+                    "confidence_threshold": 0.3,
+                    "crop": False}
 
         stitcher = Stitcher(**settings)
         result = stitcher.stitch(["boat5.jpg", "boat2.jpg",
@@ -64,7 +66,7 @@ class TestStitcher(unittest.TestCase):
                                    atol=max_image_shape_derivation)
 
     def test_stitcher_boat_aquaduct_subset(self):
-        settings = {"final_megapix": 1, "crop": True}
+        settings = {"final_megapix": 1}
 
         stitcher = Stitcher(**settings)
         result = stitcher.stitch(["boat5.jpg",
@@ -85,7 +87,8 @@ class TestStitcher(unittest.TestCase):
                     "adjuster": "affine",
                     "warper_type": "affine",
                     "wave_correct_kind": "no",
-                    "confidence_threshold": 0.3}
+                    "confidence_threshold": 0.3,
+                    "crop": False}
 
         stitcher = Stitcher(**settings)
         result = stitcher.stitch(["budapest1.jpg", "budapest2.jpg",

@@ -22,7 +22,7 @@ class TestStitcher(unittest.TestCase):
         start = time.time()
         tracemalloc.start()
 
-        stitcher = Stitcher(final_megapix=3)
+        stitcher = Stitcher(final_megapix=3, crop=False)
         stitcher.stitch(["boat5.jpg", "boat2.jpg",
                          "boat3.jpg", "boat4.jpg",
                          "boat1.jpg", "boat6.jpg"])

@@ -20,7 +20,7 @@ class TestImageComposition(unittest.TestCase):
         img = increase_brightness(img, value=25)
         cv.imwrite("s1_bright.jpg", img)
 
-        stitcher = Stitcher(compensator="no", blender_type="no")
+        stitcher = Stitcher(compensator="no", blender_type="no", crop=False)
         result = stitcher.stitch(["s1_bright.jpg", "s2.jpg"])
 
         cv.imwrite("without_exposure_comp.jpg", result)
@@ -31,7 +31,7 @@ class TestImageComposition(unittest.TestCase):
         cv.imwrite("with_exposure_comp.jpg", result)
 
     def test_timelapse(self):
-        stitcher = Stitcher(timelapse='as_is')
+        stitcher = Stitcher(timelapse='as_is', crop=False)
         _ = stitcher.stitch(["s1.jpg", "s2.jpg"])
         frame1 = cv.imread("fixed_s1.jpg")
 
