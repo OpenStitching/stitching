@@ -8,6 +8,8 @@ from .stitching_error import StitchingError
 
 
 class Subsetter:
+    """https://docs.opencv.org/4.x/d7/d74/group__stitching__rotation.html#ga855d2fccbcfc3b3477b34d415be5e786 and
+    https://docs.opencv.org/4.x/d7/d74/group__stitching__rotation.html#gabaeb9dab170ea8066ae2583bf3a669e9"""  # noqa
 
     DEFAULT_CONFIDENCE_THRESHOLD = 1
     DEFAULT_MATCHES_GRAPH_DOT_FILE = None

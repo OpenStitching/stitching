@@ -7,6 +7,7 @@ from .blender import Blender
 
 class SeamFinder:
     """https://docs.opencv.org/4.x/d7/d09/classcv_1_1detail_1_1SeamFinder.html"""  # noqa
+
     SEAM_FINDER_CHOICES = OrderedDict()
     SEAM_FINDER_CHOICES['dp_color'] = cv.detail_DpSeamFinder('COLOR')
     SEAM_FINDER_CHOICES['dp_colorgrad'] = cv.detail_DpSeamFinder('COLOR_GRAD')

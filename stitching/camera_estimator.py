@@ -6,6 +6,7 @@ from .stitching_error import StitchingError
 
 
 class CameraEstimator:
+    """https://docs.opencv.org/4.x/df/d15/classcv_1_1detail_1_1Estimator.html"""  # noqa
 
     CAMERA_ESTIMATOR_CHOICES = OrderedDict()
     CAMERA_ESTIMATOR_CHOICES['homography'] = cv.detail_HomographyBasedEstimator

@@ -3,6 +3,8 @@ import cv2 as cv
 
 
 class FeatureDetector:
+    """https://docs.opencv.org/4.x/d0/d13/classcv_1_1Feature2D.html"""
+
     DETECTOR_CHOICES = OrderedDict()
     try:
         cv.xfeatures2d_SURF.create()  # check if the function can be called

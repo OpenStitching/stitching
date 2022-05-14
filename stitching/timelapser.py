@@ -4,6 +4,7 @@ import numpy as np
 
 
 class Timelapser:
+    """https://docs.opencv.org/4.x/dd/dac/classcv_1_1detail_1_1Timelapser.html"""  # noqa
 
     TIMELAPSE_CHOICES = ('no', 'as_is', 'crop',)
     DEFAULT_TIMELAPSE = 'no'

@@ -5,6 +5,7 @@ import numpy as np
 
 
 class Warper:
+    """https://docs.opencv.org/4.x/da/db8/classcv_1_1detail_1_1RotationWarper.html"""  # noqa
 
     WARP_TYPE_CHOICES = ('spherical', 'plane', 'affine', 'cylindrical',
                          'fisheye', 'stereographic', 'compressedPlaneA2B1',

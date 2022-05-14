@@ -4,6 +4,7 @@ import numpy as np
 
 
 class FeatureMatcher:
+    """https://docs.opencv.org/4.x/da/d87/classcv_1_1detail_1_1FeaturesMatcher.html"""  # noqa
 
     MATCHER_CHOICES = ('homography', 'affine')
     DEFAULT_MATCHER = 'homography'

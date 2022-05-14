@@ -3,6 +3,7 @@ import cv2 as cv
 
 
 class ExposureErrorCompensator:
+    """https://docs.opencv.org/4.x/d2/d37/classcv_1_1detail_1_1ExposureCompensator.html"""  # noqa
 
     COMPENSATOR_CHOICES = OrderedDict()
     COMPENSATOR_CHOICES['gain_blocks'] = cv.detail.ExposureCompensator_GAIN_BLOCKS  # noqa
