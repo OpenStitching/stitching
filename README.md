@@ -24,12 +24,12 @@ panorama = stitcher.stitch(["img1.jpg", "img2.jpg", "img3.jpg"])
 
 ```
 
-or using the [command line tool](https://github.com/lukasalexanderweber/stitching/blob/pip_package/stitching.py)
+or using the [command line tool](https://github.com/lukasalexanderweber/stitching/blob/main/stitching_tool.py)
 
 
 ```
-python stitching.py -h
-python stitching.py img1.jpg img2.jpg img3.jpg
+python stitching_tool.py -h
+python stitching_tool.py img1.jpg img2.jpg img3.jpg
 ```
 
 ## Tutorial
