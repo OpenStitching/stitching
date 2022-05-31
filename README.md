@@ -56,13 +56,13 @@ Please make sure to update tests as appropriate.
 Run tests using
 
 ```bash
-pipenv run python -m unittest
+pipenv run unittest
 ```
 
 Build with
 
 ```bash
-pipenv run python -m build
+pipenv run build
 ```
 
 ## License

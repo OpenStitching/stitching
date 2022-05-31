@@ -19,3 +19,7 @@ factory-boy = "*"
 
 [requires]
 python_version = "3.10"
+
+[scripts]
+unittest = "python -m unittest"
+build = "python -m build"
