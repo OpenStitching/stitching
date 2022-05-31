@@ -5,7 +5,8 @@ name = "pypi"
 
 [packages]
 opencv-python = ">=4.0.1"
-
+build = "==0.8.0"
+ 
 [dev-packages]
 black = "*"
 flake8 = "*"
