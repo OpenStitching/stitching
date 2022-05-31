@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+opencv-python = ">=4.0.1"
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+isort = "*"
+mypy = "*"
+pre-commit = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+factory-boy = "*"
+
+[requires]
+python_version = "3.10"
