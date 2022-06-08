@@ -1,0 +1,3 @@
+opencv-python>=4.0.1
+largestinteriorrectangle
+pre-commit
