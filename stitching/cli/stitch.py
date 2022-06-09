@@ -22,9 +22,7 @@ from stitching.subsetter import Subsetter
 from stitching.timelapser import Timelapser
 from stitching.warper import Warper
 
-parser = argparse.ArgumentParser(
-    prog="stitching.py", description="Rotation model image stitcher"
-)
+parser = argparse.ArgumentParser(prog="stitch.py")
 parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
 parser.add_argument(
     "--medium_megapix",
@@ -263,7 +261,8 @@ parser.add_argument(
 
 __doc__ += "\n" + parser.format_help()
 
-if __name__ == "__main__":
+
+def main():
     args = parser.parse_args()
     args_dict = vars(args)
 
@@ -283,3 +282,7 @@ if __name__ == "__main__":
     cv.imshow(output, preview)
     cv.waitKey()
     cv.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    main()
