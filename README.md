@@ -30,12 +30,11 @@ panorama = stitcher.stitch(["img1.jpg", "img2.jpg", "img3.jpg"])
 
 ```
 
-or using the [command line
-tool](https://github.com/lukasalexanderweber/stitching/blob/main/stitching_tool.py)
+or using the command line interface ([cli](https://github.com/lukasalexanderweber/stitching/tree/main/stitching/cli/stitch.py)) which is available after installation
 
 ```bash
-python stitching_tool.py -h
-python stitching_tool.py img1.jpg img2.jpg img3.jpg
+stitch -h
+stitch img1.jpg img2.jpg img3.jpg
 ```
 
 ## Tutorial
