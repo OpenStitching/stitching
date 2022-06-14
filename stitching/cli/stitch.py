@@ -5,7 +5,8 @@ Command line tool for the stitching package
 import argparse
 
 import cv2 as cv
-import numpy as np
+import numpy as 
+import glob
 
 from stitching import Stitcher
 from stitching.blender import Blender
@@ -23,7 +24,14 @@ from stitching.timelapser import Timelapser
 from stitching.warper import Warper
 
 parser = argparse.ArgumentParser(prog="stitch.py")
-parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
+# parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
+
+# Add argument for directory to folder containing images
+parser.add_argument(
+    '--folder_dir', nargs='+',
+    help="Directory to folder of images.", type=str
+)
+
 parser.add_argument(
     "--medium_megapix",
     action="store",
@@ -251,7 +259,26 @@ def main():
     args_dict = vars(args)
 
     # Extract In- and Output
-    img_names = args_dict.pop("img_names")
+    
+    ##### 
+    # Add directory to folder containing images
+    folder_dir = args_dict.pop('folder_dir')
+    
+    image_paths = folder_dir[0]
+    print("Folder directory: ", image_paths)
+    extensions = ("*.png","*.jpg","*.jpeg")
+    list = []
+    for extension in extensions:
+        list.extend(glob.glob(image_paths+"/"+extension))
+
+    # Get all images
+    img_names = []
+    for image in list:
+        # img = cv2.imread(image)
+        img_names.append(image)
+    #####
+    
+    # img_names = args_dict.pop("img_names")
     img_names = [cv.samples.findFile(img_name) for img_name in img_names]
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
