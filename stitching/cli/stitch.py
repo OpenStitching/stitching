@@ -3,9 +3,10 @@ Command line tool for the stitching package
 """
 
 import argparse
+import glob
 
 import cv2 as cv
-import numpy as np
+import numpy as 
 
 from stitching import Stitcher
 from stitching.blender import Blender
@@ -24,6 +25,7 @@ from stitching.warper import Warper
 
 parser = argparse.ArgumentParser(prog="stitch.py")
 parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
+
 parser.add_argument(
     "--medium_megapix",
     action="store",
@@ -252,6 +254,8 @@ def main():
 
     # Extract In- and Output
     img_names = args_dict.pop("img_names")
+    if len(img_names) == 1:
+        img_names = glob.glob(img_names[0])
     img_names = [cv.samples.findFile(img_name) for img_name in img_names]
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
