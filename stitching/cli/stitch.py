@@ -256,7 +256,6 @@ def main():
     img_names = args_dict.pop("img_names")
     if len(img_names) == 1:
         img_names = glob.glob(img_names[0])
-    img_names = [cv.samples.findFile(img_name) for img_name in img_names]
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
 
