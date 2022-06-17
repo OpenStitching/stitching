@@ -6,7 +6,7 @@ import argparse
 import glob
 
 import cv2 as cv
-import numpy as 
+import numpy as np
 
 from stitching import Stitcher
 from stitching.blender import Blender
