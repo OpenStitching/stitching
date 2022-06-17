@@ -28,6 +28,8 @@ class ImageHandler:
         self.img_sizes = []
 
     def set_img_names(self, img_names):
+        if len(img_names) < 2:
+            raise StitchingError("2 or more Images needed for Stitching")
         self.img_names = img_names
 
     def resize_to_medium_resolution(self):
