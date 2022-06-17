@@ -258,6 +258,7 @@ def main():
         img_names = glob.glob(img_names[0])
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
+    print("stitching " + " ".join(img_names) + " into " + output)
 
     stitcher = Stitcher(**args_dict)
     panorama = stitcher.stitch(img_names)
