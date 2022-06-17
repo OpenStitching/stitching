@@ -259,26 +259,9 @@ def main():
     args_dict = vars(args)
 
     # Extract In- and Output
-    
-    ##### 
-    # Add directory to folder containing images
-    folder_dir = args_dict.pop('folder_dir')
-    
-    image_paths = folder_dir[0]
-    print("Folder directory: ", image_paths)
-    extensions = ("*.png","*.jpg","*.jpeg")
-    list = []
-    for extension in extensions:
-        list.extend(glob.glob(image_paths+"/"+extension))
-
-    # Get all images
-    img_names = []
-    for image in list:
-        # img = cv2.imread(image)
-        img_names.append(image)
-    #####
-    
-    # img_names = args_dict.pop("img_names")
+    img_names = args_dict.pop("img_names")
+    if len(img_names) == 1:
+        img_names = glob.glob(img_names[0])
     img_names = [cv.samples.findFile(img_name) for img_name in img_names]
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
