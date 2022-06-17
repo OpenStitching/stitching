@@ -24,13 +24,7 @@ from stitching.timelapser import Timelapser
 from stitching.warper import Warper
 
 parser = argparse.ArgumentParser(prog="stitch.py")
-# parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
-
-# Add argument for directory to folder containing images
-parser.add_argument(
-    '--folder_dir', nargs='+',
-    help="Directory to folder of images.", type=str
-)
+parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
 
 parser.add_argument(
     "--medium_megapix",
