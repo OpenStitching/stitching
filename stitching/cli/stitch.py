@@ -3,10 +3,10 @@ Command line tool for the stitching package
 """
 
 import argparse
+import glob
 
 import cv2 as cv
 import numpy as 
-import glob
 
 from stitching import Stitcher
 from stitching.blender import Blender
