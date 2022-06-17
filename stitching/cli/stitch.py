@@ -25,7 +25,12 @@ from stitching.warper import Warper
 
 parser = argparse.ArgumentParser(prog="stitch.py")
 parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
-
+parser.add_argument(
+    "--affine",
+    action="store_true",
+    help="Overwrites multiple parameters to optimize the stitching for "
+    "scans and images captured by specialized devices."
+)
 parser.add_argument(
     "--medium_megapix",
     action="store",
@@ -259,6 +264,17 @@ def main():
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
     print("stitching " + " ".join(img_names) + " into " + output)
+
+    # Set parameters for 'affine' mode
+    affine_mode = args_dict.pop("affine")
+    affine_settings = {"estimator": "affine",
+                       "wave_correct_kind": "no",
+                       "matcher_type": "affine",
+                       "adjuster": "affine",
+                       "warper_type": "affine",
+                       "compensator": "no"}
+    if affine_mode:
+        args_dict.update(affine_settings)
 
     stitcher = Stitcher(**args_dict)
     panorama = stitcher.stitch(img_names)
