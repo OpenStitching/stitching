@@ -1,5 +1,6 @@
-from itertools import chain
 import math
+from itertools import chain
+
 import cv2 as cv
 import numpy as np
 
@@ -14,9 +15,11 @@ class Subsetter:
     DEFAULT_CONFIDENCE_THRESHOLD = 1
     DEFAULT_MATCHES_GRAPH_DOT_FILE = None
 
-    def __init__(self,
-                 confidence_threshold=DEFAULT_CONFIDENCE_THRESHOLD,
-                 matches_graph_dot_file=DEFAULT_MATCHES_GRAPH_DOT_FILE):
+    def __init__(
+        self,
+        confidence_threshold=DEFAULT_CONFIDENCE_THRESHOLD,
+        matches_graph_dot_file=DEFAULT_MATCHES_GRAPH_DOT_FILE,
+    ):
         self.confidence_threshold = confidence_threshold
         self.save_file = matches_graph_dot_file
 
@@ -33,23 +36,21 @@ class Subsetter:
 
     def save_matches_graph_dot_file(self, img_names, pairwise_matches):
         if self.save_file:
-            with open(self.save_file, 'w') as filehandler:
-                filehandler.write(self.get_matches_graph(img_names,
-                                                         pairwise_matches)
-                                  )
+            with open(self.save_file, "w") as filehandler:
+                filehandler.write(self.get_matches_graph(img_names, pairwise_matches))
 
     def get_matches_graph(self, img_names, pairwise_matches):
-        return cv.detail.matchesGraphAsString(img_names, pairwise_matches,
-                                              self.confidence_threshold)
+        return cv.detail.matchesGraphAsString(
+            img_names, pairwise_matches, self.confidence_threshold
+        )
 
     def get_indices_to_keep(self, features, pairwise_matches):
-        indices = cv.detail.leaveBiggestComponent(features,
-                                                  pairwise_matches,
-                                                  self.confidence_threshold)
+        indices = cv.detail.leaveBiggestComponent(
+            features, pairwise_matches, self.confidence_threshold
+        )
 
         if len(indices) < 2:
-            raise StitchingError("No match exceeds the "
-                                 "given confidence theshold.")
+            raise StitchingError("No match exceeds the " "given confidence theshold.")
 
         return indices
 
@@ -60,13 +61,13 @@ class Subsetter:
     @staticmethod
     def subset_matches(pairwise_matches, indices):
         indices_to_delete = Subsetter.get_indices_to_delete(
-            math.sqrt(len(pairwise_matches)),
-            indices
-            )
+            math.sqrt(len(pairwise_matches)), indices
+        )
 
         matches_matrix = FeatureMatcher.get_matches_matrix(pairwise_matches)
-        matches_matrix_subset = Subsetter.subset_matrix(matches_matrix,
-                                                        indices_to_delete)
+        matches_matrix_subset = Subsetter.subset_matrix(
+            matches_matrix, indices_to_delete
+        )
         matches_subset = Subsetter.matrix_rows_to_list(matches_matrix_subset)
 
         return matches_subset
@@ -80,8 +81,8 @@ class Subsetter:
         for idx, idx_to_delete in enumerate(indices_to_delete):
             matrix_to_subset = Subsetter.delete_index_from_matrix(
                 matrix_to_subset,
-                idx_to_delete-idx  # matrix shape reduced by one at each step
-                )
+                idx_to_delete - idx,  # matrix shape reduced by one at each step
+            )
 
         return matrix_to_subset
 

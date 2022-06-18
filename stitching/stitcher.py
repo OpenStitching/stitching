@@ -1,47 +1,48 @@
 from types import SimpleNamespace
 
-from .image_handler import ImageHandler
-from .feature_detector import FeatureDetector
-from .feature_matcher import FeatureMatcher
-from .subsetter import Subsetter
-from .camera_estimator import CameraEstimator
+from .blender import Blender
 from .camera_adjuster import CameraAdjuster
+from .camera_estimator import CameraEstimator
 from .camera_wave_corrector import WaveCorrector
-from .warper import Warper
 from .cropper import Cropper
 from .exposure_error_compensator import ExposureErrorCompensator
+from .feature_detector import FeatureDetector
+from .feature_matcher import FeatureMatcher
+from .image_handler import ImageHandler
 from .seam_finder import SeamFinder
-from .blender import Blender
-from .timelapser import Timelapser
 from .stitching_error import StitchingError
+from .subsetter import Subsetter
+from .timelapser import Timelapser
+from .warper import Warper
 
 
 class Stitcher:
     DEFAULT_SETTINGS = {
-         "medium_megapix": ImageHandler.DEFAULT_MEDIUM_MEGAPIX,
-         "detector": FeatureDetector.DEFAULT_DETECTOR,
-         "nfeatures": 500,
-         "matcher_type": FeatureMatcher.DEFAULT_MATCHER,
-         "range_width": FeatureMatcher.DEFAULT_RANGE_WIDTH,
-         "try_use_gpu": False,
-         "match_conf": None,
-         "confidence_threshold": Subsetter.DEFAULT_CONFIDENCE_THRESHOLD,
-         "matches_graph_dot_file": Subsetter.DEFAULT_MATCHES_GRAPH_DOT_FILE,
-         "estimator": CameraEstimator.DEFAULT_CAMERA_ESTIMATOR,
-         "adjuster": CameraAdjuster.DEFAULT_CAMERA_ADJUSTER,
-         "refinement_mask": CameraAdjuster.DEFAULT_REFINEMENT_MASK,
-         "wave_correct_kind": WaveCorrector.DEFAULT_WAVE_CORRECTION,
-         "warper_type": Warper.DEFAULT_WARP_TYPE,
-         "low_megapix": ImageHandler.DEFAULT_LOW_MEGAPIX,
-         "crop": Cropper.DEFAULT_CROP,
-         "compensator": ExposureErrorCompensator.DEFAULT_COMPENSATOR,
-         "nr_feeds": ExposureErrorCompensator.DEFAULT_NR_FEEDS,
-         "block_size": ExposureErrorCompensator.DEFAULT_BLOCK_SIZE,
-         "finder": SeamFinder.DEFAULT_SEAM_FINDER,
-         "final_megapix": ImageHandler.DEFAULT_FINAL_MEGAPIX,
-         "blender_type": Blender.DEFAULT_BLENDER,
-         "blend_strength": Blender.DEFAULT_BLEND_STRENGTH,
-         "timelapse": Timelapser.DEFAULT_TIMELAPSE}
+        "medium_megapix": ImageHandler.DEFAULT_MEDIUM_MEGAPIX,
+        "detector": FeatureDetector.DEFAULT_DETECTOR,
+        "nfeatures": 500,
+        "matcher_type": FeatureMatcher.DEFAULT_MATCHER,
+        "range_width": FeatureMatcher.DEFAULT_RANGE_WIDTH,
+        "try_use_gpu": False,
+        "match_conf": None,
+        "confidence_threshold": Subsetter.DEFAULT_CONFIDENCE_THRESHOLD,
+        "matches_graph_dot_file": Subsetter.DEFAULT_MATCHES_GRAPH_DOT_FILE,
+        "estimator": CameraEstimator.DEFAULT_CAMERA_ESTIMATOR,
+        "adjuster": CameraAdjuster.DEFAULT_CAMERA_ADJUSTER,
+        "refinement_mask": CameraAdjuster.DEFAULT_REFINEMENT_MASK,
+        "wave_correct_kind": WaveCorrector.DEFAULT_WAVE_CORRECTION,
+        "warper_type": Warper.DEFAULT_WARP_TYPE,
+        "low_megapix": ImageHandler.DEFAULT_LOW_MEGAPIX,
+        "crop": Cropper.DEFAULT_CROP,
+        "compensator": ExposureErrorCompensator.DEFAULT_COMPENSATOR,
+        "nr_feeds": ExposureErrorCompensator.DEFAULT_NR_FEEDS,
+        "block_size": ExposureErrorCompensator.DEFAULT_BLOCK_SIZE,
+        "finder": SeamFinder.DEFAULT_SEAM_FINDER,
+        "final_megapix": ImageHandler.DEFAULT_FINAL_MEGAPIX,
+        "blender_type": Blender.DEFAULT_BLENDER,
+        "blend_strength": Blender.DEFAULT_BLEND_STRENGTH,
+        "timelapse": Timelapser.DEFAULT_TIMELAPSE,
+    }
 
     def __init__(self, **kwargs):
         self.initialize_stitcher(**kwargs)
@@ -52,27 +53,28 @@ class Stitcher:
         self.settings.update(kwargs)
 
         args = SimpleNamespace(**self.settings)
-        self.img_handler = ImageHandler(args.medium_megapix,
-                                        args.low_megapix,
-                                        args.final_megapix)
-        self.detector = \
-            FeatureDetector(args.detector, nfeatures=args.nfeatures)
-        match_conf = \
-            FeatureMatcher.get_match_conf(args.match_conf, args.detector)
-        self.matcher = FeatureMatcher(args.matcher_type, args.range_width,
-                                      try_use_gpu=args.try_use_gpu,
-                                      match_conf=match_conf)
-        self.subsetter = \
-            Subsetter(args.confidence_threshold, args.matches_graph_dot_file)
+        self.img_handler = ImageHandler(
+            args.medium_megapix, args.low_megapix, args.final_megapix
+        )
+        self.detector = FeatureDetector(args.detector, nfeatures=args.nfeatures)
+        match_conf = FeatureMatcher.get_match_conf(args.match_conf, args.detector)
+        self.matcher = FeatureMatcher(
+            args.matcher_type,
+            args.range_width,
+            try_use_gpu=args.try_use_gpu,
+            match_conf=match_conf,
+        )
+        self.subsetter = Subsetter(
+            args.confidence_threshold, args.matches_graph_dot_file
+        )
         self.camera_estimator = CameraEstimator(args.estimator)
-        self.camera_adjuster = \
-            CameraAdjuster(args.adjuster, args.refinement_mask)
+        self.camera_adjuster = CameraAdjuster(args.adjuster, args.refinement_mask)
         self.wave_corrector = WaveCorrector(args.wave_correct_kind)
         self.warper = Warper(args.warper_type)
         self.cropper = Cropper(args.crop)
-        self.compensator = \
-            ExposureErrorCompensator(args.compensator, args.nr_feeds,
-                                     args.block_size)
+        self.compensator = ExposureErrorCompensator(
+            args.compensator, args.nr_feeds, args.block_size
+        )
         self.seam_finder = SeamFinder(args.finder)
         self.blender = Blender(args.blender_type, args.blend_strength)
         self.timelapser = Timelapser(args.timelapse)
@@ -91,15 +93,17 @@ class Stitcher:
         imgs = self.resize_low_resolution(imgs)
         imgs, masks, corners, sizes = self.warp_low_resolution(imgs, cameras)
         self.prepare_cropper(imgs, masks, corners, sizes)
-        imgs, masks, corners, sizes = \
-            self.crop_low_resolution(imgs, masks, corners, sizes)
+        imgs, masks, corners, sizes = self.crop_low_resolution(
+            imgs, masks, corners, sizes
+        )
         self.estimate_exposure_errors(corners, imgs, masks)
         seam_masks = self.find_seam_masks(imgs, corners, masks)
 
         imgs = self.resize_final_resolution()
         imgs, masks, corners, sizes = self.warp_final_resolution(imgs, cameras)
-        imgs, masks, corners, sizes = \
-            self.crop_final_resolution(imgs, masks, corners, sizes)
+        imgs, masks, corners, sizes = self.crop_final_resolution(
+            imgs, masks, corners, sizes
+        )
         self.set_masks(masks)
         imgs = self.compensate_exposure_errors(corners, imgs)
         seam_masks = self.resize_seam_masks(seam_masks)
@@ -121,10 +125,13 @@ class Stitcher:
         return self.matcher.match_features(features)
 
     def subset(self, imgs, features, matches):
-        names, sizes, imgs, features, matches = \
-            self.subsetter.subset(self.img_handler.img_names,
-                                  self.img_handler.img_sizes,
-                                  imgs, features, matches)
+        names, sizes, imgs, features, matches = self.subsetter.subset(
+            self.img_handler.img_names,
+            self.img_handler.img_sizes,
+            imgs,
+            features,
+            matches,
+        )
         self.img_handler.img_names, self.img_handler.img_sizes = names, sizes
         return imgs, features, matches
 
@@ -146,8 +153,7 @@ class Stitcher:
     def warp_low_resolution(self, imgs, cameras):
         sizes = self.img_handler.get_low_img_sizes()
         camera_aspect = self.img_handler.get_medium_to_low_ratio()
-        imgs, masks, corners, sizes = \
-            self.warp(imgs, cameras, sizes, camera_aspect)
+        imgs, masks, corners, sizes = self.warp(imgs, cameras, sizes, camera_aspect)
         return list(imgs), list(masks), corners, sizes
 
     def warp_final_resolution(self, imgs, cameras):
@@ -220,7 +226,7 @@ class Stitcher:
             if self.timelapser.do_timelapse:
                 self.timelapser.process_and_save_frame(
                     self.img_handler.img_names[idx], img, corner
-                    )
+                )
             else:
                 self.blender.feed(img, mask, corner)
 

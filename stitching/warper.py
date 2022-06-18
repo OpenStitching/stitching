@@ -5,18 +5,28 @@ import numpy as np
 
 
 class Warper:
-    """https://docs.opencv.org/4.x/da/db8/classcv_1_1detail_1_1RotationWarper.html"""  # noqa
+    """https://docs.opencv.org/4.x/da/db8/classcv_1_1detail_1_1RotationWarper.html"""
 
-    WARP_TYPE_CHOICES = ('spherical', 'plane', 'affine', 'cylindrical',
-                         'fisheye', 'stereographic', 'compressedPlaneA2B1',
-                         'compressedPlaneA1.5B1',
-                         'compressedPlanePortraitA2B1',
-                         'compressedPlanePortraitA1.5B1',
-                         'paniniA2B1', 'paniniA1.5B1', 'paniniPortraitA2B1',
-                         'paniniPortraitA1.5B1', 'mercator',
-                         'transverseMercator')
+    WARP_TYPE_CHOICES = (
+        "spherical",
+        "plane",
+        "affine",
+        "cylindrical",
+        "fisheye",
+        "stereographic",
+        "compressedPlaneA2B1",
+        "compressedPlaneA1.5B1",
+        "compressedPlanePortraitA2B1",
+        "compressedPlanePortraitA1.5B1",
+        "paniniA2B1",
+        "paniniA1.5B1",
+        "paniniPortraitA2B1",
+        "paniniPortraitA1.5B1",
+        "mercator",
+        "transverseMercator",
+    )
 
-    DEFAULT_WARP_TYPE = 'spherical'
+    DEFAULT_WARP_TYPE = "spherical"
 
     def __init__(self, warper_type=DEFAULT_WARP_TYPE):
         self.warper_type = warper_type
@@ -31,12 +41,14 @@ class Warper:
             yield self.warp_image(img, camera, aspect)
 
     def warp_image(self, img, camera, aspect=1):
-        warper = cv.PyRotationWarper(self.warper_type, self.scale*aspect)
-        _, warped_image = warper.warp(img,
-                                      Warper.get_K(camera, aspect),
-                                      camera.R,
-                                      cv.INTER_LINEAR,
-                                      cv.BORDER_REFLECT)
+        warper = cv.PyRotationWarper(self.warper_type, self.scale * aspect)
+        _, warped_image = warper.warp(
+            img,
+            Warper.get_K(camera, aspect),
+            camera.R,
+            cv.INTER_LINEAR,
+            cv.BORDER_REFLECT,
+        )
         return warped_image
 
     def create_and_warp_masks(self, sizes, cameras, aspect=1):
@@ -44,13 +56,15 @@ class Warper:
             yield self.create_and_warp_mask(size, camera, aspect)
 
     def create_and_warp_mask(self, size, camera, aspect=1):
-        warper = cv.PyRotationWarper(self.warper_type, self.scale*aspect)
+        warper = cv.PyRotationWarper(self.warper_type, self.scale * aspect)
         mask = 255 * np.ones((size[1], size[0]), np.uint8)
-        _, warped_mask = warper.warp(mask,
-                                     Warper.get_K(camera, aspect),
-                                     camera.R,
-                                     cv.INTER_NEAREST,
-                                     cv.BORDER_CONSTANT)
+        _, warped_mask = warper.warp(
+            mask,
+            Warper.get_K(camera, aspect),
+            camera.R,
+            cv.INTER_NEAREST,
+            cv.BORDER_CONSTANT,
+        )
         return warped_mask
 
     def warp_rois(self, sizes, cameras, aspect=1):
@@ -63,7 +77,7 @@ class Warper:
         return roi_corners, roi_sizes
 
     def warp_roi(self, size, camera, aspect=1):
-        warper = cv.PyRotationWarper(self.warper_type, self.scale*aspect)
+        warper = cv.PyRotationWarper(self.warper_type, self.scale * aspect)
         K = Warper.get_K(camera, aspect)
         return warper.warpRoi(size, K, camera.R)
 

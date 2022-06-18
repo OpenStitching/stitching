@@ -1,4 +1,5 @@
 from collections import namedtuple
+
 import cv2 as cv
 import numpy as np
 
@@ -6,7 +7,7 @@ from .blender import Blender
 from .stitching_error import StitchingError
 
 
-class Rectangle(namedtuple('Rectangle', 'x y width height')):
+class Rectangle(namedtuple("Rectangle", "x y width height")):
     __slots__ = ()
 
     @property
@@ -30,13 +31,13 @@ class Rectangle(namedtuple('Rectangle', 'x y width height')):
         return self.y + self.height
 
     def times(self, x):
-        return Rectangle(*(int(round(i*x)) for i in self))
+        return Rectangle(*(int(round(i * x)) for i in self))
 
     def draw_on(self, img, color=(0, 0, 255), size=1):
         if len(img.shape) == 2:
             img = cv.cvtColor(img, cv.COLOR_GRAY2RGB)
         start_point = (self.x, self.y)
-        end_point = (self.x2-1, self.y2-1)
+        end_point = (self.x2 - 1, self.y2 - 1)
         cv.rectangle(img, start_point, end_point, color, size)
         return img
 
@@ -56,10 +57,10 @@ class Cropper:
             lir = self.estimate_largest_interior_rectangle(mask)
             corners = self.get_zero_center_corners(corners)
             rectangles = self.get_rectangles(corners, sizes)
-            self.overlapping_rectangles = self.get_overlaps(
-                rectangles, lir)
+            self.overlapping_rectangles = self.get_overlaps(rectangles, lir)
             self.intersection_rectangles = self.get_intersections(
-                rectangles, self.overlapping_rectangles)
+                rectangles, self.overlapping_rectangles
+            )
 
     def crop_images(self, imgs, aspect=1):
         for idx, img in enumerate(imgs):
@@ -75,8 +76,7 @@ class Cropper:
 
     def crop_rois(self, corners, sizes, aspect=1):
         if self.do_crop:
-            scaled_overlaps = \
-                [r.times(aspect) for r in self.overlapping_rectangles]
+            scaled_overlaps = [r.times(aspect) for r in self.overlapping_rectangles]
             cropped_corners = [r.corner for r in scaled_overlaps]
             cropped_corners = self.get_zero_center_corners(cropped_corners)
             cropped_sizes = [r.size for r in scaled_overlaps]
@@ -93,8 +93,7 @@ class Cropper:
         # is explicitely desired (needs some time to compile at the first run!)
         import largestinteriorrectangle
 
-        contours, hierarchy = \
-            cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+        contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
         if not hierarchy.shape == (1, 1, 4) or not np.all(hierarchy == -1):
             raise StitchingError("Invalid Contour. Try without cropping.")
         contour = contours[0][:, 0, :]
@@ -129,12 +128,14 @@ class Cropper:
         y2 = min(rectangle1.y2, rectangle2.y2)
         if x2 < x1 or y2 < y1:
             raise StitchingError("Rectangles do not overlap!")
-        return Rectangle(x1, y1, x2-x1, y2-y1)
+        return Rectangle(x1, y1, x2 - x1, y2 - y1)
 
     @staticmethod
     def get_intersections(rectangles, overlapping_rectangles):
-        return [Cropper.get_intersection(r, overlap_r) for r, overlap_r
-                in zip(rectangles, overlapping_rectangles)]
+        return [
+            Cropper.get_intersection(r, overlap_r)
+            for r, overlap_r in zip(rectangles, overlapping_rectangles)
+        ]
 
     @staticmethod
     def get_intersection(rectangle, overlapping_rectangle):
@@ -146,4 +147,4 @@ class Cropper:
 
     @staticmethod
     def crop_rectangle(img, rectangle):
-        return img[rectangle.y:rectangle.y2, rectangle.x:rectangle.x2]
+        return img[rectangle.y : rectangle.y2, rectangle.x : rectangle.x2]

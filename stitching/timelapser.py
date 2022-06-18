@@ -1,13 +1,18 @@
 import os
+
 import cv2 as cv
 import numpy as np
 
 
 class Timelapser:
-    """https://docs.opencv.org/4.x/dd/dac/classcv_1_1detail_1_1Timelapser.html"""  # noqa
+    """https://docs.opencv.org/4.x/dd/dac/classcv_1_1detail_1_1Timelapser.html"""
 
-    TIMELAPSE_CHOICES = ('no', 'as_is', 'crop',)
-    DEFAULT_TIMELAPSE = 'no'
+    TIMELAPSE_CHOICES = (
+        "no",
+        "as_is",
+        "crop",
+    )
+    DEFAULT_TIMELAPSE = "no"
 
     def __init__(self, timelapse=DEFAULT_TIMELAPSE):
         self.do_timelapse = True
@@ -22,12 +27,9 @@ class Timelapser:
             self.do_timelapse = False
 
         if self.do_timelapse:
-            self.timelapser = cv.detail.Timelapser_createDefault(
-                self.timelapse_type
-                )
+            self.timelapser = cv.detail.Timelapser_createDefault(self.timelapse_type)
 
     def initialize(self, *args):
-        """https://docs.opencv.org/4.x/dd/dac/classcv_1_1detail_1_1Timelapser.html#aaf0f7c4128009f02473332a0c41f6345"""  # noqa
         self.timelapser.initialize(*args)
 
     def process_and_save_frame(self, img_name, img, corner):

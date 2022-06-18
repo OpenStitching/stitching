@@ -8,9 +8,7 @@ class MegapixScaler:
         self.scale = None
 
     def set_scale_by_img_size(self, img_size):
-        self.set_scale(
-            self.get_scale_by_resolution(img_size[0] * img_size[1])
-            )
+        self.set_scale(self.get_scale_by_resolution(img_size[0] * img_size[1]))
 
     def set_scale(self, scale):
         self.scale = scale
@@ -28,7 +26,6 @@ class MegapixScaler:
 
 
 class MegapixDownscaler(MegapixScaler):
-
     @staticmethod
     def force_downscale(scale):
         return min(1.0, scale)

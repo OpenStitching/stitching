@@ -22,15 +22,18 @@ pip install stitching
 
 ## Usage
 
-The command line interface ([cli](https://github.com/lukasalexanderweber/stitching/tree/main/stitching/cli/stitch.py)) is available after installation
+The command line interface
+([cli](https://github.com/lukasalexanderweber/stitching/tree/main/stitching/cli/stitch.py))
+is available after installation
 
 `stitch -h`               show the help
 
 `stitch *`                stitches all files in the actual dir
 
-`stitch img_dir/IMG*.jpg` stitches all files in the img_dir directory starting with "IMG" and ending with ".jpg"
+`stitch img_dir/IMG*.jpg` stitches all files in the img_dir directory
+starting with "IMG" and ending with ".jpg"
 
-`stitch img1.jpg img2.jpg img3.jpg` 
+`stitch img1.jpg img2.jpg img3.jpg`
 stitches the 3 explicit files of the current dir
 
 Or use the Stitcher class in your script
