@@ -1,36 +1,41 @@
 from collections import OrderedDict
+
 import cv2 as cv
 
 
 class ExposureErrorCompensator:
-    """https://docs.opencv.org/4.x/d2/d37/classcv_1_1detail_1_1ExposureCompensator.html"""  # noqa
+    """https://docs.opencv.org/4.x/d2/d37/classcv_1_1detail_1_1ExposureCompensator.html"""  # noqa: E501
 
     COMPENSATOR_CHOICES = OrderedDict()
-    COMPENSATOR_CHOICES['gain_blocks'] = cv.detail.ExposureCompensator_GAIN_BLOCKS  # noqa
-    COMPENSATOR_CHOICES['gain'] = cv.detail.ExposureCompensator_GAIN
-    COMPENSATOR_CHOICES['channel'] = cv.detail.ExposureCompensator_CHANNELS
-    COMPENSATOR_CHOICES['channel_blocks'] = cv.detail.ExposureCompensator_CHANNELS_BLOCKS  # noqa
-    COMPENSATOR_CHOICES['no'] = cv.detail.ExposureCompensator_NO
+    COMPENSATOR_CHOICES["gain_blocks"] = cv.detail.ExposureCompensator_GAIN_BLOCKS
+    COMPENSATOR_CHOICES["gain"] = cv.detail.ExposureCompensator_GAIN
+    COMPENSATOR_CHOICES["channel"] = cv.detail.ExposureCompensator_CHANNELS
+    COMPENSATOR_CHOICES[
+        "channel_blocks"
+    ] = cv.detail.ExposureCompensator_CHANNELS_BLOCKS
+    COMPENSATOR_CHOICES["no"] = cv.detail.ExposureCompensator_NO
 
     DEFAULT_COMPENSATOR = list(COMPENSATOR_CHOICES.keys())[0]
     DEFAULT_NR_FEEDS = 1
     DEFAULT_BLOCK_SIZE = 32
 
-    def __init__(self,
-                 compensator=DEFAULT_COMPENSATOR,
-                 nr_feeds=DEFAULT_NR_FEEDS,
-                 block_size=DEFAULT_BLOCK_SIZE):
+    def __init__(
+        self,
+        compensator=DEFAULT_COMPENSATOR,
+        nr_feeds=DEFAULT_NR_FEEDS,
+        block_size=DEFAULT_BLOCK_SIZE,
+    ):
 
-        if compensator == 'channel':
+        if compensator == "channel":
             self.compensator = cv.detail_ChannelsCompensator(nr_feeds)
-        elif compensator == 'channel_blocks':
+        elif compensator == "channel_blocks":
             self.compensator = cv.detail_BlocksChannelsCompensator(
                 block_size, block_size, nr_feeds
-                )
+            )
         else:
             self.compensator = cv.detail.ExposureCompensator_createDefault(
                 ExposureErrorCompensator.COMPENSATOR_CHOICES[compensator]
-                )
+            )
 
     def feed(self, *args):
         """https://docs.opencv.org/4.x/d2/d37/classcv_1_1detail_1_1ExposureCompensator.html#ae6b0cc69a7bc53818ddea53eddb6bdba"""  # noqa

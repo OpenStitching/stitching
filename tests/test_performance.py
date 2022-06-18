@@ -1,14 +1,13 @@
-import unittest
 import os
 import time
 import tracemalloc
+import unittest
 
 from .context import Stitcher
 from .stitching_detailed import main
 
 
 class TestStitcher(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         TEST_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -23,9 +22,16 @@ class TestStitcher(unittest.TestCase):
         tracemalloc.start()
 
         stitcher = Stitcher(final_megapix=3, crop=False)
-        stitcher.stitch(["boat5.jpg", "boat2.jpg",
-                         "boat3.jpg", "boat4.jpg",
-                         "boat1.jpg", "boat6.jpg"])
+        stitcher.stitch(
+            [
+                "boat5.jpg",
+                "boat2.jpg",
+                "boat3.jpg",
+                "boat4.jpg",
+                "boat1.jpg",
+                "boat6.jpg",
+            ]
+        )
 
         _, peak_memory = tracemalloc.get_traced_memory()
         tracemalloc.stop()
@@ -50,11 +56,11 @@ class TestStitcher(unittest.TestCase):
         print(f"Peak was {peak_memory_detailed / 10**6} MB")
         print(f"Time was {time_needed_detailed} s")
 
-        self.assertLessEqual(peak_memory / 10**6,
-                             peak_memory_detailed / 10**6)
+        self.assertLessEqual(peak_memory / 10**6, peak_memory_detailed / 10**6)
         uncertainty_based_on_run = 0.25
-        self.assertLessEqual(time_needed - uncertainty_based_on_run,
-                             time_needed_detailed)
+        self.assertLessEqual(
+            time_needed - uncertainty_based_on_run, time_needed_detailed
+        )
 
 
 def starttest():

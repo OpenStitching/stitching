@@ -1,23 +1,22 @@
 from collections import OrderedDict
+
 import cv2 as cv
 import numpy as np
 
 
 class WaveCorrector:
-    """https://docs.opencv.org/4.x/d7/d74/group__stitching__rotation.html#ga8faf9588aebd5aeb6f8c649c82beb1fb"""  # noqa
+    """https://docs.opencv.org/4.x/d7/d74/group__stitching__rotation.html#ga8faf9588aebd5aeb6f8c649c82beb1fb"""  # noqa: E501
 
     WAVE_CORRECT_CHOICES = OrderedDict()
-    WAVE_CORRECT_CHOICES['horiz'] = cv.detail.WAVE_CORRECT_HORIZ
-    WAVE_CORRECT_CHOICES['vert'] = cv.detail.WAVE_CORRECT_VERT
-    WAVE_CORRECT_CHOICES['auto'] = cv.detail.WAVE_CORRECT_AUTO
-    WAVE_CORRECT_CHOICES['no'] = None
+    WAVE_CORRECT_CHOICES["horiz"] = cv.detail.WAVE_CORRECT_HORIZ
+    WAVE_CORRECT_CHOICES["vert"] = cv.detail.WAVE_CORRECT_VERT
+    WAVE_CORRECT_CHOICES["auto"] = cv.detail.WAVE_CORRECT_AUTO
+    WAVE_CORRECT_CHOICES["no"] = None
 
     DEFAULT_WAVE_CORRECTION = list(WAVE_CORRECT_CHOICES.keys())[0]
 
     def __init__(self, wave_correct_kind=DEFAULT_WAVE_CORRECTION):
-        self.wave_correct_kind = WaveCorrector.WAVE_CORRECT_CHOICES[
-            wave_correct_kind
-            ]
+        self.wave_correct_kind = WaveCorrector.WAVE_CORRECT_CHOICES[wave_correct_kind]
 
     def correct(self, cameras):
         if self.wave_correct_kind is not None:

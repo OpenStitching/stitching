@@ -1,13 +1,12 @@
-import unittest
 import os
+import unittest
 
 import cv2 as cv
 
-from .context import MegapixScaler, MegapixDownscaler
+from .context import MegapixDownscaler, MegapixScaler
 
 
 class TestScaler(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         TEST_DIR = os.path.abspath(os.path.dirname(__file__))

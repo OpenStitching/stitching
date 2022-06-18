@@ -29,7 +29,7 @@ parser.add_argument(
     "--affine",
     action="store_true",
     help="Overwrites multiple parameters to optimize the stitching for "
-    "scans and images captured by specialized devices."
+    "scans and images captured by specialized devices.",
 )
 parser.add_argument(
     "--medium_megapix",
@@ -267,12 +267,14 @@ def main():
 
     # Set parameters for 'affine' mode
     affine_mode = args_dict.pop("affine")
-    affine_settings = {"estimator": "affine",
-                       "wave_correct_kind": "no",
-                       "matcher_type": "affine",
-                       "adjuster": "affine",
-                       "warper_type": "affine",
-                       "compensator": "no"}
+    affine_settings = {
+        "estimator": "affine",
+        "wave_correct_kind": "no",
+        "matcher_type": "affine",
+        "adjuster": "affine",
+        "warper_type": "affine",
+        "compensator": "no",
+    }
     if affine_mode:
         args_dict.update(affine_settings)
 

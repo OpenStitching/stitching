@@ -3,21 +3,26 @@ import cv2 as cv
 from .megapix_scaler import MegapixDownscaler
 from .stitching_error import StitchingError
 
+
 class ImageHandler:
 
     DEFAULT_MEDIUM_MEGAPIX = 0.6
     DEFAULT_LOW_MEGAPIX = 0.1
     DEFAULT_FINAL_MEGAPIX = -1
 
-    def __init__(self,
-                 medium_megapix=DEFAULT_MEDIUM_MEGAPIX,
-                 low_megapix=DEFAULT_LOW_MEGAPIX,
-                 final_megapix=DEFAULT_FINAL_MEGAPIX):
+    def __init__(
+        self,
+        medium_megapix=DEFAULT_MEDIUM_MEGAPIX,
+        low_megapix=DEFAULT_LOW_MEGAPIX,
+        final_megapix=DEFAULT_FINAL_MEGAPIX,
+    ):
 
         if medium_megapix < low_megapix:
-            raise StitchingError("Medium resolution megapix need to be "
-                                 "greater or equal than low resolution "
-                                 "megapix")
+            raise StitchingError(
+                "Medium resolution megapix need to be "
+                "greater or equal than low resolution "
+                "megapix"
+            )
 
         self.medium_scaler = MegapixDownscaler(medium_megapix)
         self.low_scaler = MegapixDownscaler(low_megapix)
@@ -54,8 +59,7 @@ class ImageHandler:
     @staticmethod
     def resize_img_by_scaler(scaler, size, img):
         desired_size = scaler.get_scaled_img_size(size)
-        return cv.resize(img, desired_size,
-                         interpolation=cv.INTER_LINEAR_EXACT)
+        return cv.resize(img, desired_size, interpolation=cv.INTER_LINEAR_EXACT)
 
     def input_images(self):
         self.img_sizes = []
@@ -99,9 +103,7 @@ class ImageHandler:
         return self.final_scaler.scale / self.low_scaler.scale
 
     def get_final_img_sizes(self):
-        return [self.final_scaler.get_scaled_img_size(sz)
-                for sz in self.img_sizes]
+        return [self.final_scaler.get_scaled_img_size(sz) for sz in self.img_sizes]
 
     def get_low_img_sizes(self):
-        return [self.low_scaler.get_scaled_img_size(sz)
-                for sz in self.img_sizes]
+        return [self.low_scaler.get_scaled_img_size(sz) for sz in self.img_sizes]
