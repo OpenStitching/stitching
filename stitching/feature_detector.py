@@ -7,29 +7,11 @@ class FeatureDetector:
     """https://docs.opencv.org/4.x/d0/d13/classcv_1_1Feature2D.html"""
 
     DETECTOR_CHOICES = OrderedDict()
-    try:
-        cv.xfeatures2d_SURF.create()  # check if the function can be called
-        DETECTOR_CHOICES["surf"] = cv.xfeatures2d_SURF.create
-    except (AttributeError, cv.error):
-        print("SURF not available")
 
-    # if SURF not available, ORB is default
     DETECTOR_CHOICES["orb"] = cv.ORB.create
-
-    try:
-        DETECTOR_CHOICES["sift"] = cv.SIFT_create
-    except AttributeError:
-        print("SIFT not available")
-
-    try:
-        DETECTOR_CHOICES["brisk"] = cv.BRISK_create
-    except AttributeError:
-        print("BRISK not available")
-
-    try:
-        DETECTOR_CHOICES["akaze"] = cv.AKAZE_create
-    except AttributeError:
-        print("AKAZE not available")
+    DETECTOR_CHOICES["sift"] = cv.SIFT_create
+    DETECTOR_CHOICES["brisk"] = cv.BRISK_create
+    DETECTOR_CHOICES["akaze"] = cv.AKAZE_create
 
     DEFAULT_DETECTOR = list(DETECTOR_CHOICES.keys())[0]
 
