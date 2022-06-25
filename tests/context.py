@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from stitching import Stitcher  # noqa: F401, E402
+from stitching import AffineStitcher, Stitcher  # noqa: F401, E402
 from stitching.blender import Blender  # noqa: F401, E402
 from stitching.camera_adjuster import CameraAdjuster  # noqa: F401, E402
 from stitching.camera_estimator import CameraEstimator  # noqa: F401, E402

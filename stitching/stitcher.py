@@ -240,3 +240,20 @@ class Stitcher:
         for arg in kwargs:
             if arg not in Stitcher.DEFAULT_SETTINGS:
                 raise StitchingError("Invalid Argument: " + arg)
+
+
+class AffineStitcher(Stitcher):
+    AFFINE_DEFAULTS = {
+        "estimator": "affine",
+        "wave_correct_kind": "no",
+        "matcher_type": "affine",
+        "adjuster": "affine",
+        "warper_type": "affine",
+        "compensator": "no",
+    }
+
+    def initialize_stitcher(self, **kwargs):
+        affine_defaults = AffineStitcher.AFFINE_DEFAULTS.copy()
+        self.validate_kwargs(kwargs)
+        affine_defaults.update(kwargs)
+        super().initialize_stitcher(**affine_defaults)
