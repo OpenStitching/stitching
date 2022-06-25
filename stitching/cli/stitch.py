@@ -8,7 +8,7 @@ import glob
 import cv2 as cv
 import numpy as np
 
-from stitching import Stitcher
+from stitching import AffineStitcher, Stitcher
 from stitching.blender import Blender
 from stitching.camera_adjuster import CameraAdjuster
 from stitching.camera_estimator import CameraEstimator
@@ -265,20 +265,14 @@ def main():
     output = args_dict.pop("output")
     print("stitching " + " ".join(img_names) + " into " + output)
 
-    # Set parameters for 'affine' mode
+    # Create Stitcher
     affine_mode = args_dict.pop("affine")
-    affine_settings = {
-        "estimator": "affine",
-        "wave_correct_kind": "no",
-        "matcher_type": "affine",
-        "adjuster": "affine",
-        "warper_type": "affine",
-        "compensator": "no",
-    }
-    if affine_mode:
-        args_dict.update(affine_settings)
 
-    stitcher = Stitcher(**args_dict)
+    if affine_mode:
+        stitcher = AffineStitcher(**args_dict)
+    else:
+        stitcher = Stitcher(**args_dict)
+
     panorama = stitcher.stitch(img_names)
 
     cv.imwrite(output, panorama)

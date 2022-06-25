@@ -4,7 +4,7 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import Stitcher
+from .context import AffineStitcher, Stitcher
 
 
 class TestStitcher(unittest.TestCase):
@@ -107,16 +107,11 @@ class TestStitcher(unittest.TestCase):
 
     def test_stitcher_budapest(self):
         settings = {
-            "matcher_type": "affine",
-            "estimator": "affine",
-            "adjuster": "affine",
-            "warper_type": "affine",
-            "wave_correct_kind": "no",
             "confidence_threshold": 0.3,
             "crop": False,
         }
 
-        stitcher = Stitcher(**settings)
+        stitcher = AffineStitcher(**settings)
         result = stitcher.stitch(
             [
                 "budapest1.jpg",
