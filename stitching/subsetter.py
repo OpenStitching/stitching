@@ -50,7 +50,7 @@ class Subsetter:
         )
 
         if len(indices) < 2:
-            raise StitchingError("No match exceeds the " "given confidence theshold.")
+            raise StitchingError("No match exceeds the " "given confidence threshold.")
 
         return indices
 
