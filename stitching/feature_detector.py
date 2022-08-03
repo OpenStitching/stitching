@@ -16,6 +16,8 @@ class FeatureDetector:
     DEFAULT_DETECTOR = list(DETECTOR_CHOICES.keys())[0]
 
     def __init__(self, detector=DEFAULT_DETECTOR, **kwargs):
+        if detector in ("brisk", "akaze"): # brisk, akaze don't support nfeatures arg
+            kwargs = {key: value for key, value in kwargs.items() if key != 'nfeatures'}
         self.detector = FeatureDetector.DETECTOR_CHOICES[detector](**kwargs)
 
     def detect_features(self, img, *args, **kwargs):
