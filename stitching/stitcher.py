@@ -56,7 +56,10 @@ class Stitcher:
         self.img_handler = ImageHandler(
             args.medium_megapix, args.low_megapix, args.final_megapix
         )
-        self.detector = FeatureDetector(args.detector, nfeatures=args.nfeatures)
+        if args.detector in ('orb', 'sift'):
+            self.detector = FeatureDetector(args.detector, nfeatures=args.nfeatures)
+        else:
+            self.detector = FeatureDetector(args.detector)
         match_conf = FeatureMatcher.get_match_conf(args.match_conf, args.detector)
         self.matcher = FeatureMatcher(
             args.matcher_type,
