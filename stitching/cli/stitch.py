@@ -52,7 +52,9 @@ parser.add_argument(
     "--nfeatures",
     action="store",
     default=500,
-    help="Type of features used for images matching. The default is 500.",
+    help="Number of features to be detected per image. "
+    "Only used for the detectors \'orb\' and \'sift'\. "
+    "The default is 500.",
     type=int,
 )
 parser.add_argument(
