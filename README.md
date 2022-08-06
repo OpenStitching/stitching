@@ -1,9 +1,10 @@
 # stitching
 
-A Python package for fast and robust Image Stitching. A modularized
-and continuing work based on opencv's [stitching
+A Python package for fast and robust Image Stitching. 
+
+Based on opencv's [stitching
 module](https://github.com/opencv/opencv/tree/4.x/modules/stitching)
-and the
+and inspired by the
 [stitching_detailed.py](https://github.com/opencv/opencv/blob/4.x/samples/python/stitching_detailed.py)
 python command line tool.
 
@@ -28,13 +29,13 @@ is available after installation
 
 `stitch -h`               show the help
 
-`stitch *`                stitches all files in the actual dir
+`stitch *`                stitches all files in the actual directory
 
 `stitch img_dir/IMG*.jpg` stitches all files in the img_dir directory
 starting with "IMG" and ending with ".jpg"
 
 `stitch img1.jpg img2.jpg img3.jpg`
-stitches the 3 explicit files of the current dir
+stitches the 3 explicit files of the current directory
 
 Or use the Stitcher class in your script
 
@@ -80,12 +81,6 @@ Run tests using
 
 ```bash
 python -m unittest
-```
-
-Build with
-
-```bash
-python -m build
 ```
 
 Please make sure to lint all pull requests.
