@@ -19,12 +19,15 @@ class CameraAdjuster:
     DEFAULT_REFINEMENT_MASK = "xxxxx"
 
     def __init__(
-        self, adjuster=DEFAULT_CAMERA_ADJUSTER, refinement_mask=DEFAULT_REFINEMENT_MASK
+        self,
+        adjuster=DEFAULT_CAMERA_ADJUSTER,
+        refinement_mask=DEFAULT_REFINEMENT_MASK,
+        confidence_threshold=1.0,
     ):
 
         self.adjuster = CameraAdjuster.CAMERA_ADJUSTER_CHOICES[adjuster]()
         self.set_refinement_mask(refinement_mask)
-        self.adjuster.setConfThresh(1)
+        self.adjuster.setConfThresh(confidence_threshold)
 
     def set_refinement_mask(self, refinement_mask):
         mask_matrix = np.zeros((3, 3), np.uint8)

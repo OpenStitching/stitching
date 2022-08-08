@@ -71,7 +71,9 @@ class Stitcher:
             args.confidence_threshold, args.matches_graph_dot_file
         )
         self.camera_estimator = CameraEstimator(args.estimator)
-        self.camera_adjuster = CameraAdjuster(args.adjuster, args.refinement_mask)
+        self.camera_adjuster = CameraAdjuster(
+            args.adjuster, args.refinement_mask, args.confidence_threshold
+        )
         self.wave_corrector = WaveCorrector(args.wave_correct_kind)
         self.warper = Warper(args.warper_type)
         self.cropper = Cropper(args.crop)
