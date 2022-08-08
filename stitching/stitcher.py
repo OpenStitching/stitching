@@ -257,5 +257,5 @@ class AffineStitcher(Stitcher):
         "compensator": "no",
     }
     
-    DEFAULT_SETTINGS = Stitcher.DEFAULT_SETTINGS.copy()
+    DEFAULT_SETTINGS = super().DEFAULT_SETTINGS.copy()
     DEFAULT_SETTINGS.update(AFFINE_DEFAULTS)
