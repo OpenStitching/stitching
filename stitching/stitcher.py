@@ -255,6 +255,6 @@ class AffineStitcher(Stitcher):
         "warper_type": "affine",
         "compensator": "no",
     }
-    
+
     DEFAULT_SETTINGS = Stitcher.DEFAULT_SETTINGS.copy()
     DEFAULT_SETTINGS.update(AFFINE_DEFAULTS)

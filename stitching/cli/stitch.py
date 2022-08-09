@@ -53,7 +53,7 @@ parser.add_argument(
     action="store",
     default=500,
     help="Number of features to be detected per image. "
-    "Only used for the detectors \'orb\' and \'sift'\. "
+    "Only used for the detectors 'orb' and 'sift'. "
     "The default is 500.",
     type=int,
 )

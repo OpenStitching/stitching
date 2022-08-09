@@ -1,6 +1,6 @@
 # stitching
 
-A Python package for fast and robust Image Stitching. 
+A Python package for fast and robust Image Stitching.
 
 Based on opencv's [stitching
 module](https://github.com/opencv/opencv/tree/4.x/modules/stitching)
