@@ -240,8 +240,7 @@ class Stitcher:
             panorama, _ = self.blender.blend()
             return panorama
 
-    @staticmethod
-    def validate_kwargs(kwargs):
+    def validate_kwargs(self, kwargs):
         for arg in kwargs:
             if arg not in self.DEFAULT_SETTINGS:
                 raise StitchingError("Invalid Argument: " + arg)
@@ -257,5 +256,5 @@ class AffineStitcher(Stitcher):
         "compensator": "no",
     }
     
-    DEFAULT_SETTINGS = super().DEFAULT_SETTINGS.copy()
+    DEFAULT_SETTINGS = Stitcher.DEFAULT_SETTINGS.copy()
     DEFAULT_SETTINGS.update(AFFINE_DEFAULTS)
