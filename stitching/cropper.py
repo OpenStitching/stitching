@@ -90,7 +90,7 @@ class Cropper:
 
     def estimate_largest_interior_rectangle(self, mask):
         # largestinteriorrectangle is only imported if cropping
-        # is explicitely desired (needs some time to compile at the first run!)
+        # is explicitly desired (needs some time to compile at the first run!)
         import largestinteriorrectangle
 
         contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
