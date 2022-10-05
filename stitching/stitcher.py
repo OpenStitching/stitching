@@ -14,7 +14,10 @@ from .stitching_error import StitchingError
 from .subsetter import Subsetter
 from .timelapser import Timelapser
 from .warper import Warper
-
+import numpy as np
+import platform
+import cv2
+import os
 
 class Stitcher:
     DEFAULT_SETTINGS = {
@@ -76,7 +79,10 @@ class Stitcher:
         )
         self.wave_corrector = WaveCorrector(args.wave_correct_kind)
         self.warper = Warper(args.warper_type)
-        self.cropper = Cropper(args.crop)
+        if platform.system() == "Linux":
+            self.cropper = Cropper(args.crop)
+        elif platform.system() == "Windows":
+            self.cropper = Cropper(False)        
         self.compensator = ExposureErrorCompensator(
             args.compensator, args.nr_feeds, args.block_size
         )
@@ -115,7 +121,23 @@ class Stitcher:
 
         self.initialize_composition(corners, sizes)
         self.blend_images(imgs, seam_masks, corners)
-        return self.create_final_panorama()
+        if platform.system() == "Linux":
+            return self.create_final_panorama()       
+        elif platform.system() == "Windows":
+            panorama = self.create_final_panorama()
+            gray = cv2.cvtColor(panorama, cv2.COLOR_BGR2GRAY)
+            thresh = cv2.bitwise_not(cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY)[1])
+            thresh = cv2.medianBlur(thresh, 5)
+
+            stitched_copy = panorama.copy()
+            thresh_copy = thresh.copy()
+
+            while np.sum(thresh_copy) > 0:
+                thresh_copy = thresh_copy[1:-1, 1:-1]
+                stitched_copy = stitched_copy[1:-1, 1:-1]
+                
+            # cv2.imwrite(os.path.join('imgs', 'result_crop.jpg'), stitched_copy)
+            return stitched_copy
 
     def initialize_registration(self, img_names):
         self.img_handler.set_img_names(img_names)
