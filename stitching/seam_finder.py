@@ -39,9 +39,9 @@ class SeamFinder:
     @staticmethod
     def draw_seam_mask(img, seam_mask, color=(0, 0, 0)):
         seam_mask = cv.UMat.get(seam_mask)
-        overlayed_img = np.copy(img)
-        overlayed_img[seam_mask == 0] = color
-        return overlayed_img
+        overlaid_img = np.copy(img)
+        overlaid_img[seam_mask == 0] = color
+        return overlaid_img
 
     @staticmethod
     def draw_seam_polygons(panorama, blended_seam_masks, alpha=0.5):
@@ -49,13 +49,13 @@ class SeamFinder:
 
     @staticmethod
     def draw_seam_lines(panorama, blended_seam_masks, linesize=1, color=(0, 0, 255)):
-        seam_lines = SeamFinder.exctract_seam_lines(blended_seam_masks, linesize)
+        seam_lines = SeamFinder.extract_seam_lines(blended_seam_masks, linesize)
         panorama_with_seam_lines = panorama.copy()
         panorama_with_seam_lines[seam_lines == 255] = color
         return panorama_with_seam_lines
 
     @staticmethod
-    def exctract_seam_lines(blended_seam_masks, linesize=1):
+    def extract_seam_lines(blended_seam_masks, linesize=1):
         seam_lines = cv.Canny(np.uint8(blended_seam_masks), 100, 200)
         seam_indices = (seam_lines == 255).nonzero()
         seam_lines = remove_invalid_line_pixels(

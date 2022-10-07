@@ -6,10 +6,10 @@ from .context import FeatureMatcher
 
 
 class TestMatcher(unittest.TestCase):
-    def test_array_in_sqare_matrix(self):
+    def test_array_in_square_matrix(self):
         array = np.zeros(9)
 
-        matrix = FeatureMatcher.array_in_sqare_matrix(array)
+        matrix = FeatureMatcher.array_in_square_matrix(array)
 
         np.testing.assert_array_equal(
             matrix, np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])

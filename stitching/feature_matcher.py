@@ -56,7 +56,7 @@ class FeatureMatcher:
 
     @staticmethod
     def get_matches_matrix(pairwise_matches):
-        return FeatureMatcher.array_in_sqare_matrix(pairwise_matches)
+        return FeatureMatcher.array_in_square_matrix(pairwise_matches)
 
     @staticmethod
     def get_confidence_matrix(pairwise_matches):
@@ -66,7 +66,7 @@ class FeatureMatcher:
         return match_conf_matrix
 
     @staticmethod
-    def array_in_sqare_matrix(array):
+    def array_in_square_matrix(array):
         matrix_dimension = int(math.sqrt(len(array)))
         rows = []
         for i in range(0, len(array), matrix_dimension):
