@@ -44,7 +44,13 @@ import stitching
 
 stitcher = stitching.Stitcher()
 panorama = stitcher.stitch(["img1.jpg", "img2.jpg", "img3.jpg"])
+```
 
+Specify your custom settings as
+
+```python
+settings = {"detector": "sift", "confidence_threshold": 0.2}    
+stitcher = Stitcher(**settings)
 ```
 
 ## Tutorial
