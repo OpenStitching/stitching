@@ -2,6 +2,7 @@
 
 import os
 import shutil
+from urllib.parse import urlparse
 
 import requests
 
@@ -9,21 +10,23 @@ TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 os.chdir(os.path.join(TEST_DIR, "testdata"))
 
 
-def download_img(url, img):
-    r = requests.get(url + img, stream=True)
+def download_img(url, img_name):
+    r = requests.get(url, stream=True)
     if r.status_code == 200:
-        with open(img, "wb") as f:
+        parse = urlparse(url)
+        img_name = os.path.basename(parse.path)
+        with open(img_name, "wb") as f:
             r.raw.decode_content = True
             shutil.copyfileobj(r.raw, f)
     else:
-        raise Exception("Failed to download " + url + img)
+        raise Exception("Failed to download " + url)
 
 
 with open("TEST_IMAGES.txt", "r") as f:
-    required_imgs = f.read().splitlines()
-download_url = required_imgs.pop(0)
+    img_urls = f.read().splitlines()
+    img_names = [os.path.basename(urlparse(url).path) for url in img_urls]
 
-for img in required_imgs:
-    if not os.path.isfile(img):
-        print("Downloading " + img)
-        download_img(download_url, img)
+    for url, img_name in zip(img_urls, img_names):
+        if not os.path.isfile(img_name):
+            print("Downloading " + img_name)
+            download_img(url, img_name)
