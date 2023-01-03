@@ -12,12 +12,16 @@ class SeamFinder:
     SEAM_FINDER_CHOICES = OrderedDict()
     SEAM_FINDER_CHOICES["dp_color"] = cv.detail_DpSeamFinder("COLOR")
     SEAM_FINDER_CHOICES["dp_colorgrad"] = cv.detail_DpSeamFinder("COLOR_GRAD")
+    SEAM_FINDER_CHOICES["gc_color"] = cv.detail_GraphCutSeamFinder("COST_COLOR")
+    SEAM_FINDER_CHOICES["gc_colorgrad"] = cv.detail_GraphCutSeamFinder(
+        "COST_COLOR_GRAD"
+    )
     SEAM_FINDER_CHOICES["voronoi"] = cv.detail.SeamFinder_createDefault(
         cv.detail.SeamFinder_VORONOI_SEAM
-    )  # noqa
+    )
     SEAM_FINDER_CHOICES["no"] = cv.detail.SeamFinder_createDefault(
         cv.detail.SeamFinder_NO
-    )  # noqa
+    )
 
     DEFAULT_SEAM_FINDER = list(SEAM_FINDER_CHOICES.keys())[0]
 
