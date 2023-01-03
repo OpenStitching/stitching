@@ -31,13 +31,15 @@ try:
     cv.xfeatures2d_SURF.create()  # check if the function can be called
     FEATURES_FIND_CHOICES["surf"] = cv.xfeatures2d_SURF.create
 except (AttributeError, cv.error):
-    print("SURF not available")
+    pass
+    # print("SURF not available")
 # if SURF not available, ORB is default
 FEATURES_FIND_CHOICES["orb"] = cv.ORB.create
 try:
     FEATURES_FIND_CHOICES["sift"] = cv.xfeatures2d_SIFT.create
 except AttributeError:
-    print("SIFT not available")
+    pass
+    # print("SIFT not available")
 try:
     FEATURES_FIND_CHOICES["brisk"] = cv.BRISK_create
 except AttributeError:
