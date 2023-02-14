@@ -1,7 +1,9 @@
-import math
+from itertools import chain
 
 import cv2 as cv
+import numpy as np
 
+from .feature_matcher import FeatureMatcher
 from .stitching_error import StitchingError
 
 
@@ -55,28 +57,9 @@ class Subsetter:
     def subset_list(list_to_subset, indices):
         return [list_to_subset[i] for i in indices]
 
-    
-    def subset_matches(self, pairwise_matches, indices, wantThreshold=True):
-        matches_subset = list(pairwise_matches)
-        _len = int(math.sqrt(len(matches_subset)))
-
-        indices_to_delete = []
-
-        for i in range(_len):
-            if not i in indices:
-                for j in range(_len):
-                    indices_to_delete.append(i*_len+j)
-                    indices_to_delete.append(j*_len+i)
-
-        indices_to_delete = list(set(indices_to_delete))
-        indices_to_delete.sort(reverse=True)
-
-        for i in indices_to_delete:
-            matches_subset.pop(i)
-        
-        if wantThreshold:            
-            for i in range(len(matches_subset)):
-                if matches_subset[i].confidence>0 and matches_subset[i].confidence<self.confidence_threshold:
-                    matches_subset[i] = cv.detail.MatchesInfo(matches_subset[0])
-
-        return matches_subset
+    @staticmethod
+    def subset_matches(pairwise_matches, indices):
+        matches_matrix = FeatureMatcher.get_matches_matrix(pairwise_matches)
+        matches_matrix_subset = matches_matrix[np.ix_(indices, indices)]
+        matches_subset_list = list(chain.from_iterable(matches_matrix_subset.tolist()))
+        return matches_subset_list

@@ -65,10 +65,8 @@ class TestImageRegistration(unittest.TestCase):
         )  # view in https://dreampuf.github.io  # noqa
 
         indices = subsetter.get_indices_to_keep(features, pairwise_matches)
-        indices_to_delete = subsetter.get_indices_to_delete(len(img_names), indices)
 
         np.testing.assert_array_equal(indices, np.array([2, 3, 4]))
-        np.testing.assert_array_equal(indices_to_delete, np.array([0, 1]))
 
         subsetted_image_names = subsetter.subset_list(img_names, indices)
         self.assertEqual(subsetted_image_names, ["boat1.jpg", "boat2.jpg", "boat3.jpg"])
