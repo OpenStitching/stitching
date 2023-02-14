@@ -77,7 +77,6 @@ class Subsetter:
         if wantThreshold:            
             for i in range(len(matches_subset)):
                 if matches_subset[i].confidence>0 and matches_subset[i].confidence<self.confidence_threshold:
-                    print(matches_subset[i].confidence)
                     matches_subset[i] = cv.detail.MatchesInfo(matches_subset[0])
 
         return matches_subset
