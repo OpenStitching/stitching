@@ -58,40 +58,29 @@ class Subsetter:
     def subset_list(list_to_subset, indices):
         return [list_to_subset[i] for i in indices]
 
-    @staticmethod
-    def subset_matches(pairwise_matches, indices):
-        indices_to_delete = Subsetter.get_indices_to_delete(
-            math.sqrt(len(pairwise_matches)), indices
-        )
+    
+    def subset_matches(self, pairwise_matches, indices, wantThreshold=True):
+        matches_subset = list(pairwise_matches)
+        _len = int(math.sqrt(len(matches_subset)))
 
-        matches_matrix = FeatureMatcher.get_matches_matrix(pairwise_matches)
-        matches_matrix_subset = Subsetter.subset_matrix(
-            matches_matrix, indices_to_delete
-        )
-        matches_subset = Subsetter.matrix_rows_to_list(matches_matrix_subset)
+        indices_to_delete = []
+
+        for i in range(_len):
+            if not i in indices:
+                for j in range(_len):
+                    indices_to_delete.append(i*_len+j)
+                    indices_to_delete.append(j*_len+i)
+
+        indices_to_delete = list(set(indices_to_delete))
+        indices_to_delete.sort(reverse=True)
+
+        for i in indices_to_delete:
+            matches_subset.pop(i)
+        
+        if wantThreshold:            
+            for i in range(len(matches_subset)):
+                if matches_subset[i].confidence>0 and matches_subset[i].confidence<self.confidence_threshold:
+                    print(matches_subset[i].confidence)
+                    matches_subset[i] = cv.detail.MatchesInfo(matches_subset[0])
 
         return matches_subset
-
-    @staticmethod
-    def get_indices_to_delete(nr_elements, indices_to_keep):
-        return list(set(range(int(nr_elements))) - set(indices_to_keep))
-
-    @staticmethod
-    def subset_matrix(matrix_to_subset, indices_to_delete):
-        for idx, idx_to_delete in enumerate(indices_to_delete):
-            matrix_to_subset = Subsetter.delete_index_from_matrix(
-                matrix_to_subset,
-                idx_to_delete - idx,  # matrix shape reduced by one at each step
-            )
-
-        return matrix_to_subset
-
-    @staticmethod
-    def delete_index_from_matrix(matrix, idx):
-        mask = np.ones(matrix.shape[0], bool)
-        mask[idx] = 0
-        return matrix[mask, :][:, mask]
-
-    @staticmethod
-    def matrix_rows_to_list(matrix):
-        return list(chain.from_iterable(matrix.tolist()))
