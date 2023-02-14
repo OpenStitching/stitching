@@ -1,4 +1,3 @@
-import math
 from itertools import chain
 
 import cv2 as cv
@@ -60,38 +59,7 @@ class Subsetter:
 
     @staticmethod
     def subset_matches(pairwise_matches, indices):
-        indices_to_delete = Subsetter.get_indices_to_delete(
-            math.sqrt(len(pairwise_matches)), indices
-        )
-
         matches_matrix = FeatureMatcher.get_matches_matrix(pairwise_matches)
-        matches_matrix_subset = Subsetter.subset_matrix(
-            matches_matrix, indices_to_delete
-        )
-        matches_subset = Subsetter.matrix_rows_to_list(matches_matrix_subset)
-
-        return matches_subset
-
-    @staticmethod
-    def get_indices_to_delete(nr_elements, indices_to_keep):
-        return list(set(range(int(nr_elements))) - set(indices_to_keep))
-
-    @staticmethod
-    def subset_matrix(matrix_to_subset, indices_to_delete):
-        for idx, idx_to_delete in enumerate(indices_to_delete):
-            matrix_to_subset = Subsetter.delete_index_from_matrix(
-                matrix_to_subset,
-                idx_to_delete - idx,  # matrix shape reduced by one at each step
-            )
-
-        return matrix_to_subset
-
-    @staticmethod
-    def delete_index_from_matrix(matrix, idx):
-        mask = np.ones(matrix.shape[0], bool)
-        mask[idx] = 0
-        return matrix[mask, :][:, mask]
-
-    @staticmethod
-    def matrix_rows_to_list(matrix):
-        return list(chain.from_iterable(matrix.tolist()))
+        matches_matrix_subset = matches_matrix[np.ix_(indices, indices)]
+        matches_subset_list = list(chain.from_iterable(matches_matrix_subset.tolist()))
+        return matches_subset_list
