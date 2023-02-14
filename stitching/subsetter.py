@@ -1,10 +1,7 @@
 import math
-from itertools import chain
 
 import cv2 as cv
-import numpy as np
 
-from .feature_matcher import FeatureMatcher
 from .stitching_error import StitchingError
 
 
