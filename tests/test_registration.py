@@ -13,18 +13,17 @@ class TestImageRegistration(unittest.TestCase):
         TEST_DIR = os.path.abspath(os.path.dirname(__file__))
         os.chdir(os.path.join(TEST_DIR, "testdata"))
 
-    def test_feature_detector(self):
+    def test_feature_detector_mask(self):
         img1 = cv.imread("s1.jpg")
-
+        mask = cv.imread("s1-mask.jpg")
+        thr, bin = cv.threshold(cv.cvtColor(mask, cv.COLOR_BGR2GRAY), 0.1, 255.0, cv.THRESH_BINARY);
+        
         default_number_of_keypoints = 500
         detector = FeatureDetector("orb")
-        features = detector.detect_features(img1)
+        features = detector.detect_features(img1, bin)
         self.assertEqual(len(features.getKeypoints()), default_number_of_keypoints)
-
-        other_keypoints = 1000
-        detector = FeatureDetector("orb", nfeatures=other_keypoints)
-        features = detector.detect_features(img1)
-        self.assertEqual(len(features.getKeypoints()), other_keypoints)
+        for kpt in features.getKeypoints():
+            self.assertGreater(kpt.pt[0], 650)
 
     def test_feature_matcher(self):
         img1, img2 = cv.imread("s1.jpg"), cv.imread("s2.jpg")

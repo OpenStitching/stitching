@@ -40,6 +40,11 @@ class ImageHandler:
     def resize_to_medium_resolution(self):
         return self.read_and_resize_imgs(self.medium_scaler)
 
+    def to_medium_resolution_binary_mask(self):
+        for img, size in self.input_images():
+            img_medium = self.resize_img_by_scaler(self.medium_scaler, size, img)
+            yield self.binary_img(img_medium)
+
     def resize_to_low_resolution(self, medium_imgs=None):
         if medium_imgs and self.scales_set:
             return self.resize_imgs_by_scaler(medium_imgs, self.low_scaler)
@@ -60,6 +65,11 @@ class ImageHandler:
     def resize_img_by_scaler(scaler, size, img):
         desired_size = scaler.get_scaled_img_size(size)
         return cv.resize(img, desired_size, interpolation=cv.INTER_LINEAR_EXACT)
+    
+    @staticmethod
+    def binary_img(img):
+        thr, bin = cv.threshold(cv.cvtColor(img, cv.COLOR_BGR2GRAY), 0.1, 255.0, cv.THRESH_BINARY);
+        return bin
 
     def input_images(self):
         self.img_sizes = []

@@ -251,7 +251,12 @@ parser.add_argument(
     help="The default is 'result.jpg'",
     type=str,
 )
-
+parser.add_argument(
+    "--mask_names",
+    nargs='*',
+    action="store",
+    type=str,
+)
 __doc__ += "\n" + parser.format_help()
 
 
@@ -274,8 +279,15 @@ def main():
         stitcher = AffineStitcher(**args_dict)
     else:
         stitcher = Stitcher(**args_dict)
-
-    panorama = stitcher.stitch(img_names)
+    
+    mask_names = args_dict.pop("mask_names")
+    if mask_names is not None and len(mask_names) != len(img_names):
+        raise Exception('img_names and masks should have the same length')
+    
+    if mask_names is not None:
+        panorama = stitcher.stitch(img_names, mask_names)
+    else:
+        panorama = stitcher.stitch(img_names)
 
     cv.imwrite(output, panorama)
 
