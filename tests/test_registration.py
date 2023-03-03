@@ -15,12 +15,12 @@ class TestImageRegistration(unittest.TestCase):
 
     def test_feature_detector_mask(self):
         img1 = cv.imread("s1.jpg")
-        mask = cv.imread("s1-mask.jpg")
-        thr, bin = cv.threshold(cv.cvtColor(mask, cv.COLOR_BGR2GRAY), 0.1, 255.0, cv.THRESH_BINARY);
-        
+        mask2 = np.zeros(img1.shape[0:2], dtype=np.uint8)
+        mask2[:,651:] = 255
+
         default_number_of_keypoints = 500
         detector = FeatureDetector("orb")
-        features = detector.detect_features(img1, bin)
+        features = detector.detect_features(img1, mask2)
         self.assertEqual(len(features.getKeypoints()), default_number_of_keypoints)
         for kpt in features.getKeypoints():
             self.assertGreater(kpt.pt[0], 650)
