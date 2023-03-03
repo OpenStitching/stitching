@@ -51,13 +51,20 @@ class Warper:
         )
         return warped_image
 
-    def create_and_warp_masks(self, sizes, cameras, aspect=1):
-        for size, camera in zip(sizes, cameras):
-            yield self.create_and_warp_mask(size, camera, aspect)
+    def create_and_warp_masks(self, sizes, cameras, aspect=1, feature_masks=None):
+        if feature_masks is not None:
+            for size, camera, feature_mask in zip(sizes, cameras, feature_masks):
+                yield self.create_and_warp_mask(size, camera, aspect, feature_mask)
+        else:
+            for size, camera in zip(sizes, cameras):
+                yield self.create_and_warp_mask(size, camera, aspect)
 
-    def create_and_warp_mask(self, size, camera, aspect=1):
+    def create_and_warp_mask(self, size, camera, aspect=1, feature_mask = None):
         warper = cv.PyRotationWarper(self.warper_type, self.scale * aspect)
         mask = 255 * np.ones((size[1], size[0]), np.uint8)
+        if(feature_mask is not None):
+            mask = cv.resize(feature_mask, (size[0], size[1]))
+        
         _, warped_mask = warper.warp(
             mask,
             Warper.get_K(camera, aspect),

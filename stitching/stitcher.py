@@ -105,7 +105,7 @@ class Stitcher:
         self.estimate_scale(cameras)
 
         imgs = self.resize_low_resolution(imgs)
-        imgs, masks, corners, sizes = self.warp_low_resolution(imgs, cameras)
+        imgs, masks, corners, sizes = self.warp_low_resolution(imgs, cameras, feature_masks)
         self.prepare_cropper(imgs, masks, corners, sizes)
         imgs, masks, corners, sizes = self.crop_low_resolution(
             imgs, masks, corners, sizes
@@ -114,7 +114,7 @@ class Stitcher:
         seam_masks = self.find_seam_masks(imgs, corners, masks)
 
         imgs = self.resize_final_resolution()
-        imgs, masks, corners, sizes = self.warp_final_resolution(imgs, cameras)
+        imgs, masks, corners, sizes = self.warp_final_resolution(imgs, cameras, feature_masks)
         imgs, masks, corners, sizes = self.crop_final_resolution(
             imgs, masks, corners, sizes
         )
@@ -170,20 +170,20 @@ class Stitcher:
     def resize_low_resolution(self, imgs=None):
         return list(self.img_handler.resize_to_low_resolution(imgs))
 
-    def warp_low_resolution(self, imgs, cameras):
+    def warp_low_resolution(self, imgs, cameras, feature_masks):
         sizes = self.img_handler.get_low_img_sizes()
         camera_aspect = self.img_handler.get_medium_to_low_ratio()
-        imgs, masks, corners, sizes = self.warp(imgs, cameras, sizes, camera_aspect)
+        imgs, masks, corners, sizes = self.warp(imgs, cameras, sizes, feature_masks, camera_aspect)
         return list(imgs), list(masks), corners, sizes
 
-    def warp_final_resolution(self, imgs, cameras):
+    def warp_final_resolution(self, imgs, cameras, feature_masks):
         sizes = self.img_handler.get_final_img_sizes()
         camera_aspect = self.img_handler.get_medium_to_final_ratio()
-        return self.warp(imgs, cameras, sizes, camera_aspect)
+        return self.warp(imgs, cameras, sizes, feature_masks, camera_aspect)
 
-    def warp(self, imgs, cameras, sizes, aspect=1):
+    def warp(self, imgs, cameras, sizes, feature_masks, aspect=1):
         imgs = self.warper.warp_images(imgs, cameras, aspect)
-        masks = self.warper.create_and_warp_masks(sizes, cameras, aspect)
+        masks = self.warper.create_and_warp_masks(sizes, cameras, aspect, feature_masks)
         corners, sizes = self.warper.warp_rois(sizes, cameras, aspect)
         return imgs, masks, corners, sizes
 

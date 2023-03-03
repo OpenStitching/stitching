@@ -282,7 +282,7 @@ def main():
     
     mask_names = args_dict.pop("mask_names")
     if mask_names is not None and len(mask_names) != len(img_names):
-        raise Exception('img_names and masks should have the same length')
+        raise Exception('img_names ('+str(len(img_names))+') and masks ('+str(len(mask_names))+')  should have the same length')
     
     if mask_names is not None:
         panorama = stitcher.stitch(img_names, mask_names)
