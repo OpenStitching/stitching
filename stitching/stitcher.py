@@ -91,8 +91,11 @@ class Stitcher:
     def stitch(self, img_names, mask_names=None):
         self.initialize_registration(img_names, mask_names)
         imgs = self.resize_medium_resolution()
-        feature_masks = list(self.mask_handler.to_medium_resolution_binary_mask())
-        print('feature_masks', feature_masks, self.mask_handler.img_names)
+        if mask_names is None :
+            feature_masks = None
+        else:
+            feature_masks = list(self.mask_handler.to_medium_resolution_binary_mask())
+        
         features = self.find_features(imgs, feature_masks)
         matches = self.match_features(features)
         imgs, features, matches = self.subset(imgs, features, matches)
@@ -132,8 +135,11 @@ class Stitcher:
     def resize_medium_resolution(self):
         return list(self.img_handler.resize_to_medium_resolution())
 
-    def find_features(self, imgs, *args):
-        return [self.detector.detect_features(img, *args) for img in imgs]
+    def find_features(self, imgs, mask_features = None):
+        if mask_features is not None:
+            return [self.detector.detect_features(img, mask) for (img, mask) in zip(imgs, mask_features) ]
+        else: 
+            return [self.detector.detect_features(img) for img in imgs ]
 
     def match_features(self, features):
         return self.matcher.match_features(features)
