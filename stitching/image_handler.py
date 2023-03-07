@@ -68,7 +68,7 @@ class ImageHandler:
     
     @staticmethod
     def binary_img(img):
-        thr, bin = cv.threshold(cv.cvtColor(img, cv.COLOR_BGR2GRAY), 0.1, 255.0, cv.THRESH_BINARY);
+        _, bin = cv.threshold(cv.cvtColor(img, cv.COLOR_BGR2GRAY), 127, 255, cv.THRESH_BINARY);
         return bin
 
     def input_images(self):
