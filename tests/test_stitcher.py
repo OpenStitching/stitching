@@ -23,14 +23,14 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (700, 1811), atol=max_image_shape_derivation
         )
 
-    @unittest.skip("skip boat test (high resuolution ran >30s)")
+    @unittest.skip("skip long running boat test")
     def test_stitcher_boat1(self):
         settings = {
             "warper_type": "fisheye",
             "wave_correct_kind": "no",
             "finder": "dp_colorgrad",
             "compensator": "no",
-            "confidence_threshold": 0.3,
+            "confidence_threshold": 1,
             "crop": False,
         }
 
@@ -53,13 +53,13 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (14488, 7556), atol=max_image_shape_derivation
         )
 
-    @unittest.skip("skip boat test (high resuolution ran >30s)")
+    @unittest.skip("skip long running boat test")
     def test_stitcher_boat2(self):
         settings = {
             "warper_type": "compressedPlaneA2B1",
             "finder": "dp_colorgrad",
             "compensator": "channel_blocks",
-            "confidence_threshold": 0.3,
+            "confidence_threshold": 1,
             "crop": False,
         }
 
@@ -105,7 +105,7 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (705, 3374), atol=max_image_shape_derivation
         )
 
-    def test_stitcher_budapest(self):
+    def test_affine_stitcher_budapest(self):
         settings = {
             "confidence_threshold": 0.3,
             "crop": False,
