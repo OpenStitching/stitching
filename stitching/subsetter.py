@@ -40,7 +40,7 @@ class Subsetter:
 
     def get_matches_graph(self, img_names, pairwise_matches):
         return cv.detail.matchesGraphAsString(
-            img_names, pairwise_matches, self.confidence_threshold
+            img_names, pairwise_matches, self.confidence_threshold if(self.confidence_threshold != 0) else 0.00001 # there is a bug in opencv with 0 as confidence threshold
         )
 
     def get_indices_to_keep(self, features, pairwise_matches):
