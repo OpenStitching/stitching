@@ -62,7 +62,7 @@ class TestImageRegistration(unittest.TestCase):
         pairwise_matches = matcher.match_features(features)
         subsetter = Subsetter(
             confidence_threshold=1, matches_graph_dot_file="dot_graph.txt"
-        )  # view in https://dreampuf.github.io  # noqa
+        )  # view in https://dreampuf.github.io
 
         indices = subsetter.get_indices_to_keep(features, pairwise_matches)
 

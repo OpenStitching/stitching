@@ -13,22 +13,6 @@ class TestImageComposition(unittest.TestCase):
         TEST_DIR = os.path.abspath(os.path.dirname(__file__))
         os.chdir(os.path.join(TEST_DIR, "testdata"))
 
-    #  visual test: look especially in the sky
-    def test_exposure_compensation(self):
-        img = cv.imread("s1.jpg")
-        img = increase_brightness(img, value=25)
-        cv.imwrite("s1_bright.jpg", img)
-
-        stitcher = Stitcher(compensator="no", blender_type="no", crop=False)
-        result = stitcher.stitch(["s1_bright.jpg", "s2.jpg"])
-
-        cv.imwrite("without_exposure_comp.jpg", result)
-
-        stitcher = Stitcher(blender_type="no")
-        result = stitcher.stitch(["s1_bright.jpg", "s2.jpg"])
-
-        cv.imwrite("with_exposure_comp.jpg", result)
-
     def test_timelapse(self):
         stitcher = Stitcher(timelapse="as_is", crop=False)
         _ = stitcher.stitch(["s1.jpg", "s2.jpg"])
@@ -56,19 +40,6 @@ class TestImageComposition(unittest.TestCase):
 
         self.assertGreater(cv.countNonZero(left), 800000)
         self.assertEqual(cv.countNonZero(right), 0)
-
-
-def increase_brightness(img, value=30):
-    hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
-    h, s, v = cv.split(hsv)
-
-    lim = 255 - value
-    v[v > lim] = 255
-    v[v <= lim] += value
-
-    final_hsv = cv.merge((h, s, v))
-    img = cv.cvtColor(final_hsv, cv.COLOR_HSV2BGR)
-    return img
 
 
 def starttest():

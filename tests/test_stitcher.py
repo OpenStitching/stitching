@@ -23,7 +23,7 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (700, 1811), atol=max_image_shape_derivation
         )
 
-    @unittest.skip("skip long running boat test")
+    # @unittest.skip("you might want to skip long running boat test")
     def test_stitcher_boat1(self):
         settings = {
             "warper_type": "fisheye",
@@ -53,7 +53,7 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (14488, 7556), atol=max_image_shape_derivation
         )
 
-    @unittest.skip("skip long running boat test")
+    # @unittest.skip("you might want to skip long running boat test")
     def test_stitcher_boat2(self):
         settings = {
             "warper_type": "compressedPlaneA2B1",
