@@ -25,7 +25,6 @@ class ExposureErrorCompensator:
         nr_feeds=DEFAULT_NR_FEEDS,
         block_size=DEFAULT_BLOCK_SIZE,
     ):
-
         if compensator == "channel":
             self.compensator = cv.detail_ChannelsCompensator(nr_feeds)
         elif compensator == "channel_blocks":
