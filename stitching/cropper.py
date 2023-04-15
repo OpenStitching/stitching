@@ -43,7 +43,6 @@ class Rectangle(namedtuple("Rectangle", "x y width height")):
 
 
 class Cropper:
-
     DEFAULT_CROP = True
 
     def __init__(self, crop=DEFAULT_CROP):

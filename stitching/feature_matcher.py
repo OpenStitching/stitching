@@ -14,7 +14,6 @@ class FeatureMatcher:
     def __init__(
         self, matcher_type=DEFAULT_MATCHER, range_width=DEFAULT_RANGE_WIDTH, **kwargs
     ):
-
         if matcher_type == "affine":
             self.matcher = cv.detail_AffineBestOf2NearestMatcher(**kwargs)
         elif range_width == -1:
