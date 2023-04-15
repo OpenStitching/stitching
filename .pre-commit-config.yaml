@@ -27,10 +27,3 @@ repos:
         args:
           - "--max-line-length=88"
           - "--ignore=E203"
-  - repo: https://github.com/timothycrosley/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
-        args:
-          - "--profile=black"
-          - "--filter-files"
