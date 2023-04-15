@@ -24,7 +24,6 @@ class CameraAdjuster:
         refinement_mask=DEFAULT_REFINEMENT_MASK,
         confidence_threshold=1.0,
     ):
-
         self.adjuster = CameraAdjuster.CAMERA_ADJUSTER_CHOICES[adjuster]()
         self.set_refinement_mask(refinement_mask)
         self.adjuster.setConfThresh(confidence_threshold)
