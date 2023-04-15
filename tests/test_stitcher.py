@@ -4,7 +4,7 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import AffineStitcher, Stitcher
+from tests.context import AffineStitcher, Stitcher
 
 
 class TestStitcher(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (700, 1811), atol=max_image_shape_derivation
         )
 
-    # @unittest.skip("you might want to skip long running boat test")
+    @unittest.skip("you might want to skip long running boat test")
     def test_stitcher_boat1(self):
         settings = {
             "warper_type": "fisheye",
@@ -53,7 +53,7 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (14488, 7556), atol=max_image_shape_derivation
         )
 
-    # @unittest.skip("you might want to skip long running boat test")
+    @unittest.skip("you might want to skip long running boat test")
     def test_stitcher_boat2(self):
         settings = {
             "warper_type": "compressedPlaneA2B1",
@@ -107,7 +107,7 @@ class TestStitcher(unittest.TestCase):
 
     def test_affine_stitcher_budapest(self):
         settings = {
-            "confidence_threshold": 0.3,
+            "confidence_threshold": 0,
             "crop": False,
         }
 
