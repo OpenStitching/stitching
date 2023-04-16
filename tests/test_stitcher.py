@@ -4,19 +4,14 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import AffineStitcher, Stitcher
-
+from context import testimg, testresult, AffineStitcher, Stitcher
 
 class TestStitcher(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        TEST_DIR = os.path.abspath(os.path.dirname(__file__))
-        os.chdir(os.path.join(TEST_DIR, "testdata"))
 
     def test_stitcher_aquaduct(self):
         stitcher = Stitcher(nfeatures=250, crop=False)
-        result = stitcher.stitch(["s1.jpg", "s2.jpg"])
-        cv.imwrite("result.jpg", result)
+        result = stitcher.stitch([testimg("s?.jpg")])
+        testresult("s_result.jpg", result)
 
         max_image_shape_derivation = 3
         np.testing.assert_allclose(
@@ -29,23 +24,22 @@ class TestStitcher(unittest.TestCase):
             "wave_correct_kind": "no",
             "finder": "dp_colorgrad",
             "compensator": "no",
-            "confidence_threshold": 1,
             "crop": False,
         }
 
         stitcher = Stitcher(**settings)
         result = stitcher.stitch(
             [
-                "boat5.jpg",
-                "boat2.jpg",
-                "boat3.jpg",
-                "boat4.jpg",
-                "boat1.jpg",
-                "boat6.jpg",
+                testimg("boat5.jpg"),
+                testimg("boat2.jpg"),
+                testimg("boat3.jpg"),
+                testimg("boat4.jpg"),
+                testimg("boat1.jpg"),
+                testimg("boat6.jpg"),
             ]
         )
 
-        cv.imwrite("boat_fisheye.jpg", result)
+        testresult("boat_fisheye.jpg", result)
 
         max_image_shape_derivation = 600
         np.testing.assert_allclose(
@@ -57,23 +51,22 @@ class TestStitcher(unittest.TestCase):
             "warper_type": "compressedPlaneA2B1",
             "finder": "dp_colorgrad",
             "compensator": "channel_blocks",
-            "confidence_threshold": 1,
             "crop": False,
         }
 
         stitcher = Stitcher(**settings)
         result = stitcher.stitch(
             [
-                "boat5.jpg",
-                "boat2.jpg",
-                "boat3.jpg",
-                "boat4.jpg",
-                "boat1.jpg",
-                "boat6.jpg",
+                testimg("boat5.jpg"),
+                testimg("boat2.jpg"),
+                testimg("boat3.jpg"),
+                testimg("boat4.jpg"),
+                testimg("boat1.jpg"),
+                testimg("boat6.jpg"),
             ]
         )
 
-        cv.imwrite("boat_plane.jpg", result)
+        testresult("boat_plane.jpg", result)
 
         max_image_shape_derivation = 600
         np.testing.assert_allclose(
@@ -86,17 +79,17 @@ class TestStitcher(unittest.TestCase):
         stitcher = Stitcher(**settings)
         result = stitcher.stitch(
             [
-                "boat5.jpg",
-                "s1.jpg",
-                "s2.jpg",
-                "boat2.jpg",
-                "boat3.jpg",
-                "boat4.jpg",
-                "boat1.jpg",
-                "boat6.jpg",
+                testimg("boat5.jpg"),
+                testimg("s1.jpg"),
+                testimg("s2.jpg"),
+                testimg("boat2.jpg"),
+                testimg("boat3.jpg"),
+                testimg("boat4.jpg"),
+                testimg("boat1.jpg"),
+                testimg("boat6.jpg"),
             ]
         )
-        cv.imwrite("subset_low_res.jpg", result)
+        testresult("subset_low_res.jpg", result)
 
         max_image_shape_derivation = 100
         np.testing.assert_allclose(
@@ -110,18 +103,9 @@ class TestStitcher(unittest.TestCase):
         }
 
         stitcher = AffineStitcher(**settings)
-        result = stitcher.stitch(
-            [
-                "budapest1.jpg",
-                "budapest2.jpg",
-                "budapest3.jpg",
-                "budapest4.jpg",
-                "budapest5.jpg",
-                "budapest6.jpg",
-            ]
-        )
+        result = stitcher.stitch([testimg("budapest?.jpg")])
 
-        cv.imwrite("budapest.jpg", result)
+        testresult("budapest.jpg", result)
 
         max_image_shape_derivation = 50
         np.testing.assert_allclose(

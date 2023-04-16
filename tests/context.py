@@ -1,6 +1,8 @@
 import os
 import sys
 
+import cv2 as cv
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from stitching import AffineStitcher, Stitcher  # noqa: F401, E402
@@ -23,3 +25,15 @@ from stitching.seam_finder import SeamFinder  # noqa: F401, E402
 from stitching.subsetter import Subsetter  # noqa: F401, E402
 from stitching.timelapser import Timelapser  # noqa: F401, E402
 from stitching.warper import Warper  # noqa: F401, E402
+
+TEST_DIR = os.path.abspath(os.path.dirname(__file__))
+IN_DIR = os.path.join(TEST_DIR, "testdata")
+OUT_DIR = os.path.join(TEST_DIR, "results")
+
+
+def testimg(img_name):
+    return os.path.join(IN_DIR, img_name)
+    
+    
+def testresult(img_name, img):
+    cv.imwrite(os.path.join(OUT_DIR, img_name), img)
