@@ -1,7 +1,9 @@
 import unittest
 
 import numpy as np
+
 from .context import AffineStitcher, Stitcher, testimg, testresult
+
 
 class TestStitcher(unittest.TestCase):
     def test_stitcher_aquaduct(self):
