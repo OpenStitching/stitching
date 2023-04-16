@@ -1,10 +1,9 @@
-import os
 import unittest
 
-import cv2 as cv
 import numpy as np
 
-from context import testimg, testresult, AffineStitcher, Stitcher
+from .context import testimg, testresult, AffineStitcher, Stitcher
+
 
 class TestStitcher(unittest.TestCase):
 
