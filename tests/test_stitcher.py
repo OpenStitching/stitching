@@ -1,12 +1,9 @@
 import unittest
 
 import numpy as np
-
-from .context import testimg, testresult, AffineStitcher, Stitcher
-
+from .context import AffineStitcher, Stitcher, testimg, testresult
 
 class TestStitcher(unittest.TestCase):
-
     def test_stitcher_aquaduct(self):
         stitcher = Stitcher(nfeatures=250, crop=False)
         result = stitcher.stitch([testimg("s?.jpg")])

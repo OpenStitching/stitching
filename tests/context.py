@@ -33,7 +33,7 @@ OUT_DIR = os.path.join(TEST_DIR, "results")
 
 def testimg(img_name):
     return os.path.join(IN_DIR, img_name)
-    
-    
+
+
 def testresult(img_name, img):
     cv.imwrite(os.path.join(OUT_DIR, img_name), img)
