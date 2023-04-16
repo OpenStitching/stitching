@@ -3,11 +3,10 @@ import unittest
 
 import cv2 as cv
 import numpy as np
+from context import AffineStitcher, Stitcher, testimg, testresult
 
-from context import testimg, testresult, AffineStitcher, Stitcher
 
 class TestStitcher(unittest.TestCase):
-
     def test_stitcher_aquaduct(self):
         stitcher = Stitcher(nfeatures=250, crop=False)
         result = stitcher.stitch([testimg("s?.jpg")])
