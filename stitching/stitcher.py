@@ -42,6 +42,7 @@ class Stitcher:
         "blender_type": Blender.DEFAULT_BLENDER,
         "blend_strength": Blender.DEFAULT_BLEND_STRENGTH,
         "timelapse": Timelapser.DEFAULT_TIMELAPSE,
+        "timelapse_prefix": Timelapser.DEFAULT_TIMELAPSE_PREFIX,
     }
 
     def __init__(self, **kwargs):
@@ -82,7 +83,7 @@ class Stitcher:
         )
         self.seam_finder = SeamFinder(args.finder)
         self.blender = Blender(args.blender_type, args.blend_strength)
-        self.timelapser = Timelapser(args.timelapse)
+        self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
 
     def stitch(self, img_names):
         self.initialize_registration(img_names)

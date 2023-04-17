@@ -4,19 +4,15 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import Stitcher
+from .context import Stitcher, testimg, OUT_DIR
 
 
 class TestImageComposition(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        TEST_DIR = os.path.abspath(os.path.dirname(__file__))
-        os.chdir(os.path.join(TEST_DIR, "testdata"))
 
     def test_timelapse(self):
-        stitcher = Stitcher(timelapse="as_is", crop=False)
-        _ = stitcher.stitch(["s1.jpg", "s2.jpg"])
-        frame1 = cv.imread("fixed_s1.jpg")
+        stitcher = Stitcher(timelapse="as_is", timelapse_prefix=os.path.join(OUT_DIR, "timelapse_"), crop=False)
+        _ = stitcher.stitch([testimg("s?.jpg")])
+        frame1 = cv.imread(os.path.join(OUT_DIR, "timelapse_s1.jpg"))
 
         max_image_shape_derivation = 3
         np.testing.assert_allclose(

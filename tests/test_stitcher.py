@@ -87,7 +87,7 @@ class TestStitcher(unittest.TestCase):
                 testimg("boat6.jpg"),
             ]
         )
-        testresult("subset_low_res.jpg", result)
+        testresult("boat_subset_low_res.jpg", result)
 
         max_image_shape_derivation = 100
         np.testing.assert_allclose(
