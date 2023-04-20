@@ -94,7 +94,7 @@ class Cropper:
 
         contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
         if not hierarchy.shape == (1, 1, 4) or not np.all(hierarchy == -1):
-            raise StitchingError("Invalid Contour. Try without cropping.")
+            raise StitchingError("Invalid Contour. Run with --no-crop (using the stitch interface), crop=false (using the stitcher class) or Cropper(False) (using the cropper class)")
         contour = contours[0][:, 0, :]
 
         lir = largestinteriorrectangle.lir(mask > 0, contour)

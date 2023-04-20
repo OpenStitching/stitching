@@ -25,6 +25,8 @@ from stitching.seam_finder import SeamFinder  # noqa: F401, E402
 from stitching.subsetter import Subsetter  # noqa: F401, E402
 from stitching.timelapser import Timelapser  # noqa: F401, E402
 from stitching.warper import Warper  # noqa: F401, E402
+from stitching.stitching_error import StitchingWarning  # noqa: F401, E402
+from stitching.cli.stitch import create_parser, main  # noqa: F401, E402
 
 TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 IN_DIR = os.path.join(TEST_DIR, "testdata")
