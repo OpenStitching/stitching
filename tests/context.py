@@ -10,6 +10,7 @@ from stitching.blender import Blender  # noqa: F401, E402
 from stitching.camera_adjuster import CameraAdjuster  # noqa: F401, E402
 from stitching.camera_estimator import CameraEstimator  # noqa: F401, E402
 from stitching.camera_wave_corrector import WaveCorrector  # noqa: F401, E402
+from stitching.cli.stitch import create_parser, main  # noqa: F401, E402
 from stitching.cropper import Cropper  # noqa: F401, E402
 from stitching.exposure_error_compensator import (  # noqa: F401, E402
     ExposureErrorCompensator,
@@ -22,11 +23,10 @@ from stitching.megapix_scaler import (  # noqa: F401, E402
     MegapixScaler,
 )
 from stitching.seam_finder import SeamFinder  # noqa: F401, E402
+from stitching.stitching_error import StitchingWarning  # noqa: F401, E402
 from stitching.subsetter import Subsetter  # noqa: F401, E402
 from stitching.timelapser import Timelapser  # noqa: F401, E402
 from stitching.warper import Warper  # noqa: F401, E402
-from stitching.stitching_error import StitchingWarning  # noqa: F401, E402
-from stitching.cli.stitch import create_parser, main  # noqa: F401, E402
 
 TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 IN_DIR = os.path.join(TEST_DIR, "testdata")

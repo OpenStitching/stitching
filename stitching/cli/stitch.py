@@ -24,6 +24,7 @@ from stitching.subsetter import Subsetter
 from stitching.timelapser import Timelapser
 from stitching.warper import Warper
 
+
 def create_parser():
     parser = argparse.ArgumentParser(prog="stitch.py")
     parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)

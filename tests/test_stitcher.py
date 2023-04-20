@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from .context import AffineStitcher, Stitcher, testimg, testresult, StitchingWarning
+from .context import AffineStitcher, Stitcher, StitchingWarning, testimg, testresult
 
 
 class TestStitcher(unittest.TestCase):
@@ -75,7 +75,7 @@ class TestStitcher(unittest.TestCase):
         settings = {"final_megapix": 1}
 
         stitcher = Stitcher(**settings)
-        
+
         with self.assertWarns(StitchingWarning) as cm:
             result = stitcher.stitch(
                 [
@@ -89,9 +89,9 @@ class TestStitcher(unittest.TestCase):
                     testimg("boat6.jpg"),
                 ]
             )
-        
+
         self.assertEqual(str(cm.warning), "not all images stitched")
-        
+
         testresult("boat_subset_low_res.jpg", result)
 
         max_image_shape_derivation = 100

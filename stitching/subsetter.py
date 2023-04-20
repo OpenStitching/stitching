@@ -1,8 +1,8 @@
+import warnings
 from itertools import chain
 
 import cv2 as cv
 import numpy as np
-import warnings
 
 from .feature_matcher import FeatureMatcher
 from .stitching_error import StitchingError, StitchingWarning
@@ -27,16 +27,16 @@ class Subsetter:
     def subset(self, img_names, img_sizes, imgs, features, matches):
         self.save_matches_graph_dot_file(img_names, matches)
         indices = self.get_indices_to_keep(features, matches)
-        
+
         if len(indices) < len(img_names):
             warnings.warn("not all images stitched", StitchingWarning)
-        
+
         img_names = Subsetter.subset_list(img_names, indices)
         img_sizes = Subsetter.subset_list(img_sizes, indices)
         imgs = Subsetter.subset_list(imgs, indices)
         features = Subsetter.subset_list(features, indices)
         matches = Subsetter.subset_matches(matches, indices)
-        
+
         return img_names, img_sizes, imgs, features, matches
 
     def save_matches_graph_dot_file(self, img_names, pairwise_matches):
