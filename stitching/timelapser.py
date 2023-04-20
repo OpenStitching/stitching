@@ -15,7 +15,9 @@ class Timelapser:
     DEFAULT_TIMELAPSE = "no"
     DEFAULT_TIMELAPSE_PREFIX = "fixed_"
 
-    def __init__(self, timelapse=DEFAULT_TIMELAPSE, timelapse_prefix=DEFAULT_TIMELAPSE_PREFIX):
+    def __init__(
+        self, timelapse=DEFAULT_TIMELAPSE, timelapse_prefix=DEFAULT_TIMELAPSE_PREFIX
+    ):
         self.do_timelapse = True
         self.timelapse_type = None
         self.timelapser = None

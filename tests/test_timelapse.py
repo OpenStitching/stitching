@@ -4,13 +4,16 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import Stitcher, testimg, OUT_DIR
+from .context import OUT_DIR, Stitcher, testimg
 
 
 class TestImageComposition(unittest.TestCase):
-
     def test_timelapse(self):
-        stitcher = Stitcher(timelapse="as_is", timelapse_prefix=os.path.join(OUT_DIR, "timelapse_"), crop=False)
+        stitcher = Stitcher(
+            timelapse="as_is",
+            timelapse_prefix=os.path.join(OUT_DIR, "timelapse_"),
+            crop=False,
+        )
         _ = stitcher.stitch([testimg("s?.jpg")])
         frame1 = cv.imread(os.path.join(OUT_DIR, "timelapse_s1.jpg"))
 
