@@ -1,18 +1,11 @@
-import os
 import unittest
-
-import cv2 as cv
 
 from .context import MegapixDownscaler, MegapixScaler
 
+SIZE = (1246, 700)
+
 
 class TestScaler(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        TEST_DIR = os.path.abspath(os.path.dirname(__file__))
-        os.chdir(os.path.join(TEST_DIR, "testdata"))
-        cls.img = cv.imread("s1.jpg")
-        cls.size = (cls.img.shape[1], cls.img.shape[0])
 
     def test_get_scale_by_resolution(self):
         scaler = MegapixScaler(0.6)
@@ -24,15 +17,15 @@ class TestScaler(unittest.TestCase):
     def test_get_scale_by_image(self):
         scaler = MegapixScaler(0.6)
 
-        scaler.set_scale_by_img_size(self.size)
+        scaler.set_scale_by_img_size(SIZE)
 
         self.assertEqual(scaler.scale, 0.8294067854101966)
 
     def test_get_scaled_img_size(self):
         scaler = MegapixScaler(0.6)
-        scaler.set_scale_by_img_size(self.size)
+        scaler.set_scale_by_img_size(SIZE)
 
-        size = scaler.get_scaled_img_size(self.size)
+        size = scaler.get_scaled_img_size(SIZE)
         self.assertEqual(size, (1033, 581))
         # 581*1033 = 600173 px = ~0.6 MP
 
@@ -40,8 +33,8 @@ class TestScaler(unittest.TestCase):
         normal_scaler = MegapixScaler(2)
         downscaler = MegapixDownscaler(2)
 
-        normal_scaler.set_scale_by_img_size(self.size)
-        downscaler.set_scale_by_img_size(self.size)
+        normal_scaler.set_scale_by_img_size(SIZE)
+        downscaler.set_scale_by_img_size(SIZE)
 
         self.assertEqual(normal_scaler.scale, 1.5142826857233715)
         self.assertEqual(downscaler.scale, 1.0)

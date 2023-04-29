@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from .context import AffineStitcher, Stitcher, StitchingWarning, testimg, testresult
+from .context import AffineStitcher, Stitcher, StitchingWarning, testimg, testresult, outfile
 
 
 class TestStitcher(unittest.TestCase):
@@ -72,7 +72,8 @@ class TestStitcher(unittest.TestCase):
         )
 
     def test_stitcher_boat_aquaduct_subset(self):
-        settings = {"final_megapix": 1}
+        graph = outfile("boat_subset_matches_graph.txt")
+        settings = {"final_megapix": 1, "matches_graph_dot_file": graph}
 
         stitcher = Stitcher(**settings)
 
@@ -98,6 +99,11 @@ class TestStitcher(unittest.TestCase):
         np.testing.assert_allclose(
             result.shape[:2], (705, 3374), atol=max_image_shape_derivation
         )
+        
+        with open(graph, "r") as file:
+            graph_content = file.read()
+            self.assertTrue(graph_content.startswith("graph matches_graph{"))
+
 
     def test_affine_stitcher_budapest(self):
         settings = {

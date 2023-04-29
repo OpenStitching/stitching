@@ -4,16 +4,14 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import FeatureDetector, FeatureMatcher, Stitcher
-
-TEST_DIR = os.path.abspath(os.path.dirname(__file__))
+from .context import FeatureDetector, FeatureMatcher, Stitcher, testimg, outfile
 
 
 class TestRangeMatcher(unittest.TestCase):
     def test_BestOf2NearestRangeMatcher(self):
-        img1 = cv.imread(os.path.join(TEST_DIR, "testdata", "weir_1.jpg"))
-        img2 = cv.imread(os.path.join(TEST_DIR, "testdata", "weir_2.jpg"))
-        img3 = cv.imread(os.path.join(TEST_DIR, "testdata", "weir_3.jpg"))
+        img1 = cv.imread(testimg("weir_1.jpg"))
+        img2 = cv.imread(testimg("weir_2.jpg"))
+        img3 = cv.imread(testimg("weir_3.jpg"))
 
         detector = FeatureDetector("orb")
         features = [detector.detect_features(img) for img in [img1, img2, img3]]
@@ -35,15 +33,9 @@ class TestRangeMatcher(unittest.TestCase):
         settings = {
             "range_width": 1,
             "confidence_threshold": 0,
-            "matches_graph_dot_file": "range_width_matches_graph.txt",
+            "matches_graph_dot_file": outfile("range_width_matches_graph.txt"),
         }
         stitcher = Stitcher(**settings)
-        stitcher.stitch(
-            [
-                os.path.join(TEST_DIR, "testdata", "weir_1.jpg"),
-                os.path.join(TEST_DIR, "testdata", "weir_2.jpg"),
-                os.path.join(TEST_DIR, "testdata", "weir_3.jpg"),
-            ]
-        )
+        stitcher.stitch([testimg("weir_?.jpg")])
 
         # TODO: Automated test that matches graph is correct
