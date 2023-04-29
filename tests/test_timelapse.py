@@ -1,21 +1,20 @@
-import os
 import unittest
 
 import cv2 as cv
 import numpy as np
 
-from .context import OUT_DIR, Stitcher, testimg
+from .context import Stitcher, testinput, load_testimg
 
 
 class TestImageComposition(unittest.TestCase):
     def test_timelapse(self):
         stitcher = Stitcher(
             timelapse="as_is",
-            timelapse_prefix=os.path.join(OUT_DIR, "timelapse_"),
+            timelapse_prefix=testinput("timelapse_"),
             crop=False,
         )
-        _ = stitcher.stitch([testimg("s?.jpg")])
-        frame1 = cv.imread(os.path.join(OUT_DIR, "timelapse_s1.jpg"))
+        _ = stitcher.stitch([testinput("s?.jpg")])
+        frame1 = load_testimg("timelapse_s1.jpg")
 
         max_image_shape_derivation = 3
         np.testing.assert_allclose(

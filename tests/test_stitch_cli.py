@@ -1,4 +1,3 @@
-import os
 import sys
 import unittest
 from unittest.mock import patch
@@ -6,7 +5,7 @@ from unittest.mock import patch
 import cv2 as cv
 import numpy as np
 
-from .context import OUT_DIR, create_parser, main, testimg
+from .context import create_parser, main, testinput, testoutput
 
 
 class TestCLI(unittest.TestCase):
@@ -18,10 +17,10 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(parsed.low_megapix, 1.0)
 
     def test_main(self):
-        output = os.path.join(OUT_DIR, "weir_from_cli.jpg")
+        output = testoutput("weir_from_cli.jpg")
         testargs = [
             "stitch.py",
-            testimg("weir_?.jpg"),
+            testinput("weir_?.jpg"),
             "--final_megapix",
             "0.05",
             "--output",
