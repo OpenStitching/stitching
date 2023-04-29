@@ -4,7 +4,6 @@ from .context import FeatureDetector, load_testimg
 
 
 class TestFeatureDetector(unittest.TestCase):
-
     def test_number_of_keypoints(self):
         img1 = load_testimg("s1.jpg")
 

@@ -6,7 +6,6 @@ SIZE = (1246, 700)
 
 
 class TestScaler(unittest.TestCase):
-
     def test_get_scale_by_resolution(self):
         scaler = MegapixScaler(0.6)
 

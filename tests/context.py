@@ -43,7 +43,7 @@ def testinput(file):
 
 def write_testresult(img_name, img):
     cv.imwrite(testoutput(img_name), img)
-    
-    
+
+
 def testoutput(file):
     return os.path.join(OUT_DIR, file)
