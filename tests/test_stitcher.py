@@ -2,7 +2,15 @@ import unittest
 
 import numpy as np
 
-from .context import AffineStitcher, Stitcher, StitchingWarning, testinput, testoutput, write_testresult, StitchingError
+from .context import (
+    AffineStitcher,
+    Stitcher,
+    StitchingWarning,
+    StitchingError,
+    testinput,
+    testoutput,
+    write_testresult,
+)
 
 
 class TestStitcher(unittest.TestCase):
@@ -105,11 +113,10 @@ class TestStitcher(unittest.TestCase):
         np.testing.assert_allclose(
             result.shape[:2], (705, 3374), atol=max_image_shape_derivation
         )
-        
+
         with open(graph, "r") as file:
             graph_content = file.read()
             self.assertTrue(graph_content.startswith("graph matches_graph{"))
-
 
     def test_affine_stitcher_budapest(self):
         settings = {

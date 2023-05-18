@@ -2,7 +2,14 @@ import unittest
 
 import numpy as np
 
-from .context import FeatureDetector, FeatureMatcher, Stitcher, testinput, testoutput, load_testimg
+from .context import (
+    FeatureDetector,
+    FeatureMatcher,
+    Stitcher,
+    load_testimg,
+    testinput,
+    testoutput,
+)
 
 
 class TestRangeMatcher(unittest.TestCase):
@@ -34,6 +41,8 @@ class TestRangeMatcher(unittest.TestCase):
             "matches_graph_dot_file": testoutput("range_width_matches_graph.txt"),
         }
         stitcher = Stitcher(**settings)
-        stitcher.stitch([testinput("weir_1.jpg"), testinput("weir_2.jpg"), testinput("weir_3.jpg")])
+        stitcher.stitch(
+            [testinput("weir_1.jpg"), testinput("weir_2.jpg"), testinput("weir_3.jpg")]
+        )
 
         # TODO: Automated test that matches graph is correct
