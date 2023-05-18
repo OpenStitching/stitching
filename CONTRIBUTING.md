@@ -21,9 +21,9 @@ and create a branch for your new feature or bug fix.
 2. Run the tests. We only take pull requests with passing tests: `python -m unittest`
 
 3. Add at least one test for your change. Only refactoring and documentation changes
-require no new tests. Also make sure you submit a change specific to exactly one issue.
-If you have ideas for multiple
-changes please create separate pull requests.
+require no new tests. 
+Also make sure you submit a change specific to exactly one issue.
+If you have ideas for multiple changes please create separate pull requests.
 
 4. Make the test(s) pass.
 
@@ -41,6 +41,7 @@ fall under the Apache License and contributors agree to our
 
 We use the formatters and linters stated in
 [.pre-commit-config.yaml](https://github.com/OpenStitching/stitching/blob/main/.pre-commit-config.yaml).
-We use [pre-commit.ci](https://pre-commit.ci/) to apply and enforce the formatting rules.
+We use [pre-commit.ci](https://pre-commit.ci/) 
+to apply and enforce the formatting rules.
 They are applied on your changes automatically once you open a Pull Request,
 so you don't have to bother with formatting. Thanks pre-commit <3
