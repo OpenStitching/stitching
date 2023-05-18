@@ -10,30 +10,30 @@ Issues for newcomers are tagged with
 and documentation issues are tagged with
 ['documentation'](https://github.com/OpenStitching/stitching/labels/documentation).
 
-We would be happy about co-maintainers, so do not hesitate contacting us 
+We would be happy about co-maintainers, so do not hesitate contacting us
 if you see yourself helping to continue this project!
 
 ## We love pull requests. Here's a quick guide
 
-1. [Fork the repo](https://help.github.com/articles/fork-a-repo) 
+1. [Fork the repo](https://help.github.com/articles/fork-a-repo)
 and create a branch for your new feature or bug fix.
 
 2. Run the tests. We only take pull requests with passing tests: `python -m unittest`
 
 3. Add at least one test for your change. Only refactoring and documentation changes
-require no new tests. Also make sure you submit a change specific to exactly one issue. 
+require no new tests. Also make sure you submit a change specific to exactly one issue.
 If you have ideas for multiple
 changes please create separate pull requests.
 
 4. Make the test(s) pass.
 
-5. Push to your fork and 
-[submit a pull request](https://help.github.com/articles/using-pull-requests). 
+5. Push to your fork and
+[submit a pull request](https://help.github.com/articles/using-pull-requests).
 A button should appear on your fork its github page afterwards.
 
 ## License Agreement
 
-All contributions like pull requests, bug fixes, documentation changes and translations 
+All contributions like pull requests, bug fixes, documentation changes and translations
 fall under the Apache License and contributors agree to our
 [contributor covenant code of conduct](https://github.com/OpenStitching/stitching/blob/main/CODE_OF_CONDUCT.md).
 
