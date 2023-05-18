@@ -1,6 +1,6 @@
 # Contributor Covenant Code of Conduct
 
-## Our Pledge 
+## Our Pledge
 
 We as members, contributors, and leaders pledge to make participation in our
 community a harassment-free experience for everyone, regardless of age, body
@@ -122,5 +122,5 @@ enforcement ladder](https://github.com/mozilla/diversity).
 
 [homepage]: https://www.contributor-covenant.org
 
-For answers to common questions about this code of conduct, see the FAQ [here](https://www.contributor-covenant.org/faq). 
+For answers to common questions about this code of conduct, see the FAQ [here](https://www.contributor-covenant.org/faq).
 Translations are available [here](https://www.contributor-covenant.org/translations).
