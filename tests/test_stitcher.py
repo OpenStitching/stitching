@@ -2,10 +2,16 @@ import unittest
 
 import numpy as np
 
-from .context import AffineStitcher, Stitcher, StitchingWarning, testinput, testoutput, write_testresult
+from .context import AffineStitcher, Stitcher, StitchingWarning, testinput, testoutput, write_testresult, StitchingError
 
 
 class TestStitcher(unittest.TestCase):
+    def test_stitcher_with_not_matching_images(self):
+        stitcher = Stitcher()
+        with self.assertRaises(StitchingError) as cm:
+            stitcher.stitch([testinput("s1.jpg"), testinput("boat1.jpg")])
+        self.assertTrue('No match exceeds the given confidence threshold' in str(cm.exception))
+    
     def test_stitcher_aquaduct(self):
         stitcher = Stitcher(nfeatures=250, crop=False)
         result = stitcher.stitch([testinput("s?.jpg")])
@@ -91,7 +97,7 @@ class TestStitcher(unittest.TestCase):
                 ]
             )
 
-        self.assertEqual(str(cm.warning), "not all images stitched")
+        self.assertTrue(str(cm.warning).startswith("Not all images are included"))
 
         write_testresult("boat_subset_low_res.jpg", result)
 
