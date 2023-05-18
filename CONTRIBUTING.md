@@ -2,7 +2,7 @@
 
 All code contributions and bug reports are welcome!
 
-Submit a new issue only if you are sure it is a missing feature or a bug. 
+Submit a new issue only if you are sure it is a missing feature or a bug.
 For questions or if you are unsure [visit our discussions](https://github.com/OpenStitching/stitching/discussions).
 
 Issues for newcomers are tagged with
@@ -29,14 +29,14 @@ appear on your fork its github page afterwards.
 
 ## License Agreement
 
-All contributions like pull requests, bug fixes, documentation changes and translations fall under the 
+All contributions like pull requests, bug fixes, documentation changes and translations fall under the
 Apache License and contributors agree to our
 [contributor covenant code of conduct](https://github.com/OpenStitching/stitching/blob/main/CODE_OF_CONDUCT.md).
 
 ## Code formatting
 
-We use the formatters and linters stated in 
+We use the formatters and linters stated in
 [.pre-commit-config.yaml](https://github.com/OpenStitching/stitching/blob/main/.pre-commit-config.yaml).
-We use [pre-commit.ci](https://pre-commit.ci/) to apply and enforce the formatting rules. 
+We use [pre-commit.ci](https://pre-commit.ci/) to apply and enforce the formatting rules.
 They are applied on your changes automatically once you open a Pull Request,
 so you don't have to bother with formatting. Thanks pre-commit <3
