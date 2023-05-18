@@ -1,3 +1,5 @@
+import glob
+
 import cv2 as cv
 
 from .megapix_scaler import MegapixDownscaler
@@ -31,6 +33,8 @@ class ImageHandler:
         self.img_sizes = []
 
     def set_img_names(self, img_names):
+        if len(img_names) == 1:
+            img_names = glob.glob(img_names[0])
         if len(img_names) < 2:
             raise StitchingError("2 or more Images needed for Stitching")
         self.img_names = img_names

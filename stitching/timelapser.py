@@ -13,11 +13,15 @@ class Timelapser:
         "crop",
     )
     DEFAULT_TIMELAPSE = "no"
+    DEFAULT_TIMELAPSE_PREFIX = "fixed_"
 
-    def __init__(self, timelapse=DEFAULT_TIMELAPSE):
+    def __init__(
+        self, timelapse=DEFAULT_TIMELAPSE, timelapse_prefix=DEFAULT_TIMELAPSE_PREFIX
+    ):
         self.do_timelapse = True
         self.timelapse_type = None
         self.timelapser = None
+        self.timelapse_prefix = timelapse_prefix
 
         if timelapse == "as_is":
             self.timelapse_type = cv.detail.Timelapser_AS_IS
@@ -47,7 +51,6 @@ class Timelapser:
         frame = cv.convertScaleAbs(frame)
         return frame
 
-    @staticmethod
-    def get_fixed_filename(img_name):
+    def get_fixed_filename(self, img_name):
         dirname, filename = os.path.split(img_name)
-        return os.path.join(dirname, "fixed_" + filename)
+        return os.path.join(dirname, self.timelapse_prefix + filename)

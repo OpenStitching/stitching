@@ -1,10 +1,11 @@
+import warnings
 from itertools import chain
 
 import cv2 as cv
 import numpy as np
 
 from .feature_matcher import FeatureMatcher
-from .stitching_error import StitchingError
+from .stitching_error import StitchingError, StitchingWarning
 
 
 class Subsetter:
@@ -27,11 +28,22 @@ class Subsetter:
         self.save_matches_graph_dot_file(img_names, matches)
         indices = self.get_indices_to_keep(features, matches)
 
+        if len(indices) < len(img_names):
+            warnings.warn(
+                """Not all images are included in the final panorama.
+                          If this is not intended, use the 'matches_graph_dot_file'
+                          parameter to analyze your matches. You might want to
+                          lower the 'confidence_threshold' or try another 'detector'
+                          to include all your images.""",
+                StitchingWarning,
+            )
+
         img_names = Subsetter.subset_list(img_names, indices)
         img_sizes = Subsetter.subset_list(img_sizes, indices)
         imgs = Subsetter.subset_list(imgs, indices)
         features = Subsetter.subset_list(features, indices)
         matches = Subsetter.subset_matches(matches, indices)
+
         return img_names, img_sizes, imgs, features, matches
 
     def save_matches_graph_dot_file(self, img_names, pairwise_matches):
@@ -54,7 +66,13 @@ class Subsetter:
         )
 
         if len(indices) < 2:
-            raise StitchingError("No match exceeds the " "given confidence threshold.")
+            raise StitchingError(
+                """No match exceeds the given confidence threshold.
+                                 Do your images have enough overlap and common
+                                 features? If yes, you might want to lower the
+                                 'confidence_threshold' or try another
+                                 'detector'."""
+            )
 
         return indices
 
