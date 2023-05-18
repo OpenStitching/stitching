@@ -61,11 +61,13 @@ stitcher = Stitcher(**settings)
 
 ## Questions
 
-For questions please use our [discussions](https://github.com/OpenStitching/stitching/discussions). Please do not use our issue section for questions.
+For questions please use our [discussions](https://github.com/OpenStitching/stitching/discussions). 
+Please do not use our issue section for questions.
 
 ## Contribute
 
-Read through [how to contribute](CONTRIBUTING.md) for information on topics like finding and fixing bugs and improving / maintaining this package.
+Read through [how to contribute](CONTRIBUTING.md) for information on topics 
+like finding and fixing bugs and improving / maintaining this package.
 
 ## Tutorial
 
