@@ -59,6 +59,16 @@ settings = {"detector": "sift", "confidence_threshold": 0.2}
 stitcher = Stitcher(**settings)
 ```
 
+## Questions
+
+For questions please use our [discussions](https://github.com/OpenStitching/stitching/discussions).
+Please do not use our issue section for questions.
+
+## Contribute
+
+Read through [how to contribute](CONTRIBUTING.md) for information on topics
+like finding and fixing bugs and improving / maintaining this package.
+
 ## Tutorial
 
 This package provides utility functions to deeply analyse what's
@@ -81,27 +91,6 @@ This package was developed and used for our paper [Automatic stitching
 of fragmented construction plans of hydraulic
 structures](https://doi.org/10.1002/bate.202200010 "Automatic
 stitching of fragmented construction plans of hydraulic structures")
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue
-first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-Run tests using
-
-```bash
-python -m unittest
-```
-
-Please make sure to lint all pull requests.
-
-Lint the changed files
-
-```bash
-pre-commit install && pre-commit run
-```
 
 ## License
 
