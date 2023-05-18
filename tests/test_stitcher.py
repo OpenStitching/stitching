@@ -5,8 +5,8 @@ import numpy as np
 from .context import (
     AffineStitcher,
     Stitcher,
-    StitchingWarning,
     StitchingError,
+    StitchingWarning,
     testinput,
     testoutput,
     write_testresult,
@@ -18,8 +18,10 @@ class TestStitcher(unittest.TestCase):
         stitcher = Stitcher()
         with self.assertRaises(StitchingError) as cm:
             stitcher.stitch([testinput("s1.jpg"), testinput("boat1.jpg")])
-        self.assertTrue('No match exceeds the given confidence threshold' in str(cm.exception))
-    
+        self.assertTrue(
+            "No match exceeds the given confidence threshold" in str(cm.exception)
+        )
+
     def test_stitcher_aquaduct(self):
         stitcher = Stitcher(nfeatures=250, crop=False)
         result = stitcher.stitch([testinput("s?.jpg")])

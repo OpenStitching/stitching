@@ -23,7 +23,10 @@ from stitching.megapix_scaler import (  # noqa: F401, E402
     MegapixScaler,
 )
 from stitching.seam_finder import SeamFinder  # noqa: F401, E402
-from stitching.stitching_error import StitchingWarning, StitchingError  # noqa: F401, E402
+from stitching.stitching_error import (  # noqa: F401, E402
+    StitchingError,
+    StitchingWarning,
+)
 from stitching.subsetter import Subsetter  # noqa: F401, E402
 from stitching.timelapser import Timelapser  # noqa: F401, E402
 from stitching.warper import Warper  # noqa: F401, E402
