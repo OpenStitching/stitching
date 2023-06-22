@@ -70,33 +70,28 @@ class SeamFinder:
         return cv.dilate(seam_lines, kernel)
 
     @staticmethod
-    def blend_seam_masks(seam_masks, corners, sizes):
-        imgs = colored_img_generator(sizes)
+    def blend_seam_masks(seam_masks, corners, sizes, colors=((255, 000, 000), (000, 000, 255), (000, 255, 000), (000, 255, 255), (255, 000, 255), (128, 128, 255), (128, 128, 128), (000, 000, 128), (000, 128, 255))):
+        imgs = colored_img_generator(sizes, colors)
         blended_seam_masks, _ = Blender.create_panorama(
             imgs, seam_masks, corners, sizes
         )
         return blended_seam_masks
 
 
-def colored_img_generator(
-    sizes,
-    colors=(
-        (255, 000, 000),  # Blue
-        (000, 000, 255),  # Red
-        (000, 255, 000),  # Green
-        (000, 255, 255),  # Yellow
-        (255, 000, 255),  # Magenta
-        (128, 128, 255),  # Pink
-        (128, 128, 128),  # Gray
-        (000, 000, 128),  # Brown
-        (000, 128, 255),
-    ),  # Orange
-):
+def colored_img_generator(sizes, colors):
+    if type(colors) is not tuple:
+        raise ValueError("colors must be a tuple ! (like colors=((255, 000, 000), (000, 255, 255)).")
+
+    if len(sizes) + 1 > len(colors):
+        print('''WARNING : Not enough default colors !\n
+        Please add additional colors in a tuple. (like colors=((255, 000, 000), (000, 255, 255)).\n
+        Without additional colors, the program will loop over the default colors.''')
+
     for idx, size in enumerate(sizes):
-        yield create_img_by_size(size, colors[idx % len(colors)])
+        yield create_img_by_size(size, colors[idx%len(colors)])
 
 
-def create_img_by_size(size, color=(0, 0, 0)):
+def create_img_by_size(size, color):
     width, height = size
     img = np.zeros((height, width, 3), np.uint8)
     img[:] = color
