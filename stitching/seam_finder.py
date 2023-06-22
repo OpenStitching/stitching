@@ -93,7 +93,7 @@ def colored_img_generator(
     ),  # Orange
 ):
     for idx, size in enumerate(sizes):
-        yield create_img_by_size(size, colors[idx%len(colors)])
+        yield create_img_by_size(size, colors[idx % len(colors)])
 
 
 def create_img_by_size(size, color=(0, 0, 0)):
