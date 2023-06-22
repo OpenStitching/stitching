@@ -101,9 +101,10 @@ def colored_img_generator(sizes, colors):
 
     if len(sizes) + 1 > len(colors):
         print(
-            """WARNING : Not enough default colors !\n
-        Please add additional colors in a tuple. (like colors=((255, 000, 000), (000, 255, 255)).\n
-        Without additional colors, the program will loop over the default colors."""
+            """! WARNING : Not enough default colors !\n
+            Please add additional colors in a tuple.\n
+            Example of use : colors=((255, 000, 000), (000, 255, 255)).\n
+            ! Without additional colors, it will loop over the default colors !"""
         )
 
     for idx, size in enumerate(sizes):
