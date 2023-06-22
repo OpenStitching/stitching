@@ -93,12 +93,7 @@ def colored_img_generator(
     ),  # Orange
 ):
     for idx, size in enumerate(sizes):
-        if idx + 1 > len(colors):
-            raise ValueError(
-                "Not enough default colors! Pass additional "
-                'colors to "colors" parameter'
-            )
-        yield create_img_by_size(size, colors[idx])
+        yield create_img_by_size(size, colors[idx%len(colors)])
 
 
 def create_img_by_size(size, color=(0, 0, 0)):
