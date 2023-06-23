@@ -5,6 +5,8 @@ import numpy as np
 
 from .blender import Blender
 
+import warnings
+from .stitching_error import StitchingWarning
 
 class SeamFinder:
     """https://docs.opencv.org/4.x/d7/d09/classcv_1_1detail_1_1SeamFinder.html"""
@@ -75,15 +77,15 @@ class SeamFinder:
         corners,
         sizes,
         colors=(
-            (255, 000, 000),
-            (000, 000, 255),
-            (000, 255, 000),
-            (000, 255, 255),
-            (255, 000, 255),
-            (128, 128, 255),
-            (128, 128, 128),
-            (000, 000, 128),
-            (000, 128, 255),
+            (255, 000, 000), # Red
+            (000, 000, 255), # Blue
+            (000, 255, 000), # Green
+            (000, 255, 255), # Yellow
+            (255, 000, 255), # Purple
+            (128, 128, 255), # Pink
+            (128, 128, 128), # Gray
+            (000, 000, 128), # Dark Blue
+            (000, 128, 255), # Light Blue
         ),
     ):
         imgs = colored_img_generator(sizes, colors)
@@ -94,24 +96,17 @@ class SeamFinder:
 
 
 def colored_img_generator(sizes, colors):
-    if type(colors) is not tuple:
-        raise ValueError(
-            "colors must be a tuple ! (like colors=((255, 000, 000), (000, 255, 255))."
-        )
 
     if len(sizes) + 1 > len(colors):
-        print(
-            """! WARNING : Not enough default colors !\n
-            Please add additional colors in a tuple.\n
-            Example of use : colors=((255, 000, 000), (000, 255, 255)).\n
-            ! Without additional colors, it will loop over the default colors !"""
-        )
+        warnings.warn(
+            """Without additional colors, there will be seam masks with identical colors""",
+            StitchingWarning)
 
     for idx, size in enumerate(sizes):
         yield create_img_by_size(size, colors[idx % len(colors)])
 
 
-def create_img_by_size(size, color):
+def create_img_by_size(size, color=(0, 0, 0)):
     width, height = size
     img = np.zeros((height, width, 3), np.uint8)
     img[:] = color
