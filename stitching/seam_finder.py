@@ -1,12 +1,12 @@
+import warnings
 from collections import OrderedDict
 
 import cv2 as cv
 import numpy as np
 
 from .blender import Blender
-
-import warnings
 from .stitching_error import StitchingWarning
+
 
 class SeamFinder:
     """https://docs.opencv.org/4.x/d7/d09/classcv_1_1detail_1_1SeamFinder.html"""
@@ -77,15 +77,15 @@ class SeamFinder:
         corners,
         sizes,
         colors=(
-            (255, 000, 000), # Red
-            (000, 000, 255), # Blue
-            (000, 255, 000), # Green
-            (000, 255, 255), # Yellow
-            (255, 000, 255), # Purple
-            (128, 128, 255), # Pink
-            (128, 128, 128), # Gray
-            (000, 000, 128), # Dark Blue
-            (000, 128, 255), # Light Blue
+            (255, 000, 000),  # Red
+            (000, 000, 255),  # Blue
+            (000, 255, 000),  # Green
+            (000, 255, 255),  # Yellow
+            (255, 000, 255),  # Purple
+            (128, 128, 255),  # Pink
+            (128, 128, 128),  # Gray
+            (000, 000, 128),  # Dark Blue
+            (000, 128, 255),  # Light Blue
         ),
     ):
         imgs = colored_img_generator(sizes, colors)
@@ -96,11 +96,11 @@ class SeamFinder:
 
 
 def colored_img_generator(sizes, colors):
-
     if len(sizes) + 1 > len(colors):
         warnings.warn(
             """Without additional colors, there will be seam masks with identical colors""",
-            StitchingWarning)
+            StitchingWarning,
+        )
 
     for idx, size in enumerate(sizes):
         yield create_img_by_size(size, colors[idx % len(colors)])
