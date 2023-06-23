@@ -1,9 +1,11 @@
+import warnings
 from collections import OrderedDict
 
 import cv2 as cv
 import numpy as np
 
 from .blender import Blender
+from .stitching_error import StitchingWarning
 
 
 class SeamFinder:
@@ -70,35 +72,39 @@ class SeamFinder:
         return cv.dilate(seam_lines, kernel)
 
     @staticmethod
-    def blend_seam_masks(seam_masks, corners, sizes):
-        imgs = colored_img_generator(sizes)
+    def blend_seam_masks(
+        seam_masks,
+        corners,
+        sizes,
+        colors=(
+            (255, 000, 000),  # Red
+            (000, 000, 255),  # Blue
+            (000, 255, 000),  # Green
+            (000, 255, 255),  # Yellow
+            (255, 000, 255),  # Purple
+            (128, 128, 255),  # Pink
+            (128, 128, 128),  # Gray
+            (000, 000, 128),  # Dark Blue
+            (000, 128, 255),  # Light Blue
+        ),
+    ):
+        imgs = colored_img_generator(sizes, colors)
         blended_seam_masks, _ = Blender.create_panorama(
             imgs, seam_masks, corners, sizes
         )
         return blended_seam_masks
 
 
-def colored_img_generator(
-    sizes,
-    colors=(
-        (255, 000, 000),  # Blue
-        (000, 000, 255),  # Red
-        (000, 255, 000),  # Green
-        (000, 255, 255),  # Yellow
-        (255, 000, 255),  # Magenta
-        (128, 128, 255),  # Pink
-        (128, 128, 128),  # Gray
-        (000, 000, 128),  # Brown
-        (000, 128, 255),
-    ),  # Orange
-):
+def colored_img_generator(sizes, colors):
+    if len(sizes) + 1 > len(colors):
+        warnings.warn(
+            """Without additional colors,
+            there will be seam masks with identical colors""",
+            StitchingWarning,
+        )
+
     for idx, size in enumerate(sizes):
-        if idx + 1 > len(colors):
-            raise ValueError(
-                "Not enough default colors! Pass additional "
-                'colors to "colors" parameter'
-            )
-        yield create_img_by_size(size, colors[idx])
+        yield create_img_by_size(size, colors[idx % len(colors)])
 
 
 def create_img_by_size(size, color=(0, 0, 0)):
