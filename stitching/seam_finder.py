@@ -98,7 +98,8 @@ class SeamFinder:
 def colored_img_generator(sizes, colors):
     if len(sizes) + 1 > len(colors):
         warnings.warn(
-            """Without additional colors, there will be seam masks with identical colors""",
+            """Without additional colors,
+            there will be seam masks with identical colors""",
             StitchingWarning,
         )
 
