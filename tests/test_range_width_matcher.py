@@ -6,7 +6,7 @@ from .context import (
     FeatureDetector,
     FeatureMatcher,
     Stitcher,
-    load_testimg,
+    load_testing,
     testinput,
     testoutput,
 )
@@ -14,9 +14,9 @@ from .context import (
 
 class TestRangeMatcher(unittest.TestCase):
     def test_BestOf2NearestRangeMatcher(self):
-        img1 = load_testimg("weir_1.jpg")
-        img2 = load_testimg("weir_2.jpg")
-        img3 = load_testimg("weir_3.jpg")
+        img1 = load_testing("weir_1.jpg")
+        img2 = load_testing("weir_2.jpg")
+        img3 = load_testing("weir_3.jpg")
 
         detector = FeatureDetector("orb")
         features = [detector.detect_features(img) for img in [img1, img2, img3]]

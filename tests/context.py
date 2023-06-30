@@ -36,7 +36,7 @@ IN_DIR = os.path.join(TEST_DIR, "testdata")
 OUT_DIR = os.path.join(TEST_DIR, "results")
 
 
-def load_testimg(img_name):
+def load_testing(img_name):
     return cv.imread(testinput(img_name))
 
 
