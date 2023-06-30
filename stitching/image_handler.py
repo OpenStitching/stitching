@@ -31,6 +31,7 @@ class ImageHandler:
         self.scales_set = False
         self.img_names = []
         self.img_sizes = []
+        self.mask_names = []
 
     def set_img_names(self, img_names):
         if len(img_names) == 1:
@@ -38,6 +39,18 @@ class ImageHandler:
         if len(img_names) < 2:
             raise StitchingError("2 or more Images needed for Stitching")
         self.img_names = img_names
+
+    def set_mask_names(self, mask_names):
+        if mask_names is None:
+            return
+        if len(mask_names) == 1:
+            mask_names = glob.glob(mask_names[0])
+        if 0 < len(mask_names) != len(self.img_names):
+            raise StitchingError(
+                "Number of images and masks does not match. "
+                "Make sure you specify one mask per image."
+            )
+        self.mask_names = mask_names
 
     def resize_to_medium_resolution(self):
         return self.read_and_resize_imgs(self.medium_scaler)
@@ -58,10 +71,25 @@ class ImageHandler:
         for img, size in zip(imgs, self.img_sizes):
             yield self.resize_img_by_scaler(scaler, size, img)
 
+    def resize_masks_for_feature_detection(self):
+        for mask, size in self.input_masks():
+            # always use the medium scaler for feature detection
+            yield self.to_binary_image(
+                self.resize_img_by_scaler(self.medium_scaler, size, mask)
+            )
+
     @staticmethod
     def resize_img_by_scaler(scaler, size, img):
         desired_size = scaler.get_scaled_img_size(size)
         return cv.resize(img, desired_size, interpolation=cv.INTER_LINEAR_EXACT)
+
+    @staticmethod
+    def to_binary_image(img):
+        # convert to mono-channel img if not already
+        if len(img.shape) == 3:
+            img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        _, binary = cv.threshold(img, 0.5, 255.0, cv.THRESH_BINARY)
+        return binary
 
     def input_images(self):
         self.img_sizes = []
@@ -71,6 +99,23 @@ class ImageHandler:
             self.img_sizes.append(size)
             self.set_scaler_scales()
             yield img, size
+
+    def input_masks(self):
+        # fill img sizes if not present
+        if len(self.img_sizes) == 0:
+            self.img_sizes = list(
+                map(lambda img_and_size: img_and_size[1], self.input_images())
+            )
+        # read masks and check compatibility to image
+        for i, (mask_name, img_size) in enumerate(zip(self.mask_names, self.img_sizes)):
+            mask = self.read_image(mask_name)
+            mask_size = self.get_image_size(mask)
+            if mask_size != img_size:
+                raise StitchingError(
+                    f"Resolution of the mask '{mask_name}' ({mask_size}) does not match"
+                    f" the resolution of image '{self.img_names[i]}' ({img_size})."
+                )
+            yield mask, mask_size
 
     @staticmethod
     def get_image_size(img):

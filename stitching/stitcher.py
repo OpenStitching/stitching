@@ -21,6 +21,7 @@ class Stitcher:
         "medium_megapix": ImageHandler.DEFAULT_MEDIUM_MEGAPIX,
         "detector": FeatureDetector.DEFAULT_DETECTOR,
         "nfeatures": 500,
+        "masks": [],
         "matcher_type": FeatureMatcher.DEFAULT_MATCHER,
         "range_width": FeatureMatcher.DEFAULT_RANGE_WIDTH,
         "try_use_gpu": False,
@@ -85,10 +86,11 @@ class Stitcher:
         self.blender = Blender(args.blender_type, args.blend_strength)
         self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
 
-    def stitch(self, img_names):
-        self.initialize_registration(img_names)
+    def stitch(self, img_names, mask_names=None):
+        self.initialize_registration(img_names, mask_names)
         imgs = self.resize_medium_resolution()
-        features = self.find_features(imgs)
+        feature_masks = self.prepare_feature_masks()
+        features = self.find_features(imgs, feature_masks)
         matches = self.match_features(features)
         imgs, features, matches = self.subset(imgs, features, matches)
         cameras = self.estimate_camera_parameters(features, matches)
@@ -118,14 +120,24 @@ class Stitcher:
         self.blend_images(imgs, seam_masks, corners)
         return self.create_final_panorama()
 
-    def initialize_registration(self, img_names):
+    def initialize_registration(self, img_names, mask_names):
         self.img_handler.set_img_names(img_names)
+        self.img_handler.set_mask_names(mask_names)
 
     def resize_medium_resolution(self):
         return list(self.img_handler.resize_to_medium_resolution())
 
-    def find_features(self, imgs):
-        return [self.detector.detect_features(img) for img in imgs]
+    def prepare_feature_masks(self):
+        return list(self.img_handler.resize_masks_for_feature_detection())
+
+    def find_features(self, imgs, masks=None):
+        if masks is None or len(masks) == 0:
+            return [self.detector.detect_features(img) for img in imgs]
+        else:
+            return [
+                self.detector.detect_features(img, mask=mask)
+                for (img, mask) in zip(imgs, masks)
+            ]
 
     def match_features(self, features):
         return self.matcher.match_features(features)

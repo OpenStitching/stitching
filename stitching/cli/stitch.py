@@ -61,6 +61,13 @@ def create_parser():
         type=int,
     )
     parser.add_argument(
+        "--masks",
+        nargs="*",
+        default=[],
+        help="Masks for selecting where features should be detected.",
+        type=str,
+    )
+    parser.add_argument(
         "--matcher_type",
         action="store",
         default=FeatureMatcher.DEFAULT_MATCHER,
@@ -272,6 +279,7 @@ def main():
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
     print("stitching " + " ".join(img_names) + " into " + output)
+    mask_names = args_dict.pop("masks")
 
     # Create Stitcher
     affine_mode = args_dict.pop("affine")
@@ -281,7 +289,7 @@ def main():
     else:
         stitcher = Stitcher(**args_dict)
 
-    panorama = stitcher.stitch(img_names)
+    panorama = stitcher.stitch(img_names, mask_names)
 
     cv.imwrite(output, panorama)
 
