@@ -39,9 +39,9 @@ class TestScaler(unittest.TestCase):
         self.assertEqual(downscaler.scale, 1.0)
 
 
-def starttest():
+def start_test():
     unittest.main()
 
 
 if __name__ == "__main__":
-    starttest()
+    start_test()

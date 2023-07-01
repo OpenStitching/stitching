@@ -36,17 +36,17 @@ IN_DIR = os.path.join(TEST_DIR, "testdata")
 OUT_DIR = os.path.join(TEST_DIR, "results")
 
 
-def load_testimg(img_name):
-    return cv.imread(testinput(img_name))
+def load_test_img(img_name):
+    return cv.imread(test_input(img_name))
 
 
-def testinput(file):
+def test_input(file):
     return os.path.join(IN_DIR, file)
 
 
-def write_testresult(img_name, img):
-    cv.imwrite(testoutput(img_name), img)
+def write_test_result(img_name, img):
+    cv.imwrite(test_output(img_name), img)
 
 
-def testoutput(file):
+def test_output(file):
     return os.path.join(OUT_DIR, file)

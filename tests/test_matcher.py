@@ -32,9 +32,9 @@ class TestMatcher(unittest.TestCase):
         self.assertEqual(implicit_match_conf_other, 0.65)
 
 
-def starttest():
+def start_test():
     unittest.main()
 
 
 if __name__ == "__main__":
-    starttest()
+    start_test()

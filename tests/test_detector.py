@@ -1,11 +1,11 @@
 import unittest
 
-from .context import FeatureDetector, load_testimg
+from .context import FeatureDetector, load_test_img
 
 
 class TestFeatureDetector(unittest.TestCase):
     def test_number_of_keypoints(self):
-        img1 = load_testimg("s1.jpg")
+        img1 = load_test_img("s1.jpg")
 
         default_number_of_keypoints = 500
         detector = FeatureDetector("orb")
@@ -18,9 +18,9 @@ class TestFeatureDetector(unittest.TestCase):
         self.assertEqual(len(features.getKeypoints()), other_keypoints)
 
 
-def starttest():
+def start_test():
     unittest.main()
 
 
 if __name__ == "__main__":
-    starttest()
+    start_test()

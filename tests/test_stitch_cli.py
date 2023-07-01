@@ -5,7 +5,7 @@ from unittest.mock import patch
 import cv2 as cv
 import numpy as np
 
-from .context import create_parser, main, testinput, testoutput
+from .context import create_parser, main, test_input, test_output
 
 
 class TestCLI(unittest.TestCase):
@@ -17,16 +17,16 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(parsed.low_megapix, 1.0)
 
     def test_main(self):
-        output = testoutput("weir_from_cli.jpg")
-        testargs = [
+        output = test_output("weir_from_cli.jpg")
+        test_args = [
             "stitch.py",
-            testinput("weir_?.jpg"),
+            test_input("weir_?.jpg"),
             "--final_megapix",
             "0.05",
             "--output",
             output,
         ]
-        with patch.object(sys, "argv", testargs):
+        with patch.object(sys, "argv", test_args):
             main()
 
             img = cv.imread(output)
@@ -36,9 +36,9 @@ class TestCLI(unittest.TestCase):
             )
 
 
-def starttest():
+def start_test():
     unittest.main()
 
 
 if __name__ == "__main__":
-    starttest()
+    start_test()
