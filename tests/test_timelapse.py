@@ -3,18 +3,18 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import Stitcher, load_testimg, testinput
+from .context import Stitcher, load_test_img, test_input
 
 
 class TestImageComposition(unittest.TestCase):
     def test_timelapse(self):
         stitcher = Stitcher(
             timelapse="as_is",
-            timelapse_prefix=testinput("timelapse_"),
+            timelapse_prefix=test_input("timelapse_"),
             crop=False,
         )
-        _ = stitcher.stitch([testinput("s?.jpg")])
-        frame1 = load_testimg("timelapse_s1.jpg")
+        _ = stitcher.stitch([test_input("s?.jpg")])
+        frame1 = load_test_img("timelapse_s1.jpg")
 
         max_image_shape_derivation = 3
         np.testing.assert_allclose(
@@ -40,9 +40,9 @@ class TestImageComposition(unittest.TestCase):
         self.assertEqual(cv.countNonZero(right), 0)
 
 
-def starttest():
+def start_test():
     unittest.main()
 
 
 if __name__ == "__main__":
-    starttest()
+    start_test()
