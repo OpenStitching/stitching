@@ -42,7 +42,11 @@ class TestRangeMatcher(unittest.TestCase):
         }
         stitcher = Stitcher(**settings)
         stitcher.stitch(
-            [test_input("weir_1.jpg"), test_input("weir_2.jpg"), test_input("weir_3.jpg")]
+            [
+                test_input("weir_1.jpg"),
+                test_input("weir_2.jpg"),
+                test_input("weir_3.jpg"),
+            ]
         )
 
         # TODO: Automated test that matches graph is correct
