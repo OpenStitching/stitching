@@ -13,11 +13,11 @@ repos:
       - id: mixed-line-ending
       - id: check-added-large-files
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.7.0
     hooks:
       - id: black
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.34.0
+    rev: v0.35.0
     hooks:
       - id: markdownlint
   - repo: https://github.com/pycqa/flake8
