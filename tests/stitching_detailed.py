@@ -131,7 +131,6 @@ def get_compensator(args):
 
 
 def main(**kwargs):
-
     args = SimpleNamespace(**kwargs)
     img_names = args.img_names
     work_megapix = args.work_megapix
@@ -417,5 +416,3 @@ def main(**kwargs):
         result_mask = None
         result, result_mask = blender.blend(result, result_mask)
         return result
-
-

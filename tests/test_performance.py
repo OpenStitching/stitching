@@ -2,22 +2,35 @@ import time
 import tracemalloc
 import unittest
 
-from context import Stitcher, test_input, Blender, CameraAdjuster, CameraEstimator, WaveCorrector, ExposureErrorCompensator, FeatureDetector, FeatureMatcher, ImageHandler, SeamFinder, Subsetter, Timelapser, Warper
+from context import (
+    Blender,
+    CameraAdjuster,
+    CameraEstimator,
+    ExposureErrorCompensator,
+    FeatureDetector,
+    FeatureMatcher,
+    ImageHandler,
+    SeamFinder,
+    Stitcher,
+    Subsetter,
+    Timelapser,
+    Warper,
+    WaveCorrector,
+    test_input,
+)
 from stitching_detailed import main
 
 
 class TestStitcher(unittest.TestCase):
-
     def test_performance(self):
-
-        test_imgs =             [
-                        test_input("boat5.jpg"),
-                        test_input("boat2.jpg"),
-                        test_input("boat3.jpg"),
-                        test_input("boat4.jpg"),
-                        test_input("boat1.jpg"),
-                        test_input("boat6.jpg"),
-                    ]        
+        test_imgs = [
+            test_input("boat5.jpg"),
+            test_input("boat2.jpg"),
+            test_input("boat3.jpg"),
+            test_input("boat4.jpg"),
+            test_input("boat1.jpg"),
+            test_input("boat6.jpg"),
+        ]
 
         # print("Run Stitcher:")
 
@@ -56,14 +69,13 @@ class TestStitcher(unittest.TestCase):
             "compose_megapix": ImageHandler.DEFAULT_FINAL_MEGAPIX,
             "expos_comp": ExposureErrorCompensator.DEFAULT_COMPENSATOR,
             "expos_comp_nr_feeds": ExposureErrorCompensator.DEFAULT_NR_FEEDS,
-            "expos_comp_nr_filtering": 2, # not used in stitching_detailed
+            "expos_comp_nr_filtering": 2,  # not used in stitching_detailed
             "expos_comp_block_size": ExposureErrorCompensator.DEFAULT_BLOCK_SIZE,
             "blend": Blender.DEFAULT_BLENDER,
             "blend_strength": Blender.DEFAULT_BLEND_STRENGTH,
-            "timelapse": None, # not backwards compatible "no" != None
+            "timelapse": None,  # not backwards compatible "no" != None
             "rangewidth": FeatureMatcher.DEFAULT_RANGE_WIDTH,
         }
-
 
         start = time.time()
         tracemalloc.start()
@@ -78,13 +90,11 @@ class TestStitcher(unittest.TestCase):
         print(f"Peak was {peak_memory_detailed / 10**6} MB")
         print(f"Time was {time_needed_detailed} s")
 
-        # We use less memory than the original approach and try to be 
+        # We use less memory than the original approach and try to be
         # just as fast, allowing ourself to be a maximum of 5% slower
         self.assertLessEqual(peak_memory / 10**6, peak_memory_detailed / 10**6)
         uncertainty_based_on_run = 0.25
-        self.assertLessEqual(
-            time_needed - time_needed / 100 * 5, time_needed_detailed
-        )
+        self.assertLessEqual(time_needed - time_needed / 100 * 5, time_needed_detailed)
 
 
 def starttest():
