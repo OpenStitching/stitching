@@ -2,7 +2,7 @@ import time
 import tracemalloc
 import unittest
 
-from context import (
+from .context import (
     Blender,
     CameraAdjuster,
     CameraEstimator,
@@ -17,7 +17,7 @@ from context import (
     WaveCorrector,
     test_input,
 )
-from stitching_detailed import main
+from .stitching_detailed import main
 
 
 class TestStitcher(unittest.TestCase):
@@ -44,8 +44,8 @@ class TestStitcher(unittest.TestCase):
         end = time.time()
         time_needed = end - start
 
-        print(f"Peak was {peak_memory / 10**6} MB")
-        print(f"Time was {time_needed} s")
+        # print(f"Peak was {peak_memory / 10**6} MB")
+        # print(f"Time was {time_needed} s")
 
         # print("Run original stitching_detailed.py:")
 
@@ -86,8 +86,8 @@ class TestStitcher(unittest.TestCase):
         end = time.time()
         time_needed_detailed = end - start
 
-        print(f"Peak was {peak_memory_detailed / 10**6} MB")
-        print(f"Time was {time_needed_detailed} s")
+        # print(f"Peak was {peak_memory_detailed / 10**6} MB")
+        # print(f"Time was {time_needed_detailed} s")
 
         # We use less memory than the original approach and try to be
         # just as fast, allowing ourself to be a maximum of 5% slower
