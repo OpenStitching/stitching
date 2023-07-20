@@ -13,7 +13,6 @@ from context import (
     SeamFinder,
     Stitcher,
     Subsetter,
-    Timelapser,
     Warper,
     WaveCorrector,
     test_input,
@@ -93,8 +92,9 @@ class TestStitcher(unittest.TestCase):
         # We use less memory than the original approach and try to be
         # just as fast, allowing ourself to be a maximum of 5% slower
         self.assertLessEqual(peak_memory / 10**6, peak_memory_detailed / 10**6)
-        uncertainty_based_on_run = 0.25
-        self.assertLessEqual(time_needed - time_needed / 100 * 5, time_needed_detailed)
+        allowed_deviation_in_percent = 5
+        allowed_deviation = time_needed / 100 * allowed_deviation_in_percent
+        self.assertLessEqual(time_needed - allowed_deviation, time_needed_detailed)
 
 
 def starttest():
