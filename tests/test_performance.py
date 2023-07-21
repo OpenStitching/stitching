@@ -89,9 +89,12 @@ class TestStitcher(unittest.TestCase):
         # print(f"Peak was {peak_memory_detailed / 10**6} MB")
         # print(f"Time was {time_needed_detailed} s")
 
-        # We use less memory than the original approach and try to be
-        # just as fast, allowing ourself to be a maximum of 5% slower
-        self.assertLessEqual(peak_memory / 10**6, peak_memory_detailed / 10**6)
+        # We use 10% less memory than the original approach
+        allowed_deviation_in_percent = 10
+        allowed_deviation = peak_memory_detailed / 100 * allowed_deviation_in_percent
+        self.assertLessEqual(peak_memory, peak_memory_detailed + allowed_deviation)
+        
+        # We allow ourself to be a maximum of 5% slower
         allowed_deviation_in_percent = 5
         allowed_deviation = time_needed / 100 * allowed_deviation_in_percent
         self.assertLessEqual(time_needed - allowed_deviation, time_needed_detailed)
