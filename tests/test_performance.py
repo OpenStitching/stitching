@@ -93,7 +93,7 @@ class TestStitcher(unittest.TestCase):
         allowed_deviation_in_percent = 10
         allowed_deviation = peak_memory_detailed / 100 * allowed_deviation_in_percent
         self.assertLessEqual(peak_memory, peak_memory_detailed + allowed_deviation)
-        
+
         # We allow ourself to be a maximum of 5% slower
         allowed_deviation_in_percent = 5
         allowed_deviation = time_needed / 100 * allowed_deviation_in_percent
