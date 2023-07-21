@@ -136,6 +136,16 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (1155, 2310), atol=max_image_shape_derivation
         )
 
+    def test_use_of_a_stitcher_for_multiple_image_sets(self):
+        # the scale should not be fixed by the first run but set dynamically
+        # based on every input image set. In this case the boat dataset runs
+        # much longer than it should since it uses the scale of the run before.
+        stitcher = Stitcher()
+        _ = stitcher.stitch([test_input("s?.jpg")])
+        self.assertEqual(round(stitcher.img_handler.medium_scaler.scale, 2), 0.83)
+        _ = stitcher.stitch([test_input("boat?.jpg")])
+        self.assertEqual(round(stitcher.img_handler.medium_scaler.scale, 2), 0.24)
+
 
 def start_test():
     unittest.main()
