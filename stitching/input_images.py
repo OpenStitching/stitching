@@ -109,7 +109,7 @@ class InputImages:
         assert isinstance(to_resolution, enum.Enum)
         return (
             self.get_scaler(to_resolution).scale
-            / self.get_scaler(from_resolution).scale
+            / self.get_scaler(from_resolution).scale  # noqa: W503
         )
 
     def get_scaled_img_sizes(self, resolution):

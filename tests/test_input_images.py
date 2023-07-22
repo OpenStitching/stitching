@@ -9,7 +9,7 @@ class TestStitcher(unittest.TestCase):
     def test_input_images(self):
         input_images = InputImages([test_input("s?.jpg")])
         input_images.set_resolutions()
-        imgs = list(input_images.read_and_resize(input_images.resolutions.MEDIUM))
+        _ = list(input_images.read_and_resize(input_images.resolutions.MEDIUM))
 
         np.testing.assert_array_equal(
             input_images.img_sizes, [(1246, 700), (1385, 700)]
