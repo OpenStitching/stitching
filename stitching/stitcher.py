@@ -87,8 +87,10 @@ class Stitcher:
 
     def stitch(self, img_names):
         self.input_images = InputImages(img_names)
-        self.input_images.set_resolutions(self.medium_megapix, self.low_megapix, self.final_megapix)
-        
+        self.input_images.set_resolutions(
+            self.medium_megapix, self.low_megapix, self.final_megapix
+        )
+
         imgs = self.resize_medium_resolution()
         features = self.find_features(imgs)
         matches = self.match_features(features)
@@ -121,7 +123,9 @@ class Stitcher:
         return self.create_final_panorama()
 
     def resize_medium_resolution(self):
-        return list(self.input_images.read_and_resize(self.input_images.resolutions.MEDIUM))
+        return list(
+            self.input_images.read_and_resize(self.input_images.resolutions.MEDIUM)
+        )
 
     def find_features(self, imgs):
         return [self.detector.detect_features(img) for img in imgs]
@@ -156,14 +160,22 @@ class Stitcher:
         return list(self.input_images.resize(imgs, self.input_images.resolutions.LOW))
 
     def warp_low_resolution(self, imgs, cameras):
-        sizes = self.input_images.get_scaled_img_sizes(self.input_images.resolutions.LOW)
-        camera_aspect = self.input_images.get_ratio(self.input_images.resolutions.MEDIUM, self.input_images.resolutions.LOW)
+        sizes = self.input_images.get_scaled_img_sizes(
+            self.input_images.resolutions.LOW
+        )
+        camera_aspect = self.input_images.get_ratio(
+            self.input_images.resolutions.MEDIUM, self.input_images.resolutions.LOW
+        )
         imgs, masks, corners, sizes = self.warp(imgs, cameras, sizes, camera_aspect)
         return list(imgs), list(masks), corners, sizes
 
     def warp_final_resolution(self, imgs, cameras):
-        sizes = self.input_images.get_scaled_img_sizes(self.input_images.resolutions.FINAL)
-        camera_aspect = self.input_images.get_ratio(self.input_images.resolutions.MEDIUM, self.input_images.resolutions.FINAL)
+        sizes = self.input_images.get_scaled_img_sizes(
+            self.input_images.resolutions.FINAL
+        )
+        camera_aspect = self.input_images.get_ratio(
+            self.input_images.resolutions.MEDIUM, self.input_images.resolutions.FINAL
+        )
         return self.warp(imgs, cameras, sizes, camera_aspect)
 
     def warp(self, imgs, cameras, sizes, aspect=1):
@@ -180,7 +192,9 @@ class Stitcher:
         return list(imgs), list(masks), corners, sizes
 
     def crop_final_resolution(self, imgs, masks, corners, sizes):
-        lir_aspect = self.input_images.get_ratio(self.input_images.resolutions.LOW, self.input_images.resolutions.FINAL)
+        lir_aspect = self.input_images.get_ratio(
+            self.input_images.resolutions.LOW, self.input_images.resolutions.FINAL
+        )
         return self.crop(imgs, masks, corners, sizes, lir_aspect)
 
     def crop(self, imgs, masks, corners, sizes, aspect=1):
