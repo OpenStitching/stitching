@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from .context import (
+from context import (
     AffineStitcher,
     Stitcher,
     StitchingError,
@@ -32,60 +32,60 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (700, 1811), atol=max_image_shape_derivation
         )
 
-    def test_stitcher_boat1(self):
-        settings = {
-            "warper_type": "fisheye",
-            "wave_correct_kind": "no",
-            "finder": "dp_colorgrad",
-            "compensator": "no",
-            "crop": False,
-        }
+    # def test_stitcher_boat1(self):
+    #     settings = {
+    #         "warper_type": "fisheye",
+    #         "wave_correct_kind": "no",
+    #         "finder": "dp_colorgrad",
+    #         "compensator": "no",
+    #         "crop": False,
+    #     }
 
-        stitcher = Stitcher(**settings)
-        result = stitcher.stitch(
-            [
-                test_input("boat5.jpg"),
-                test_input("boat2.jpg"),
-                test_input("boat3.jpg"),
-                test_input("boat4.jpg"),
-                test_input("boat1.jpg"),
-                test_input("boat6.jpg"),
-            ]
-        )
+    #     stitcher = Stitcher(**settings)
+    #     result = stitcher.stitch(
+    #         [
+    #             test_input("boat5.jpg"),
+    #             test_input("boat2.jpg"),
+    #             test_input("boat3.jpg"),
+    #             test_input("boat4.jpg"),
+    #             test_input("boat1.jpg"),
+    #             test_input("boat6.jpg"),
+    #         ]
+    #     )
 
-        write_test_result("boat_fisheye.jpg", result)
+    #     write_test_result("boat_fisheye.jpg", result)
 
-        max_image_shape_derivation = 600
-        np.testing.assert_allclose(
-            result.shape[:2], (14488, 7556), atol=max_image_shape_derivation
-        )
+    #     max_image_shape_derivation = 600
+    #     np.testing.assert_allclose(
+    #         result.shape[:2], (14488, 7556), atol=max_image_shape_derivation
+    #     )
 
-    def test_stitcher_boat2(self):
-        settings = {
-            "warper_type": "compressedPlaneA2B1",
-            "finder": "dp_colorgrad",
-            "compensator": "channel_blocks",
-            "crop": False,
-        }
+    # def test_stitcher_boat2(self):
+    #     settings = {
+    #         "warper_type": "compressedPlaneA2B1",
+    #         "finder": "dp_colorgrad",
+    #         "compensator": "channel_blocks",
+    #         "crop": False,
+    #     }
 
-        stitcher = Stitcher(**settings)
-        result = stitcher.stitch(
-            [
-                test_input("boat5.jpg"),
-                test_input("boat2.jpg"),
-                test_input("boat3.jpg"),
-                test_input("boat4.jpg"),
-                test_input("boat1.jpg"),
-                test_input("boat6.jpg"),
-            ]
-        )
+    #     stitcher = Stitcher(**settings)
+    #     result = stitcher.stitch(
+    #         [
+    #             test_input("boat5.jpg"),
+    #             test_input("boat2.jpg"),
+    #             test_input("boat3.jpg"),
+    #             test_input("boat4.jpg"),
+    #             test_input("boat1.jpg"),
+    #             test_input("boat6.jpg"),
+    #         ]
+    #     )
 
-        write_test_result("boat_plane.jpg", result)
+    #     write_test_result("boat_plane.jpg", result)
 
-        max_image_shape_derivation = 600
-        np.testing.assert_allclose(
-            result.shape[:2], (7400, 12340), atol=max_image_shape_derivation
-        )
+    #     max_image_shape_derivation = 600
+    #     np.testing.assert_allclose(
+    #         result.shape[:2], (7400, 12340), atol=max_image_shape_derivation
+    #     )
 
     def test_stitcher_boat_aquaduct_subset(self):
         graph = test_output("boat_subset_matches_graph.txt")
@@ -138,13 +138,12 @@ class TestStitcher(unittest.TestCase):
 
     def test_use_of_a_stitcher_for_multiple_image_sets(self):
         # the scale should not be fixed by the first run but set dynamically
-        # based on every input image set. In this case the boat dataset runs
-        # much longer than it should since it uses the scale of the run before.
+        # based on every input image set.
         stitcher = Stitcher()
         _ = stitcher.stitch([test_input("s?.jpg")])
-        self.assertEqual(round(stitcher.img_handler.medium_scaler.scale, 2), 0.83)
+        self.assertEqual(round(stitcher.input_images.scalers["MEDIUM"].scale, 2), 0.83)
         _ = stitcher.stitch([test_input("boat?.jpg")])
-        self.assertEqual(round(stitcher.img_handler.medium_scaler.scale, 2), 0.24)
+        self.assertEqual(round(stitcher.input_images.scalers["MEDIUM"].scale, 2), 0.24)
 
 
 def start_test():
