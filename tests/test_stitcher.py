@@ -139,9 +139,9 @@ class TestStitcher(unittest.TestCase):
         # the scale should not be fixed by the first run but set dynamically
         # based on every input image set.
         stitcher = Stitcher()
-        _ = stitcher.stitch([test_input("s?.jpg")])
+        _ = stitcher.stitch([test_input("s1.jpg"), test_input("s2.jpg")])
         self.assertEqual(round(stitcher.input_images.scalers["MEDIUM"].scale, 2), 0.83)
-        _ = stitcher.stitch([test_input("boat?.jpg")])
+        _ = stitcher.stitch([test_input("boat1.jpg"), test_input("boat2.jpg")])
         self.assertEqual(round(stitcher.input_images.scalers["MEDIUM"].scale, 2), 0.24)
 
 
