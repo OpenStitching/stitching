@@ -8,7 +8,6 @@ from .context import Images, test_input
 class TestStitcher(unittest.TestCase):
     def test_images(self):
         images = Images([test_input("s1.jpg"), test_input("s2.jpg")])
-        images.set_resolutions()
         _ = list(images.read_and_resize(Images.Resolution.MEDIUM))
 
         np.testing.assert_array_equal(

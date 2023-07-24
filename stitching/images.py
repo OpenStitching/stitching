@@ -14,37 +14,32 @@ class Images:
         LOW = 0.1
         FINAL = -1
 
-    def __init__(self, img_names):
-        img_names = Images.resolve_wildcards(img_names)
-        if len(img_names) < 2:
+    def __init__(self, 
+                 img_names, 
+                 medium_megapix=Resolution.MEDIUM.value, 
+                 low_megapix=Resolution.LOW.value, 
+                 final_megapix=Resolution.FINAL.value):
+        self.img_names = Images.resolve_wildcards(img_names)
+        if len(self.img_names) < 2:
             raise StitchingError("2 or more Images needed")
-        self.img_names = img_names
-        self.resolutions_set = False
-        self.img_sizes = []
-        self.img_sizes_set = False
-        self.scalers = {}
-        self.scales_set = False
-
-    def set_resolutions(
-        self,
-        medium_megapix=Resolution.MEDIUM.value,
-        low_megapix=Resolution.LOW.value,
-        final_megapix=Resolution.FINAL.value,
-    ):
-        assert not self.resolutions_set
+            
         if medium_megapix < low_megapix:
             raise StitchingError(
                 "Medium resolution megapix need to be "
                 "greater or equal than low resolution "
                 "megapix"
             )
+        
+        self.scalers = {}
         self.scalers["MEDIUM"] = MegapixDownscaler(medium_megapix)
         self.scalers["LOW"] = MegapixDownscaler(low_megapix)
         self.scalers["FINAL"] = MegapixDownscaler(final_megapix)
-        self.resolutions_set = True
+
+        self.img_sizes = []
+        self.img_sizes_set = False
+        self.scales_set = False
 
     def read_and_resize(self, resolution):
-        assert self.resolutions_set
         Images.check_resolution(resolution)
         
         for idx, name in enumerate(self.img_names):
@@ -102,7 +97,6 @@ class Images:
         return cv.resize(img, desired_size, interpolation=cv.INTER_LINEAR_EXACT)
 
     def get_scaler(self, resolution):
-        assert self.resolutions_set
         Images.check_resolution(resolution)
         return self.scalers[resolution.name]
 
