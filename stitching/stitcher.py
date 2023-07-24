@@ -8,7 +8,7 @@ from .cropper import Cropper
 from .exposure_error_compensator import ExposureErrorCompensator
 from .feature_detector import FeatureDetector
 from .feature_matcher import FeatureMatcher
-from .input_images import InputImages
+from .images import Images
 from .seam_finder import SeamFinder
 from .stitching_error import StitchingError
 from .subsetter import Subsetter
@@ -18,7 +18,7 @@ from .warper import Warper
 
 class Stitcher:
     DEFAULT_SETTINGS = {
-        "medium_megapix": InputImages.DEFAULT_MEDIUM_MEGAPIX,
+        "medium_megapix": Images.Resolution.MEDIUM.value,
         "detector": FeatureDetector.DEFAULT_DETECTOR,
         "nfeatures": 500,
         "matcher_type": FeatureMatcher.DEFAULT_MATCHER,
@@ -32,13 +32,13 @@ class Stitcher:
         "refinement_mask": CameraAdjuster.DEFAULT_REFINEMENT_MASK,
         "wave_correct_kind": WaveCorrector.DEFAULT_WAVE_CORRECTION,
         "warper_type": Warper.DEFAULT_WARP_TYPE,
-        "low_megapix": InputImages.DEFAULT_LOW_MEGAPIX,
+        "low_megapix": Images.Resolution.LOW.value,
         "crop": Cropper.DEFAULT_CROP,
         "compensator": ExposureErrorCompensator.DEFAULT_COMPENSATOR,
         "nr_feeds": ExposureErrorCompensator.DEFAULT_NR_FEEDS,
         "block_size": ExposureErrorCompensator.DEFAULT_BLOCK_SIZE,
         "finder": SeamFinder.DEFAULT_SEAM_FINDER,
-        "final_megapix": InputImages.DEFAULT_FINAL_MEGAPIX,
+        "final_megapix": Images.Resolution.FINAL.value,
         "blender_type": Blender.DEFAULT_BLENDER,
         "blend_strength": Blender.DEFAULT_BLEND_STRENGTH,
         "timelapse": Timelapser.DEFAULT_TIMELAPSE,
@@ -86,8 +86,8 @@ class Stitcher:
         self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
 
     def stitch(self, img_names):
-        self.input_images = InputImages(img_names)
-        self.input_images.set_resolutions(
+        self.images = Images(img_names)
+        self.images.set_resolutions(
             self.medium_megapix, self.low_megapix, self.final_megapix
         )
 
@@ -123,9 +123,7 @@ class Stitcher:
         return self.create_final_panorama()
 
     def resize_medium_resolution(self):
-        return list(
-            self.input_images.read_and_resize(self.input_images.resolutions.MEDIUM)
-        )
+        return list(self.images.read_and_resize(Images.Resolution.MEDIUM))
 
     def find_features(self, imgs):
         return [self.detector.detect_features(img) for img in imgs]
@@ -135,13 +133,13 @@ class Stitcher:
 
     def subset(self, imgs, features, matches):
         names, sizes, imgs, features, matches = self.subsetter.subset(
-            self.input_images.img_names,
-            self.input_images.img_sizes,
+            self.images.img_names,
+            self.images.img_sizes,
             imgs,
             features,
             matches,
         )
-        self.input_images.img_names, self.input_images.img_sizes = names, sizes
+        self.images.img_names, self.images.img_sizes = names, sizes
         return imgs, features, matches
 
     def estimate_camera_parameters(self, features, matches):
@@ -157,24 +155,20 @@ class Stitcher:
         self.warper.set_scale(cameras)
 
     def resize_low_resolution(self, imgs):
-        return list(self.input_images.resize(imgs, self.input_images.resolutions.LOW))
+        return list(self.images.resize(imgs, Images.Resolution.LOW))
 
     def warp_low_resolution(self, imgs, cameras):
-        sizes = self.input_images.get_scaled_img_sizes(
-            self.input_images.resolutions.LOW
-        )
-        camera_aspect = self.input_images.get_ratio(
-            self.input_images.resolutions.MEDIUM, self.input_images.resolutions.LOW
+        sizes = self.images.get_scaled_img_sizes(Images.Resolution.LOW)
+        camera_aspect = self.images.get_ratio(
+            Images.Resolution.MEDIUM, Images.Resolution.LOW
         )
         imgs, masks, corners, sizes = self.warp(imgs, cameras, sizes, camera_aspect)
         return list(imgs), list(masks), corners, sizes
 
     def warp_final_resolution(self, imgs, cameras):
-        sizes = self.input_images.get_scaled_img_sizes(
-            self.input_images.resolutions.FINAL
-        )
-        camera_aspect = self.input_images.get_ratio(
-            self.input_images.resolutions.MEDIUM, self.input_images.resolutions.FINAL
+        sizes = self.images.get_scaled_img_sizes(Images.Resolution.FINAL)
+        camera_aspect = self.images.get_ratio(
+            Images.Resolution.MEDIUM, Images.Resolution.FINAL
         )
         return self.warp(imgs, cameras, sizes, camera_aspect)
 
@@ -192,8 +186,8 @@ class Stitcher:
         return list(imgs), list(masks), corners, sizes
 
     def crop_final_resolution(self, imgs, masks, corners, sizes):
-        lir_aspect = self.input_images.get_ratio(
-            self.input_images.resolutions.LOW, self.input_images.resolutions.FINAL
+        lir_aspect = self.images.get_ratio(
+            Images.Resolution.LOW, Images.Resolution.FINAL
         )
         return self.crop(imgs, masks, corners, sizes, lir_aspect)
 
@@ -210,7 +204,7 @@ class Stitcher:
         return self.seam_finder.find(imgs, corners, masks)
 
     def resize_final_resolution(self):
-        return self.input_images.read_and_resize(self.input_images.resolutions.FINAL)
+        return self.images.read_and_resize(Images.Resolution.FINAL)
 
     def compensate_exposure_errors(self, corners, imgs):
         for idx, (corner, img) in enumerate(zip(corners, imgs)):
@@ -244,7 +238,7 @@ class Stitcher:
         for idx, (img, mask, corner) in enumerate(zip(imgs, masks, corners)):
             if self.timelapser.do_timelapse:
                 self.timelapser.process_and_save_frame(
-                    self.input_images.img_names[idx], img, corner
+                    self.images.img_names[idx], img, corner
                 )
             else:
                 self.blender.feed(img, mask, corner)

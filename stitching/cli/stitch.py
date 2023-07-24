@@ -18,7 +18,7 @@ from stitching.cropper import Cropper
 from stitching.exposure_error_compensator import ExposureErrorCompensator
 from stitching.feature_detector import FeatureDetector
 from stitching.feature_matcher import FeatureMatcher
-from stitching.input_images import InputImages
+from stitching.images import Images
 from stitching.seam_finder import SeamFinder
 from stitching.subsetter import Subsetter
 from stitching.timelapser import Timelapser
@@ -37,9 +37,9 @@ def create_parser():
     parser.add_argument(
         "--medium_megapix",
         action="store",
-        default=InputImages.DEFAULT_MEDIUM_MEGAPIX,
+        default=Images.Resolution.MEDIUM.value,
         help="Resolution for image registration step. "
-        "The default is %s Mpx" % InputImages.DEFAULT_MEDIUM_MEGAPIX,
+        "The default is %s Mpx" % Images.Resolution.MEDIUM.value,
         type=float,
     )
     parser.add_argument(
@@ -154,9 +154,9 @@ def create_parser():
     parser.add_argument(
         "--low_megapix",
         action="store",
-        default=InputImages.DEFAULT_LOW_MEGAPIX,
+        default=Images.Resolution.LOW.value,
         help="Resolution for seam estimation and exposure estimation step. "
-        "The default is %s Mpx." % InputImages.DEFAULT_LOW_MEGAPIX,
+        "The default is %s Mpx." % Images.Resolution.LOW.value,
         type=float,
     )
     parser.add_argument(
@@ -211,9 +211,9 @@ def create_parser():
     parser.add_argument(
         "--final_megapix",
         action="store",
-        default=InputImages.DEFAULT_FINAL_MEGAPIX,
+        default=Images.Resolution.FINAL.value,
         help="Resolution for compositing step. Use -1 for original resolution. "
-        "The default is %s" % InputImages.DEFAULT_FINAL_MEGAPIX,
+        "The default is %s" % Images.Resolution.FINAL.value,
         type=float,
     )
     parser.add_argument(
