@@ -86,7 +86,9 @@ class Stitcher:
         self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
 
     def stitch(self, img_names):
-        self.images = Images(img_names, self.medium_megapix, self.low_megapix, self.final_megapix)
+        self.images = Images(
+            img_names, self.medium_megapix, self.low_megapix, self.final_megapix
+        )
 
         imgs = self.resize_medium_resolution()
         features = self.find_features(imgs)

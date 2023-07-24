@@ -13,22 +13,24 @@ class Images:
         LOW = 0.1
         FINAL = -1
 
-    def __init__(self, 
-                 img_names, 
-                 medium_megapix=Resolution.MEDIUM.value, 
-                 low_megapix=Resolution.LOW.value, 
-                 final_megapix=Resolution.FINAL.value):
+    def __init__(
+        self,
+        img_names,
+        medium_megapix=Resolution.MEDIUM.value,
+        low_megapix=Resolution.LOW.value,
+        final_megapix=Resolution.FINAL.value,
+    ):
         self.img_names = Images.resolve_wildcards(img_names)
         if len(self.img_names) < 2:
             raise StitchingError("2 or more Images needed")
-            
+
         if medium_megapix < low_megapix:
             raise StitchingError(
                 "Medium resolution megapix need to be "
                 "greater or equal than low resolution "
                 "megapix"
             )
-        
+
         self.scalers = {}
         self.scalers["MEDIUM"] = MegapixDownscaler(medium_megapix)
         self.scalers["LOW"] = MegapixDownscaler(low_megapix)
