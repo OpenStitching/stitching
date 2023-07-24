@@ -1,5 +1,5 @@
-from enum import Enum
 import glob
+from enum import Enum
 
 import cv2 as cv
 
@@ -8,7 +8,6 @@ from .stitching_error import StitchingError
 
 
 class Images:
-    
     class Resolution(Enum):
         MEDIUM = 0.6
         LOW = 0.1
@@ -41,7 +40,7 @@ class Images:
 
     def read_and_resize(self, resolution):
         Images.check_resolution(resolution)
-        
+
         for idx, name in enumerate(self.img_names):
             img = Images.read_image(name)
             size = Images.get_image_size(img)
@@ -61,17 +60,13 @@ class Images:
                     self.img_sizes_set = True
             # ------
 
-            yield Images.resize_img_by_scaler(
-                self.get_scaler(resolution), size, img
-            )
+            yield Images.resize_img_by_scaler(self.get_scaler(resolution), size, img)
 
     def resize(self, imgs, resolution):
         assert self.scales_set
         Images.check_resolution(resolution)
         for img, size in zip(imgs, self.img_sizes):
-            yield Images.resize_img_by_scaler(
-                self.get_scaler(resolution), size, img
-            )
+            yield Images.resize_img_by_scaler(self.get_scaler(resolution), size, img)
 
     @staticmethod
     def resolve_wildcards(img_names):
@@ -113,6 +108,6 @@ class Images:
         return [
             self.get_scaler(resolution).get_scaled_img_size(sz) for sz in self.img_sizes
         ]
-    
+
     def check_resolution(resolution):
         assert isinstance(resolution, Enum) and resolution in Images.Resolution
