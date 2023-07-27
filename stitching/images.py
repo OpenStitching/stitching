@@ -40,9 +40,7 @@ class Images:
         self.img_sizes_set = False
         self.scales_set = False
 
-    def read_and_resize(self, resolution):
-        Images.check_resolution(resolution)
-
+    def read(self):
         for idx, name in enumerate(self.img_names):
             img = Images.read_image(name)
             size = Images.get_image_size(img)
@@ -62,13 +60,12 @@ class Images:
                     self.img_sizes_set = True
             # ------
 
-            yield Images.resize_img_by_scaler(self.get_scaler(resolution), size, img)
+            yield img
 
     def resize(self, imgs, resolution):
-        assert self.scales_set
         Images.check_resolution(resolution)
-        for img, size in zip(imgs, self.img_sizes):
-            yield Images.resize_img_by_scaler(self.get_scaler(resolution), size, img)
+        for idx, img in enumerate(imgs):
+            yield Images.resize_img_by_scaler(self.get_scaler(resolution), self.img_sizes[idx], img)
 
     @staticmethod
     def resolve_wildcards(img_names):

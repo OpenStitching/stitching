@@ -122,7 +122,9 @@ class Stitcher:
         return self.create_final_panorama()
 
     def resize_medium_resolution(self):
-        return list(self.images.read_and_resize(Images.Resolution.MEDIUM))
+        imgs = self.images.read()
+        medium_imgs = self.images.resize(imgs, Images.Resolution.MEDIUM)
+        return list(medium_imgs)
 
     def find_features(self, imgs):
         return [self.detector.detect_features(img) for img in imgs]
@@ -203,7 +205,8 @@ class Stitcher:
         return self.seam_finder.find(imgs, corners, masks)
 
     def resize_final_resolution(self):
-        return self.images.read_and_resize(Images.Resolution.FINAL)
+        imgs = self.images.read()
+        return self.images.resize(imgs, Images.Resolution.FINAL)
 
     def compensate_exposure_errors(self, corners, imgs):
         for idx, (corner, img) in enumerate(zip(corners, imgs)):
