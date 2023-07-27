@@ -65,7 +65,9 @@ class Images:
     def resize(self, imgs, resolution):
         Images.check_resolution(resolution)
         for idx, img in enumerate(imgs):
-            yield Images.resize_img_by_scaler(self.get_scaler(resolution), self.img_sizes[idx], img)
+            yield Images.resize_img_by_scaler(
+                self.get_scaler(resolution), self.img_sizes[idx], img
+            )
 
     @staticmethod
     def resolve_wildcards(img_names):
