@@ -5,7 +5,7 @@ import cv2 as cv
 import numpy as np
 
 from .blender import Blender
-from .stitching_error import StitchingWarning
+from .stitching_warning import StitchingWarning
 
 
 class SeamFinder:

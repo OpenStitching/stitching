@@ -1,0 +1,2 @@
+class StitchingWarning(UserWarning):
+    pass

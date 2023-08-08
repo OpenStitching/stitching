@@ -5,7 +5,8 @@ import cv2 as cv
 import numpy as np
 
 from .feature_matcher import FeatureMatcher
-from .stitching_error import StitchingError, StitchingWarning
+from .stitching_error import StitchingError
+from .stitching_warning import StitchingWarning
 
 
 class Subsetter:
