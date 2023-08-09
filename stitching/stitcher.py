@@ -10,7 +10,7 @@ from .feature_detector import FeatureDetector
 from .feature_matcher import FeatureMatcher
 from .image_handler import ImageHandler
 from .seam_finder import SeamFinder
-from .stitching_error import InvalidMaskIndexError, InvalidArgumentError
+from .stitching_error import InvalidArgumentError, InvalidMaskIndexError
 from .subsetter import Subsetter
 from .timelapser import Timelapser
 from .warper import Warper

@@ -4,9 +4,9 @@ import numpy as np
 
 from .context import (
     AffineStitcher,
-    Stitcher,
-    NoMatchExceedsThresholdError,
     ImagesNotFullIncludedWarning,
+    NoMatchExceedsThresholdError,
+    Stitcher,
     test_input,
     test_output,
     write_test_result,
