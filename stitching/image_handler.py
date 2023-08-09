@@ -3,7 +3,11 @@ import glob
 import cv2 as cv
 
 from .megapix_scaler import MegapixDownscaler
-from .stitching_error import ResolutionMismatchError, InsufficientImagesError, ImageReadError
+from .stitching_error import (
+    ImageReadError,
+    InsufficientImagesError,
+    ResolutionMismatchError,
+)
 
 
 class ImageHandler:
