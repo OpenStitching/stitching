@@ -5,8 +5,8 @@ import numpy as np
 from .context import (
     AffineStitcher,
     Stitcher,
-    StitchingError,
-    StitchingWarning,
+    NoMatchExceedsThresholdError,
+    ImagesNotFullIncludedWarning,
     test_input,
     test_output,
     write_test_result,
@@ -16,7 +16,7 @@ from .context import (
 class TestStitcher(unittest.TestCase):
     def test_stitcher_with_not_matching_images(self):
         stitcher = Stitcher()
-        with self.assertRaises(StitchingError) as cm:
+        with self.assertRaises(NoMatchExceedsThresholdError) as cm:
             stitcher.stitch([test_input("s1.jpg"), test_input("boat1.jpg")])
         self.assertTrue(
             "No match exceeds the given confidence threshold" in str(cm.exception)
@@ -93,7 +93,7 @@ class TestStitcher(unittest.TestCase):
 
         stitcher = Stitcher(**settings)
 
-        with self.assertWarns(StitchingWarning) as cm:
+        with self.assertWarns(ImagesNotFullIncludedWarning) as cm:
             result = stitcher.stitch(
                 [
                     test_input("boat5.jpg"),

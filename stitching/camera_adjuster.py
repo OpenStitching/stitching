@@ -3,7 +3,7 @@ from collections import OrderedDict
 import cv2 as cv
 import numpy as np
 
-from .stitching_error import StitchingError
+from .stitching_error import CameraAdjustmentError
 
 
 class CameraAdjuster:
@@ -45,6 +45,6 @@ class CameraAdjuster:
     def adjust(self, features, pairwise_matches, estimated_cameras):
         b, cameras = self.adjuster.apply(features, pairwise_matches, estimated_cameras)
         if not b:
-            raise StitchingError("Camera parameters adjusting failed.")
+            raise CameraAdjustmentError("Camera parameters adjusting failed.")
 
         return cameras

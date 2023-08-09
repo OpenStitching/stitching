@@ -5,8 +5,8 @@ import cv2 as cv
 import numpy as np
 
 from .feature_matcher import FeatureMatcher
-from .stitching_error import StitchingError
-from .stitching_warning import StitchingWarning
+from .stitching_error import NoMatchExceedsThresholdError
+from .stitching_warning import ImagesNotFullIncludedWarning
 
 
 class Subsetter:
@@ -36,7 +36,7 @@ class Subsetter:
                           parameter to analyze your matches. You might want to
                           lower the 'confidence_threshold' or try another 'detector'
                           to include all your images.""",
-                StitchingWarning,
+                ImagesNotFullIncludedWarning,
             )
 
         img_names = Subsetter.subset_list(img_names, indices)
@@ -67,7 +67,7 @@ class Subsetter:
         )
 
         if len(indices) < 2:
-            raise StitchingError(
+            raise NoMatchExceedsThresholdError(
                 """No match exceeds the given confidence threshold.
                                  Do your images have enough overlap and common
                                  features? If yes, you might want to lower the

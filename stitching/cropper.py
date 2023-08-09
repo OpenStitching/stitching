@@ -4,7 +4,7 @@ import cv2 as cv
 import numpy as np
 
 from .blender import Blender
-from .stitching_error import StitchingError
+from .stitching_error import InvalidContourError, RectanglesNotOverlapError
 
 
 class Rectangle(namedtuple("Rectangle", "x y width height")):
@@ -94,7 +94,7 @@ class Cropper:
 
         contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
         if not hierarchy.shape == (1, 1, 4) or not np.all(hierarchy == -1):
-            raise StitchingError(
+            raise InvalidContourError(
                 """Invalid Contour. Run with --no-crop (using the stitch interface),
                                  crop=false (using the stitcher class) or Cropper(False)
                                  (using the cropper class)"""
@@ -130,7 +130,7 @@ class Cropper:
         x2 = min(rectangle1.x2, rectangle2.x2)
         y2 = min(rectangle1.y2, rectangle2.y2)
         if x2 < x1 or y2 < y1:
-            raise StitchingError("Rectangles do not overlap!")
+            raise RectanglesNotOverlapError("Rectangles do not overlap!")
         return Rectangle(x1, y1, x2 - x1, y2 - y1)
 
     @staticmethod

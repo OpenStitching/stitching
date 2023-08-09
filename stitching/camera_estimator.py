@@ -3,7 +3,7 @@ from collections import OrderedDict
 import cv2 as cv
 import numpy as np
 
-from .stitching_error import StitchingError
+from .stitching_error import HomographyEstimationError
 
 
 class CameraEstimator:
@@ -21,7 +21,7 @@ class CameraEstimator:
     def estimate(self, features, pairwise_matches):
         b, cameras = self.estimator.apply(features, pairwise_matches, None)
         if not b:
-            raise StitchingError("Homography estimation failed.")
+            raise HomographyEstimationError("Homography estimation failed.")
         for cam in cameras:
             cam.R = cam.R.astype(np.float32)
         return cameras

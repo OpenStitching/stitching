@@ -10,7 +10,8 @@ from .feature_detector import FeatureDetector
 from .feature_matcher import FeatureMatcher
 from .image_handler import ImageHandler
 from .seam_finder import SeamFinder
-from .stitching_error import StitchingError
+from .stitching_error import *
+from .stitching_warning import *
 from .subsetter import Subsetter
 from .timelapser import Timelapser
 from .warper import Warper
@@ -219,7 +220,7 @@ class Stitcher:
         elif idx == self.mask_index:
             return self.mask
         else:
-            raise StitchingError("Invalid Mask Index!")
+            raise InvalidMaskIndexError("Invalid Mask Index!")
 
     def initialize_composition(self, corners, sizes):
         if self.timelapser.do_timelapse:
@@ -244,7 +245,7 @@ class Stitcher:
     def validate_kwargs(self, kwargs):
         for arg in kwargs:
             if arg not in self.DEFAULT_SETTINGS:
-                raise StitchingError("Invalid Argument: " + arg)
+                raise InvalidArgumentError("Invalid Argument: " + arg)
 
 
 class AffineStitcher(Stitcher):

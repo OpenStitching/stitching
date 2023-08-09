@@ -5,7 +5,7 @@ import cv2 as cv
 import numpy as np
 
 from .blender import Blender
-from .stitching_warning import StitchingWarning
+from .stitching_warning import IdenticalColorsWarning
 
 
 class SeamFinder:
@@ -100,7 +100,7 @@ def colored_img_generator(sizes, colors):
         warnings.warn(
             """Without additional colors,
             there will be seam masks with identical colors""",
-            StitchingWarning,
+            IdenticalColorsWarning,
         )
 
     for idx, size in enumerate(sizes):
