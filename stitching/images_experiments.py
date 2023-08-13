@@ -5,36 +5,36 @@ import cv2 as cv
 
 from .stitching_error import StitchingError
 
- 
+
 class Images(ABC):
     @abstractmethod
     def __init__(self, images):
         pass
-    
-    @property                 
-    def sizes(self):     
+
+    @property
+    def sizes(self):
         return self._sizes
 
     @sizes.setter
     def food_eaten(self, sizes):
         self._sizes = sizes
 
-    @property                 
-    def names(self):     
+    @property
+    def names(self):
         return self._names
 
     @food_eaten.setter
     def food_eaten(self, names):
         self._names = names
-    
+
     @abstractmethod
-    def subset(self):     
+    def subset(self):
         pass
-    
+
     @abstractmethod
     def __iter__(self):
-      pass
-      
+        pass
+
     @staticmethod
     def read_image(img_name):
         img = cv.imread(img_name)
@@ -48,23 +48,22 @@ class Images(ABC):
         return (img.shape[1], img.shape[0])
 
 
-
 class NumpyImages(Images):
     def __init__(self, images):
-      if len(images) < 2:
-          raise StitchingError("2 or more Images needed")
-      self.images = images
-      self._sizes = [Images.get_image_size(img) for img in images]
-      self._names = [str(i+1) for i in range(len(images))]
-    
+        if len(images) < 2:
+            raise StitchingError("2 or more Images needed")
+        self.images = images
+        self._sizes = [Images.get_image_size(img) for img in images]
+        self._names = [str(i + 1) for i in range(len(images))]
+
     def subset(self):
         pass
-    
-    def __iter__(self):
-      for img in self.images:
-        yield img
 
-        
+    def __iter__(self):
+        for img in self.images:
+            yield img
+
+
 class NamedImages(Images):
     def __init__(self, images):
         self._names = self.resolve_wildcards(images)
@@ -72,10 +71,10 @@ class NamedImages(Images):
             raise StitchingError("2 or more Images needed")
         self._sizes = []
         self.sizes_set = False
-    
+
     def subset(self):
         pass
-    
+
     def __iter__(self):
         for idx, name in enumerate(self.names):
             img = Images.read_image(name)
@@ -91,12 +90,13 @@ class NamedImages(Images):
             # ------
 
             yield img
-        
+
     @staticmethod
     def resolve_wildcards(img_names):
         if len(img_names) == 1:
             img_names = glob.glob(img_names[0])
         return img_names
+
 
 Images.register(NumpyImages)
 Images.register(NamedImages)

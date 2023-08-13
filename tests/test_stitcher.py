@@ -1,7 +1,6 @@
 import unittest
 
 import numpy as np
-
 from context import (
     AffineStitcher,
     Stitcher,
@@ -24,7 +23,6 @@ class TestStitcher(unittest.TestCase):
             result.shape[:2], (673, 2636), atol=max_image_shape_derivation
         )
 
-    
     def test_stitcher_with_not_matching_images(self):
         stitcher = Stitcher()
         with self.assertRaises(StitchingError) as cm:

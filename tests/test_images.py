@@ -1,19 +1,17 @@
 import unittest
 
 import numpy as np
-
-from context import Images, test_input, NumpyImages, load_test_img, NamedImages
+from context import Images, NamedImages, NumpyImages, load_test_img, test_input
 
 
 class TestStitcher(unittest.TestCase):
-    
     def test_numpy_image_input(self):
         images = NumpyImages([load_test_img("s1.jpg"), load_test_img("s2.jpg")])
         for img in images:
             print(img.shape)
         images.sizes
         images.names
-    
+
     def test_named_image_input(self):
         images = NamedImages([test_input("s1.jpg"), test_input("s2.jpg")])
         for img in images:
@@ -21,7 +19,6 @@ class TestStitcher(unittest.TestCase):
         images.sizes
         images.names
 
-    
     # def test_images(self):
     #     images = Images([test_input("s1.jpg"), test_input("s2.jpg")])
     #     _ = list(images.resize(images.read(), Images.Resolution.MEDIUM))
