@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from .context import (
+from context import (
     AffineStitcher,
     Stitcher,
     StitchingError,
@@ -14,6 +14,17 @@ from .context import (
 
 
 class TestStitcher(unittest.TestCase):
+    def test_stitcher_weir(self):
+        stitcher = Stitcher()
+        result = stitcher.stitch([test_input("weir*.jpg")])
+        write_test_result("weir.jpg", result)
+
+        max_image_shape_derivation = 10
+        np.testing.assert_allclose(
+            result.shape[:2], (673, 2636), atol=max_image_shape_derivation
+        )
+
+    
     def test_stitcher_with_not_matching_images(self):
         stitcher = Stitcher()
         with self.assertRaises(StitchingError) as cm:
