@@ -29,7 +29,7 @@ class Images(ABC):
         self._scalers["LOW"] = MegapixDownscaler(low_megapix)
         self._scalers["FINAL"] = MegapixDownscaler(final_megapix)
         self._scales_set = False
-        
+
         self._sizes_set = False
         self._names_set = False
 
@@ -111,28 +111,31 @@ class Images(ABC):
         if len(img_names) == 1:
             img_names = glob.glob(img_names[0])
         return img_names
-    
+
     @staticmethod
-    def of(images,         medium_megapix=Resolution.MEDIUM.value,
-            low_megapix=Resolution.LOW.value,
-            final_megapix=Resolution.FINAL.value,
-):
+    def of(
+        images,
+        medium_megapix=Resolution.MEDIUM.value,
+        low_megapix=Resolution.LOW.value,
+        final_megapix=Resolution.FINAL.value,
+    ):
         if not isinstance(images, list):
             raise StitchingError("images must be a list of images or filenames")
         if len(images) == 0:
             raise StitchingError("images must not be an empty list")
-            
+
         if Images._check_list_contains_only_instances_of_type(images, np.ndarray):
             return _NumpyImages(images, medium_megapix, low_megapix, final_megapix)
         elif Images._check_list_contains_only_instances_of_type(images, str):
             return _NamedImages(images, medium_megapix, low_megapix, final_megapix)
         else:
-            raise StitchingError("invalid images list: must be numpy arrays (loaded images) or filename strings")
-            
+            raise StitchingError(
+                "invalid images list: must be numpy arrays (loaded images) or filename strings"
+            )
+
     @staticmethod
     def _check_list_contains_only_instances_of_type(l, t):
         return all([isinstance(element, t) for element in l])
-        
 
 
 class _NumpyImages(Images):

@@ -17,11 +17,7 @@ from stitching.exposure_error_compensator import (  # noqa: F401, E402
 )
 from stitching.feature_detector import FeatureDetector  # noqa: F401, E402
 from stitching.feature_matcher import FeatureMatcher  # noqa: F401, E402
-from stitching.images import (  # noqa: F401, E402
-    Images,
-    _NamedImages,
-    _NumpyImages,
-)
+from stitching.images import Images, _NamedImages, _NumpyImages  # noqa: F401, E402
 from stitching.megapix_scaler import (  # noqa: F401, E402
     MegapixDownscaler,
     MegapixScaler,
