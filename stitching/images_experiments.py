@@ -1,6 +1,6 @@
 import glob
-from enum import Enum
 from abc import ABC, abstractmethod
+from enum import Enum
 
 import cv2 as cv
 
@@ -13,7 +13,7 @@ class Images(ABC):
         MEDIUM = 0.6
         LOW = 0.1
         FINAL = -1
-    
+
     @abstractmethod
     def __init__(self, images, medium_megapix, low_megapix, final_megapix):
         if medium_megapix < low_megapix:
@@ -82,7 +82,7 @@ class Images(ABC):
     @abstractmethod
     def __iter__(self):
         pass
-    
+
     @staticmethod
     def read_image(img_name):
         img = cv.imread(img_name)
@@ -103,7 +103,7 @@ class Images(ABC):
     @staticmethod
     def check_resolution(resolution):
         assert isinstance(resolution, Enum) and resolution in Images.Resolution
-    
+
     @staticmethod
     def resolve_wildcards(img_names):
         if len(img_names) == 1:
@@ -111,13 +111,14 @@ class Images(ABC):
         return img_names
 
 
-
 class NumpyImages(Images):
-    def __init__(self, images,         
-            medium_megapix=Images.Resolution.MEDIUM.value,
-            low_megapix=Images.Resolution.LOW.value,
-            final_megapix=Images.Resolution.FINAL.value,
-):
+    def __init__(
+        self,
+        images,
+        medium_megapix=Images.Resolution.MEDIUM.value,
+        low_megapix=Images.Resolution.LOW.value,
+        final_megapix=Images.Resolution.FINAL.value,
+    ):
         super().__init__(images, medium_megapix, low_megapix, final_megapix)
         if len(images) < 2:
             raise StitchingError("2 or more Images needed")
@@ -135,11 +136,13 @@ class NumpyImages(Images):
 
 
 class NamedImages(Images):
-    def __init__(self, images,         
-            medium_megapix=Images.Resolution.MEDIUM.value,
-            low_megapix=Images.Resolution.LOW.value,
-            final_megapix=Images.Resolution.FINAL.value,
-):
+    def __init__(
+        self,
+        images,
+        medium_megapix=Images.Resolution.MEDIUM.value,
+        low_megapix=Images.Resolution.LOW.value,
+        final_megapix=Images.Resolution.FINAL.value,
+    ):
         super().__init__(images, medium_megapix, low_megapix, final_megapix)
         self._names = Images.resolve_wildcards(images)
         if len(self.names) < 2:
@@ -159,7 +162,7 @@ class NamedImages(Images):
             # Attention for side effects!
             # the scalers are set on the first run
             self._set_scales(size)
-            
+
             # the original image sizes are set on the first run
             if not self.sizes_set:
                 self._sizes.append(size)
@@ -168,5 +171,3 @@ class NamedImages(Images):
             # ------
 
             yield img
-
-

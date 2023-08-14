@@ -6,17 +6,17 @@ from context import Images, NamedImages, NumpyImages, load_test_img, test_input
 
 class TestStitcher(unittest.TestCase):
     # TODO: DYI, test np arrays, Factory
-    
+
     def test_numpy_image_input(self):
         images = NumpyImages([load_test_img("s1.jpg"), load_test_img("s2.jpg")])
-        
+
         full_np_arrays = list(images)
 
         np.testing.assert_array_equal(images.sizes, [(1246, 700), (1385, 700)])
 
         low_sizes = images.get_scaled_img_sizes(Images.Resolution.LOW)
         np.testing.assert_array_equal(low_sizes, [(422, 237), (469, 237)])
-        
+
         low_np_arrays = list(images.resize(Images.Resolution.LOW))
 
         ratio = images.get_ratio(Images.Resolution.MEDIUM, Images.Resolution.LOW)
@@ -31,7 +31,7 @@ class TestStitcher(unittest.TestCase):
 
         low_sizes = images.get_scaled_img_sizes(Images.Resolution.LOW)
         np.testing.assert_array_equal(low_sizes, [(422, 237), (469, 237)])
-        
+
         low_np_arrays = list(images.resize(Images.Resolution.LOW))
 
         ratio = images.get_ratio(Images.Resolution.MEDIUM, Images.Resolution.LOW)
