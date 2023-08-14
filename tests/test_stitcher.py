@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-from context import (
+from .context import (
     AffineStitcher,
     Stitcher,
     StitchingError,
@@ -150,9 +150,9 @@ class TestStitcher(unittest.TestCase):
         # based on every input image set.
         stitcher = Stitcher()
         _ = stitcher.stitch([test_input("s1.jpg"), test_input("s2.jpg")])
-        self.assertEqual(round(stitcher.images.scalers["MEDIUM"].scale, 2), 0.83)
+        self.assertEqual(round(stitcher.images._scalers["MEDIUM"].scale, 2), 0.83)
         _ = stitcher.stitch([test_input("boat1.jpg"), test_input("boat2.jpg")])
-        self.assertEqual(round(stitcher.images.scalers["MEDIUM"].scale, 2), 0.24)
+        self.assertEqual(round(stitcher.images._scalers["MEDIUM"].scale, 2), 0.24)
 
 
 def start_test():

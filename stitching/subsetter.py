@@ -24,7 +24,7 @@ class Subsetter:
         self.confidence_threshold = confidence_threshold
         self.save_file = matches_graph_dot_file
 
-    def subset(self, img_names, img_sizes, imgs, features, matches):
+    def subset(self, img_names, features, matches):
         self.save_matches_graph_dot_file(img_names, matches)
         indices = self.get_indices_to_keep(features, matches)
 
@@ -38,13 +38,7 @@ class Subsetter:
                 StitchingWarning,
             )
 
-        img_names = Subsetter.subset_list(img_names, indices)
-        img_sizes = Subsetter.subset_list(img_sizes, indices)
-        imgs = Subsetter.subset_list(imgs, indices)
-        features = Subsetter.subset_list(features, indices)
-        matches = Subsetter.subset_matches(matches, indices)
-
-        return img_names, img_sizes, imgs, features, matches
+        return indices
 
     def save_matches_graph_dot_file(self, img_names, pairwise_matches):
         if self.save_file:
