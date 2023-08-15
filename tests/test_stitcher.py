@@ -1,6 +1,7 @@
 import unittest
 
 import numpy as np
+
 from .context import (
     AffineStitcher,
     Stitcher,
