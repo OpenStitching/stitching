@@ -58,4 +58,3 @@ def write_tutorial_result(img_name, img):
 
 def tutorial_output(file):
     return os.path.join(OUT_DIR, "tutorial", file)
-
