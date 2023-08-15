@@ -1,7 +1,5 @@
 import os
 import sys
-import time
-import tracemalloc
 
 import cv2 as cv
 
