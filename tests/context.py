@@ -50,3 +50,12 @@ def write_test_result(img_name, img):
 
 def test_output(file):
     return os.path.join(OUT_DIR, file)
+
+
+def write_tutorial_result(img_name, img):
+    cv.imwrite(tutorial_output(img_name), img)
+
+
+def tutorial_output(file):
+    return os.path.join(OUT_DIR, "tutorial", file)
+
