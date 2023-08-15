@@ -1,7 +1,6 @@
 import unittest
 
 import numpy as np
-
 from context import (
     Blender,
     CameraAdjuster,
@@ -220,9 +219,7 @@ class TestStitcherTutorial(unittest.TestCase):
             panorama, blended_seam_masks
         )
 
-        write_tutorial_result(
-            "tutorial_09_result_with_seam_lines.jpg", with_seam_lines
-        )
+        write_tutorial_result("tutorial_09_result_with_seam_lines.jpg", with_seam_lines)
         write_tutorial_result(
             "tutorial_09_result_with_seam_polygons.jpg", with_seam_polygons
         )
