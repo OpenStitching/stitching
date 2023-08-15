@@ -30,7 +30,7 @@ class Images(ABC):
         if Images.check_list_element_types(images, np.ndarray):
             return _NumpyImages(images, medium_megapix, low_megapix, final_megapix)
         elif Images.check_list_element_types(images, str):
-            return _NamedImages(images, medium_megapix, low_megapix, final_megapix)
+            return _FilenameImages(images, medium_megapix, low_megapix, final_megapix)
         else:
             raise StitchingError(
                 """invalid images list:
@@ -160,7 +160,7 @@ class _NumpyImages(Images):
             yield img
 
 
-class _NamedImages(Images):
+class _FilenameImages(Images):
     def __init__(self, images, medium_megapix, low_megapix, final_megapix):
         super().__init__(images, medium_megapix, low_megapix, final_megapix)
         self._names = Images.resolve_wildcards(images)

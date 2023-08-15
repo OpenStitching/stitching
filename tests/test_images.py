@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from .context import Images, _NamedImages, _NumpyImages, load_test_img, test_input
+from .context import Images, _FilenameImages, _NumpyImages, load_test_img, test_input
 
 
 class TestImages(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestImages(unittest.TestCase):
 
     def test_named_image_input(self):
         images = Images.of([test_input("s1.jpg"), test_input("s2.jpg")])
-        self.assertTrue(isinstance(images, _NamedImages))
+        self.assertTrue(isinstance(images, _FilenameImages))
         self.assertTrue(images.names[0].endswith("s1.jpg"))
         self.assertTrue(images.names[1].endswith("s2.jpg"))
         self.check_s_images(images)
