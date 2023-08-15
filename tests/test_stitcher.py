@@ -7,6 +7,7 @@ from .context import (
     Stitcher,
     StitchingError,
     StitchingWarning,
+    load_test_img,
     test_input,
     test_output,
     write_test_result,
@@ -14,6 +15,34 @@ from .context import (
 
 
 class TestStitcher(unittest.TestCase):
+    def test_stitcher_weir(self):
+        stitcher = Stitcher()
+        max_image_shape_derivation = 15
+        expected_shape = (673, 2636)
+
+        # from filenames
+        images = [test_input("weir*.jpg")]
+        result = stitcher.stitch(images)
+        write_test_result("weir_from_filenames.jpg", result)
+
+        np.testing.assert_allclose(
+            result.shape[:2], expected_shape, atol=max_image_shape_derivation
+        )
+
+        # from loaded numpy arrays
+        images = [
+            load_test_img("weir_1.jpg"),
+            load_test_img("weir_2.jpg"),
+            load_test_img("weir_3.jpg"),
+            load_test_img("weir_noise.jpg"),
+        ]
+        result = stitcher.stitch(images)
+        write_test_result("weir_from_numpy_images.jpg", result)
+
+        np.testing.assert_allclose(
+            result.shape[:2], expected_shape, atol=max_image_shape_derivation
+        )
+
     def test_stitcher_with_not_matching_images(self):
         stitcher = Stitcher()
         with self.assertRaises(StitchingError) as cm:
@@ -138,13 +167,12 @@ class TestStitcher(unittest.TestCase):
 
     def test_use_of_a_stitcher_for_multiple_image_sets(self):
         # the scale should not be fixed by the first run but set dynamically
-        # based on every input image set. In this case the boat dataset runs
-        # much longer than it should since it uses the scale of the run before.
+        # based on every input image set.
         stitcher = Stitcher()
-        _ = stitcher.stitch([test_input("s?.jpg")])
-        self.assertEqual(round(stitcher.img_handler.medium_scaler.scale, 2), 0.83)
-        _ = stitcher.stitch([test_input("boat?.jpg")])
-        self.assertEqual(round(stitcher.img_handler.medium_scaler.scale, 2), 0.24)
+        _ = stitcher.stitch([test_input("s1.jpg"), test_input("s2.jpg")])
+        self.assertEqual(round(stitcher.images._scalers["MEDIUM"].scale, 2), 0.83)
+        _ = stitcher.stitch([test_input("boat1.jpg"), test_input("boat2.jpg")])
+        self.assertEqual(round(stitcher.images._scalers["MEDIUM"].scale, 2), 0.24)
 
 
 def start_test():
