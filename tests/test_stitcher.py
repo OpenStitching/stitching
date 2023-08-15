@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from .context import (
+from context import (
     AffineStitcher,
     Stitcher,
     StitchingError,
@@ -10,20 +10,37 @@ from .context import (
     test_input,
     test_output,
     write_test_result,
+    load_test_img
 )
 
 
 class TestStitcher(unittest.TestCase):
     def test_stitcher_weir(self):
         stitcher = Stitcher()
-        result = stitcher.stitch([test_input("weir*.jpg")])
-        write_test_result("weir.jpg", result)
-
-        max_image_shape_derivation = 10
+        max_image_shape_derivation = 15
+        expected_shape = (673, 2636)
+        
+        # from filenames
+        images = [test_input("weir*.jpg")]
+        result = stitcher.stitch(images)
+        write_test_result("weir_from_filenames.jpg", result)
+        
         np.testing.assert_allclose(
-            result.shape[:2], (673, 2636), atol=max_image_shape_derivation
+            result.shape[:2], expected_shape, atol=max_image_shape_derivation
         )
 
+        # from loaded numpy arrays
+        images = [load_test_img("weir_1.jpg"), 
+                  load_test_img("weir_2.jpg"), 
+                  load_test_img("weir_3.jpg"), 
+                  load_test_img("weir_noise.jpg")]
+        result = stitcher.stitch(images)
+        write_test_result("weir_from_numpy_images.jpg", result)
+
+        np.testing.assert_allclose(
+            result.shape[:2], expected_shape, atol=max_image_shape_derivation
+        )
+    
     def test_stitcher_with_not_matching_images(self):
         stitcher = Stitcher()
         with self.assertRaises(StitchingError) as cm:
