@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from context import (
+from .context import (
     Blender,
     CameraAdjuster,
     CameraEstimator,
