@@ -33,7 +33,7 @@ class Images(ABC):
             return _NamedImages(images, medium_megapix, low_megapix, final_megapix)
         else:
             raise StitchingError(
-                """invalid images list: 
+                """invalid images list:
                     must be numpy arrays (loaded images) or filename strings"""
             )
 
