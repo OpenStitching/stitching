@@ -1,7 +1,7 @@
 import unittest
 
-import cv2 as cv
 import numpy as np
+
 from context import (
     Blender,
     CameraAdjuster,
@@ -31,10 +31,10 @@ class TestStitcherTutorial(unittest.TestCase):
         low_imgs = list(images.resize(Images.Resolution.LOW))
         final_imgs = list(images.resize(Images.Resolution.FINAL))
 
-        original_size = images.sizes[0]
-        medium_size = Images.get_image_size(medium_imgs[0])
-        low_size = Images.get_image_size(low_imgs[0])
-        final_size = Images.get_image_size(final_imgs[0])
+        original_size = images.sizes[0]  # noqa F401
+        medium_size = Images.get_image_size(medium_imgs[0])  # noqa F401
+        low_size = Images.get_image_size(low_imgs[0])  # noqa F401
+        final_size = Images.get_image_size(final_imgs[0])  # noqa F401
 
         # Find Features
         finder = FeatureDetector()
@@ -138,12 +138,12 @@ class TestStitcherTutorial(unittest.TestCase):
         lir = cropper.estimate_largest_interior_rectangle(mask)
 
         lir_to_crop = lir.draw_on(mask, size=2)
-        write_tutorial_result(f"tutorial_06_crop.jpg", lir_to_crop)
+        write_tutorial_result("tutorial_06_crop.jpg", lir_to_crop)
 
         low_corners = cropper.get_zero_center_corners(low_corners)
         rectangles = cropper.get_rectangles(low_corners, low_sizes)
         overlap = cropper.get_overlap(rectangles[1], lir)
-        intersection = cropper.get_intersection(rectangles[1], overlap)
+        intersection = cropper.get_intersection(rectangles[1], overlap)  # noqa F401
 
         cropper.prepare(warped_low_imgs, warped_low_masks, low_corners, low_sizes)
 
@@ -208,7 +208,7 @@ class TestStitcherTutorial(unittest.TestCase):
             blender.feed(img, mask, corner)
         panorama, _ = blender.blend()
 
-        write_tutorial_result(f"tutorial_09_result.jpg", panorama)
+        write_tutorial_result("tutorial_09_result.jpg", panorama)
 
         blended_seam_masks = seam_finder.blend_seam_masks(
             seam_masks, final_corners, final_sizes
@@ -221,10 +221,10 @@ class TestStitcherTutorial(unittest.TestCase):
         )
 
         write_tutorial_result(
-            f"tutorial_09_result_with_seam_lines.jpg", with_seam_lines
+            "tutorial_09_result_with_seam_lines.jpg", with_seam_lines
         )
         write_tutorial_result(
-            f"tutorial_09_result_with_seam_polygons.jpg", with_seam_polygons
+            "tutorial_09_result_with_seam_polygons.jpg", with_seam_polygons
         )
 
         # Check only that the result is correct.
