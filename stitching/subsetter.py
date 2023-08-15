@@ -59,6 +59,9 @@ class Subsetter:
             features, pairwise_matches, self.confidence_threshold
         )
 
+        # see https://github.com/OpenStitching/stitching/issues/40
+        indices = indices.flatten()
+
         if len(indices) < 2:
             raise StitchingError(
                 """No match exceeds the given confidence threshold.
