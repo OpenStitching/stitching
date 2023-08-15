@@ -15,6 +15,28 @@ class Images(ABC):
         LOW = 0.1
         FINAL = -1
 
+    @staticmethod
+    def of(
+        images,
+        medium_megapix=Resolution.MEDIUM.value,
+        low_megapix=Resolution.LOW.value,
+        final_megapix=Resolution.FINAL.value,
+    ):
+        if not isinstance(images, list):
+            raise StitchingError("images must be a list of images or filenames")
+        if len(images) == 0:
+            raise StitchingError("images must not be an empty list")
+
+        if Images.check_list_element_types(images, np.ndarray):
+            return _NumpyImages(images, medium_megapix, low_megapix, final_megapix)
+        elif Images.check_list_element_types(images, str):
+            return _NamedImages(images, medium_megapix, low_megapix, final_megapix)
+        else:
+            raise StitchingError(
+                """invalid images list: 
+                    must be numpy arrays (loaded images) or filename strings"""
+            )
+
     @abstractmethod
     def __init__(self, images, medium_megapix, low_megapix, final_megapix):
         if medium_megapix < low_megapix:
@@ -55,6 +77,10 @@ class Images(ABC):
                 self._get_scaler(resolution), self._sizes[idx], img
             )
 
+    @abstractmethod
+    def __iter__(self):
+        pass
+
     def _set_scales(self, size):
         if not self._scales_set:
             for scaler in self._scalers.values():
@@ -80,10 +106,6 @@ class Images(ABC):
         return [
             self._get_scaler(resolution).get_scaled_img_size(sz) for sz in self._sizes
         ]
-
-    @abstractmethod
-    def __iter__(self):
-        pass
 
     @staticmethod
     def read_image(img_name):
@@ -113,29 +135,8 @@ class Images(ABC):
         return img_names
 
     @staticmethod
-    def of(
-        images,
-        medium_megapix=Resolution.MEDIUM.value,
-        low_megapix=Resolution.LOW.value,
-        final_megapix=Resolution.FINAL.value,
-    ):
-        if not isinstance(images, list):
-            raise StitchingError("images must be a list of images or filenames")
-        if len(images) == 0:
-            raise StitchingError("images must not be an empty list")
-
-        if Images._check_list_contains_only_instances_of_type(images, np.ndarray):
-            return _NumpyImages(images, medium_megapix, low_megapix, final_megapix)
-        elif Images._check_list_contains_only_instances_of_type(images, str):
-            return _NamedImages(images, medium_megapix, low_megapix, final_megapix)
-        else:
-            raise StitchingError(
-                "invalid images list: must be numpy arrays (loaded images) or filename strings"
-            )
-
-    @staticmethod
-    def _check_list_contains_only_instances_of_type(l, t):
-        return all([isinstance(element, t) for element in l])
+    def check_list_element_types(list_, type_):
+        return all([isinstance(element, type_) for element in list_])
 
 
 class _NumpyImages(Images):
