@@ -1,15 +1,15 @@
 import unittest
 
 import numpy as np
+
 from .context import Images, _NamedImages, _NumpyImages, load_test_img, test_input
 
 
 class TestImages(unittest.TestCase):
-    
     def test_numpy_image_input(self):
         images = Images.of([load_test_img("s1.jpg"), load_test_img("s2.jpg")])
         self.assertTrue(isinstance(images, _NumpyImages))
-        self.assertEqual(images.names, ['1', '2'])
+        self.assertEqual(images.names, ["1", "2"])
         self.check_s_images(images)
 
     def test_named_image_input(self):
@@ -18,7 +18,7 @@ class TestImages(unittest.TestCase):
         self.assertTrue(images.names[0].endswith("s1.jpg"))
         self.assertTrue(images.names[1].endswith("s2.jpg"))
         self.check_s_images(images)
-        
+
     def check_s_images(self, images):
         self.assertTrue(isinstance(images, Images))
 
@@ -41,11 +41,10 @@ class TestImages(unittest.TestCase):
         ratio = images.get_ratio(Images.Resolution.MEDIUM, Images.Resolution.LOW)
         self.assertEqual(ratio, 0.408248290463863)
 
-
     def test_images(self):
         self.assertEqual(Images.Resolution.LOW.name, "LOW")
         self.assertEqual(Images.Resolution.LOW.value, 0.1)
-        
+
         images = Images.of(["1", "2"], 10)
         self.assertEqual(images._scalers["MEDIUM"].megapix, 10)
 
