@@ -75,7 +75,7 @@ class Images(ABC):
         )
 
     def get_scaled_img_sizes(self, resolution):
-        self._scales_set
+        assert self._scales_set and self._sizes_set
         Images.check_resolution(resolution)
         return [
             self._get_scaler(resolution).get_scaled_img_size(sz) for sz in self._sizes

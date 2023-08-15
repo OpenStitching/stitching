@@ -150,7 +150,7 @@ class Stitcher:
     def estimate_scale(self, cameras):
         self.warper.set_scale(cameras)
 
-    def resize_low_resolution(self, imgs):
+    def resize_low_resolution(self, imgs=None):
         return list(self.images.resize(Images.Resolution.LOW, imgs))
 
     def warp_low_resolution(self, imgs, cameras):
