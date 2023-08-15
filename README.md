@@ -89,8 +89,7 @@ seam lines where the images are blended:
 
 This package was developed and used for our paper [Automatic stitching
 of fragmented construction plans of hydraulic
-structures](https://doi.org/10.1002/bate.202200010 "Automatic
-stitching of fragmented construction plans of hydraulic structures")
+structures](https://hdl.handle.net/20.500.11970/112696)
 
 ## License
 
