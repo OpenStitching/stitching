@@ -1,8 +1,8 @@
 import os
 import sys
 import unittest
-from unittest.mock import patch
 from datetime import datetime
+from unittest.mock import patch
 
 import cv2 as cv
 import numpy as np
@@ -36,9 +36,9 @@ class TestCLI(unittest.TestCase):
             np.testing.assert_allclose(
                 img.shape[:2], (150, 590), atol=max_image_shape_derivation
             )
-            
+
     def test_main_verbose(self):
-        name = datetime.now().strftime('%Y%m%d_%H%M%S') + "_verbose_results"
+        name = datetime.now().strftime("%Y%m%d_%H%M%S") + "_verbose_results"
         output = test_output(name)
         test_args = [
             "stitch.py",
