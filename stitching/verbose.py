@@ -6,9 +6,10 @@ from .images import Images
 from .seam_finder import SeamFinder
 from .timelapser import Timelapser
 
+
 def verbose_stitching(stitcher, images, verbose_dir=None):
     _dir = "." if verbose_dir is None else verbose_dir
-    
+
     images = Images.of(images)
 
     # Resize Images
@@ -19,9 +20,7 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
     features = [finder.detect_features(img) for img in imgs]
     for idx, img_features in enumerate(features):
         img_with_features = finder.draw_keypoints(imgs[idx], img_features)
-        write_verbose_result(
-            _dir, f"01_features_img{idx+1}.jpg", img_with_features
-        )
+        write_verbose_result(_dir, f"01_features_img{idx+1}.jpg", img_with_features)
 
     # Match Features
     matcher = stitcher.matcher
@@ -40,9 +39,7 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
         )
     )
     for idx1, idx2, img in all_relevant_matches:
-        write_verbose_result(
-            _dir, f"02_matches_img{idx1+1}_to_img{idx2+1}.jpg", img
-        )
+        write_verbose_result(_dir, f"02_matches_img{idx1+1}_to_img{idx2+1}.jpg", img)
 
     # Subset
     subsetter = stitcher.subsetter
@@ -68,34 +65,26 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
     # Warp Images
     low_imgs = list(images.resize(Images.Resolution.LOW, imgs))
     imgs = None  # free memory
-    
+
     warper = stitcher.warper
     warper.set_scale(cameras)
 
     low_sizes = images.get_scaled_img_sizes(Images.Resolution.LOW)
-    camera_aspect = images.get_ratio(
-        Images.Resolution.MEDIUM, Images.Resolution.LOW
-    )
+    camera_aspect = images.get_ratio(Images.Resolution.MEDIUM, Images.Resolution.LOW)
 
     low_imgs = list(warper.warp_images(low_imgs, cameras, camera_aspect))
-    low_masks = list(
-        warper.create_and_warp_masks(low_sizes, cameras, camera_aspect)
-    )
+    low_masks = list(warper.create_and_warp_masks(low_sizes, cameras, camera_aspect))
     low_corners, low_sizes = warper.warp_rois(low_sizes, cameras, camera_aspect)
 
     final_sizes = images.get_scaled_img_sizes(Images.Resolution.FINAL)
-    camera_aspect = images.get_ratio(
-        Images.Resolution.MEDIUM, Images.Resolution.FINAL
-    )
+    camera_aspect = images.get_ratio(Images.Resolution.MEDIUM, Images.Resolution.FINAL)
 
     final_imgs = list(images.resize(Images.Resolution.FINAL))
     final_imgs = list(warper.warp_images(final_imgs, cameras, camera_aspect))
     final_masks = list(
         warper.create_and_warp_masks(final_sizes, cameras, camera_aspect)
     )
-    final_corners, final_sizes = warper.warp_rois(
-        final_sizes, cameras, camera_aspect
-    )
+    final_corners, final_sizes = warper.warp_rois(final_sizes, cameras, camera_aspect)
 
     for idx, warped_img in enumerate(final_imgs):
         write_verbose_result(_dir, f"04_warped_img{idx+1}.jpg", warped_img)
@@ -117,38 +106,36 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
             low_imgs, low_masks, low_corners, low_sizes
         )
         write_verbose_result(_dir, "06_estimated_mask_to_crop.jpg", mask)
-    
+
         lir = cropper.estimate_largest_interior_rectangle(mask)
-    
+
         lir_to_crop = lir.draw_on(mask, size=2)
         write_verbose_result(_dir, "06_lir.jpg", lir_to_crop)
-    
+
         low_corners = cropper.get_zero_center_corners(low_corners)
         rectangles = cropper.get_rectangles(low_corners, low_sizes)
         overlap = cropper.get_overlap(rectangles[1], lir)
-    
+
         cropper.prepare(low_imgs, low_masks, low_corners, low_sizes)
-    
+
         low_masks = list(cropper.crop_images(low_masks))
         low_imgs = list(cropper.crop_images(low_imgs))
         low_corners, low_sizes = cropper.crop_rois(low_corners, low_sizes)
-    
+
         lir_aspect = images.get_ratio(Images.Resolution.LOW, Images.Resolution.FINAL)
         cropped_final_masks = list(cropper.crop_images(final_masks, lir_aspect))
         cropped_final_imgs = list(cropper.crop_images(final_imgs, lir_aspect))
         final_corners, final_sizes = cropper.crop_rois(
             final_corners, final_sizes, lir_aspect
         )
-    
+
         timelapser = Timelapser("as_is")
         timelapser.initialize(final_corners, final_sizes)
-    
+
         for idx, (img, corner) in enumerate(zip(cropped_final_imgs, final_corners)):
             timelapser.process_frame(img, corner)
             frame = timelapser.get_frame()
-            write_verbose_result(
-                _dir, f"07_timelapse_cropped_img{idx+1}.jpg", frame
-            )
+            write_verbose_result(_dir, f"07_timelapse_cropped_img{idx+1}.jpg", frame)
 
     # Seam Masks
     seam_finder = stitcher.seam_finder
@@ -179,9 +166,7 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
     ]
 
     for idx, compensated_img in enumerate(compensated_imgs):
-        write_verbose_result(
-            _dir, f"08_compensated{idx+1}.jpg", compensated_img
-        )
+        write_verbose_result(_dir, f"08_compensated{idx+1}.jpg", compensated_img)
 
     # Blending
     blender = stitcher.blender
@@ -198,15 +183,11 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
     with_seam_lines = seam_finder.draw_seam_lines(
         panorama, blended_seam_masks, linesize=3
     )
-    with_seam_polygons = seam_finder.draw_seam_polygons(
-        panorama, blended_seam_masks
-    )
+    with_seam_polygons = seam_finder.draw_seam_polygons(panorama, blended_seam_masks)
 
     write_verbose_result(_dir, "09_result_with_seam_lines.jpg", with_seam_lines)
-    write_verbose_result(
-        _dir, "09_result_with_seam_polygons.jpg", with_seam_polygons
-    )
-    
+    write_verbose_result(_dir, "09_result_with_seam_polygons.jpg", with_seam_polygons)
+
     return panorama
 
 

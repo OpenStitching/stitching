@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from .context import Stitcher, test_input, VERBOSE_DIR
+from .context import VERBOSE_DIR, Stitcher, test_input
 
 
 class TestStitcherVerbose(unittest.TestCase):
