@@ -28,8 +28,6 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
     matcher = stitcher.matcher
     matches = matcher.match_features(features)
 
-    matcher.get_confidence_matrix(matches)
-
     # Subset
     subsetter = stitcher.subsetter
 
