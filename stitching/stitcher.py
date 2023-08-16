@@ -13,6 +13,7 @@ from .seam_finder import SeamFinder
 from .stitching_error import StitchingError
 from .subsetter import Subsetter
 from .timelapser import Timelapser
+from .verbose import verbose_stitching
 from .warper import Warper
 
 
@@ -84,6 +85,9 @@ class Stitcher:
         self.seam_finder = SeamFinder(args.finder)
         self.blender = Blender(args.blender_type, args.blend_strength)
         self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
+
+    def stitch_verbose(self, images, verbose_dir=None):
+        return verbose_stitching(self, images, verbose_dir)
 
     def stitch(self, images):
         self.images = Images.of(

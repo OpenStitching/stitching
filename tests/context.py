@@ -34,6 +34,7 @@ from stitching.warper import Warper  # noqa: F401, E402
 TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 IN_DIR = os.path.join(TEST_DIR, "testdata")
 OUT_DIR = os.path.join(TEST_DIR, "results")
+VERBOSE_DIR = os.path.join(OUT_DIR, "verbose")
 
 
 def load_test_img(img_name):

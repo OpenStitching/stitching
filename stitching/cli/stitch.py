@@ -4,7 +4,9 @@ Command line tool for the stitching package
 
 import argparse
 import glob
+import os
 import sys
+from datetime import datetime
 
 import cv2 as cv
 import numpy as np
@@ -28,6 +30,18 @@ from stitching.warper import Warper
 def create_parser():
     parser = argparse.ArgumentParser(prog="stitch.py")
     parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Creates a directory with verbose results.",
+    )
+    parser.add_argument(
+        "--verbose_dir",
+        action="store",
+        default=datetime.now().strftime("%Y%m%d_%H%M%S") + "_verbose_results",
+        help="The directory where verbose results should be saved.",
+    )
     parser.add_argument(
         "--affine",
         action="store_true",
@@ -269,9 +283,10 @@ def main():
     img_names = args_dict.pop("img_names")
     if len(img_names) == 1:
         img_names = glob.glob(img_names[0])
+    verbose = args_dict.pop("verbose")
+    verbose_dir = args_dict.pop("verbose_dir")
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
-    print("stitching " + " ".join(img_names) + " into " + output)
 
     # Create Stitcher
     affine_mode = args_dict.pop("affine")
@@ -281,9 +296,14 @@ def main():
     else:
         stitcher = Stitcher(**args_dict)
 
-    panorama = stitcher.stitch(img_names)
-
-    cv.imwrite(output, panorama)
+    if verbose:
+        print("stitching " + " ".join(img_names) + " into " + verbose_dir)
+        os.makedirs(verbose_dir)
+        stitcher.stitch_verbose(img_names, verbose_dir)
+    else:
+        print("stitching " + " ".join(img_names) + " into " + output)
+        panorama = stitcher.stitch(img_names)
+        cv.imwrite(output, panorama)
 
     if preview:
         zoom_x = 600.0 / panorama.shape[1]
