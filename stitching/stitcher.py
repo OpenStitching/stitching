@@ -14,6 +14,7 @@ from .stitching_error import StitchingError
 from .subsetter import Subsetter
 from .timelapser import Timelapser
 from .warper import Warper
+from .verbose import verbose_stitching
 
 
 class Stitcher:
@@ -84,6 +85,9 @@ class Stitcher:
         self.seam_finder = SeamFinder(args.finder)
         self.blender = Blender(args.blender_type, args.blend_strength)
         self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
+        
+    def stitch_verbose(self, images, verbose_dir=None):
+        return verbose_stitching(self, images, verbose_dir)
 
     def stitch(self, images):
         self.images = Images.of(
@@ -248,7 +252,7 @@ class Stitcher:
         for arg in kwargs:
             if arg not in self.DEFAULT_SETTINGS:
                 raise StitchingError("Invalid Argument: " + arg)
-
+        
 
 class AffineStitcher(Stitcher):
     AFFINE_DEFAULTS = {

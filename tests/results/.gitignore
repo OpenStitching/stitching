@@ -3,4 +3,4 @@
 
 # But not these files...
 !.gitignore
-!tutorial/
+!verbose/

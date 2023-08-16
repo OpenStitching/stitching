@@ -34,6 +34,7 @@ from stitching.warper import Warper  # noqa: F401, E402
 TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 IN_DIR = os.path.join(TEST_DIR, "testdata")
 OUT_DIR = os.path.join(TEST_DIR, "results")
+VERBOSE_DIR = os.path.join(OUT_DIR, "verbose")
 
 
 def load_test_img(img_name):
@@ -50,11 +51,3 @@ def write_test_result(img_name, img):
 
 def test_output(file):
     return os.path.join(OUT_DIR, file)
-
-
-def write_tutorial_result(img_name, img):
-    cv.imwrite(tutorial_output(img_name), img)
-
-
-def tutorial_output(file):
-    return os.path.join(OUT_DIR, "tutorial", file)
