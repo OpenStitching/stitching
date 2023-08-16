@@ -46,7 +46,7 @@ class TestCLI(unittest.TestCase):
             "--final_megapix",
             "0.05",
             "--verbose",
-            "--verbose_path",
+            "--verbose_dir",
             output,
         ]
         with patch.object(sys, "argv", test_args):

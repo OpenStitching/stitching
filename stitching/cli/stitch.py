@@ -36,7 +36,7 @@ def create_parser():
         help="Creates a directory with verbose results.",
     )
     parser.add_argument(
-        "--verbose_path",
+        "--verbose_dir",
         action="store",
         default=datetime.now().strftime('%Y%m%d_%H%M%S') + "_verbose_results",
         help="The directory where verbose results should be saved.",
@@ -283,7 +283,7 @@ def main():
     if len(img_names) == 1:
         img_names = glob.glob(img_names[0])
     verbose = args_dict.pop("verbose")
-    verbose_path = args_dict.pop("verbose_path")
+    verbose_dir = args_dict.pop("verbose_dir")
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
 
@@ -296,9 +296,9 @@ def main():
         stitcher = Stitcher(**args_dict)
 
     if verbose:
-        print("stitching " + " ".join(img_names) + " into " + verbose_path)
-        os.makedirs(verbose_path)
-        stitcher.stitch_verbose(img_names, verbose_path)
+        print("stitching " + " ".join(img_names) + " into " + verbose_dir)
+        os.makedirs(verbose_dir)
+        stitcher.stitch_verbose(img_names, verbose_dir)
     else:
         print("stitching " + " ".join(img_names) + " into " + output)
         panorama = stitcher.stitch(img_names)
