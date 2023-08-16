@@ -30,12 +30,15 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
 
     matcher.get_confidence_matrix(matches)
 
+    # Subset
+    subsetter = stitcher.subsetter
+
     all_relevant_matches = list(
         matcher.draw_matches_matrix(
             imgs,
             features,
             matches,
-            conf_thresh=1,
+            conf_thresh=subsetter.confidence_threshold,
             inliers=True,
             matchColor=(0, 255, 0),
         )
