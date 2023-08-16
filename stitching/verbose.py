@@ -113,9 +113,6 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
         write_verbose_result(_dir, "06_lir.jpg", lir_to_crop)
 
         low_corners = cropper.get_zero_center_corners(low_corners)
-        rectangles = cropper.get_rectangles(low_corners, low_sizes)
-        overlap = cropper.get_overlap(rectangles[1], lir)
-
         cropper.prepare(low_imgs, low_masks, low_corners, low_sizes)
 
         low_masks = list(cropper.crop_images(low_masks))
