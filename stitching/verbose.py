@@ -10,7 +10,9 @@ from .timelapser import Timelapser
 def verbose_stitching(stitcher, images, verbose_dir=None):
     _dir = "." if verbose_dir is None else verbose_dir
 
-    images = Images.of(images, stitcher.medium_megapix, stitcher.low_megapix, stitcher.final_megapix)
+    images = Images.of(
+        images, stitcher.medium_megapix, stitcher.low_megapix, stitcher.final_megapix
+    )
 
     # Resize Images
     imgs = list(images.resize(Images.Resolution.MEDIUM))

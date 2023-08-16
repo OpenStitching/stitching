@@ -4,8 +4,8 @@ Command line tool for the stitching package
 
 import argparse
 import glob
-import sys
 import os
+import sys
 from datetime import datetime
 
 import cv2 as cv
@@ -31,14 +31,15 @@ def create_parser():
     parser = argparse.ArgumentParser(prog="stitch.py")
     parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
     parser.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_true",
         help="Creates a directory with verbose results.",
     )
     parser.add_argument(
         "--verbose_path",
         action="store",
-        default=datetime.now().strftime('%Y%m%d_%H%M%S') + "_verbose_results",
+        default=datetime.now().strftime("%Y%m%d_%H%M%S") + "_verbose_results",
         help="The directory where verbose results should be saved.",
     )
     parser.add_argument(
