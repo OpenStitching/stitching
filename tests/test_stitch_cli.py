@@ -1,6 +1,8 @@
+import os
 import sys
 import unittest
 from unittest.mock import patch
+from datetime import datetime
 
 import cv2 as cv
 import numpy as np
@@ -30,6 +32,27 @@ class TestCLI(unittest.TestCase):
             main()
 
             img = cv.imread(output)
+            max_image_shape_derivation = 10
+            np.testing.assert_allclose(
+                img.shape[:2], (150, 590), atol=max_image_shape_derivation
+            )
+            
+    def test_main_verbose(self):
+        name = datetime.now().strftime('%Y%m%d_%H%M%S') + "_verbose_results"
+        output = test_output(name)
+        test_args = [
+            "stitch.py",
+            test_input("weir_?.jpg"),
+            "--final_megapix",
+            "0.05",
+            "--verbose",
+            "--verbose_path",
+            output,
+        ]
+        with patch.object(sys, "argv", test_args):
+            main()
+
+            img = cv.imread(os.path.join(output, "09_result.jpg"))
             max_image_shape_derivation = 10
             np.testing.assert_allclose(
                 img.shape[:2], (150, 590), atol=max_image_shape_derivation
