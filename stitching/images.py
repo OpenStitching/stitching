@@ -137,7 +137,7 @@ class Images(ABC):
     @staticmethod
     def check_list_element_types(list_, type_):
         return all([isinstance(element, type_) for element in list_])
-    
+
     @staticmethod
     def to_binary(img):
         if len(img.shape) == 3:

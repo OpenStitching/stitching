@@ -1,9 +1,10 @@
 from collections import OrderedDict
 
-import numpy as np
 import cv2 as cv
+import numpy as np
 
 from .stitching_error import StitchingError
+
 
 class FeatureDetector:
     """https://docs.opencv.org/4.x/d0/d13/classcv_1_1Feature2D.html"""
@@ -32,11 +33,11 @@ class FeatureDetector:
             assert len(img.shape) == 3 and len(mask.shape) == 2
             if not np.array_equal(img.shape[:2], mask.shape):
                 raise StitchingError(
-                f"Resolution of mask '{idx+1}' ({mask.shape}) does not match"
-                f" the resolution of image '{idx+1}' ({img.shape[:2]}).")
-            features.append(self.detect_features(img, mask=mask))
+                    f"Resolution of mask '{idx+1}' ({mask.shape}) does not match"
+                    f" the resolution of image '{idx+1}' ({img.shape[:2]})."
+                )
+            features.append(self.detector.detect_features(img, mask=mask))
         return features
-            
 
     @staticmethod
     def draw_keypoints(img, features, **kwargs):
