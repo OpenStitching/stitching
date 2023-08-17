@@ -1,6 +1,9 @@
 from collections import OrderedDict
 
 import cv2 as cv
+import numpy as np
+
+from .stitching_error import StitchingError
 
 
 class FeatureDetector:
@@ -20,6 +23,21 @@ class FeatureDetector:
 
     def detect_features(self, img, *args, **kwargs):
         return cv.detail.computeImageFeatures2(self.detector, img, *args, **kwargs)
+
+    def detect(self, imgs):
+        return [self.detect_features(img) for img in imgs]
+
+    def detect_with_masks(self, imgs, masks):
+        features = []
+        for idx, (img, mask) in enumerate(zip(imgs, masks)):
+            assert len(img.shape) == 3 and len(mask.shape) == 2
+            if not np.array_equal(img.shape[:2], mask.shape):
+                raise StitchingError(
+                    f"Resolution of mask '{idx+1}' ({mask.shape}) does not match"
+                    f" the resolution of image '{idx+1}' ({img.shape[:2]})."
+                )
+            features.append(self.detect_features(img, mask=mask))
+        return features
 
     @staticmethod
     def draw_keypoints(img, features, **kwargs):

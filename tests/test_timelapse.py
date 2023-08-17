@@ -3,18 +3,18 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import Stitcher, load_test_img, test_input
+from .context import Stitcher, test_input, test_output
 
 
 class TestImageComposition(unittest.TestCase):
     def test_timelapse(self):
         stitcher = Stitcher(
             timelapse="as_is",
-            timelapse_prefix=test_input("timelapse_"),
+            timelapse_prefix=test_output("timelapse_"),
             crop=False,
         )
         _ = stitcher.stitch([test_input("s?.jpg")])
-        frame1 = load_test_img("timelapse_s1.jpg")
+        frame1 = cv.imread(test_output("timelapse_s1.jpg"))
 
         max_image_shape_derivation = 3
         np.testing.assert_allclose(

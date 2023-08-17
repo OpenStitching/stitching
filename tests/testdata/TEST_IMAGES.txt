@@ -16,3 +16,7 @@ https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/
 https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/imgs/weir_2.jpg
 https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/imgs/weir_3.jpg
 https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/imgs/weir_noise.jpg
+https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/imgs/barcode1.png
+https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/imgs/barcode2.png
+https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/imgs/mask1.png
+https://raw.githubusercontent.com/lukasalexanderweber/stitching_tutorial/master/imgs/mask2.png

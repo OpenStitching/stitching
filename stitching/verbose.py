@@ -7,7 +7,7 @@ from .seam_finder import SeamFinder
 from .timelapser import Timelapser
 
 
-def verbose_stitching(stitcher, images, verbose_dir=None):
+def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     _dir = "." if verbose_dir is None else verbose_dir
 
     images = Images.of(
@@ -19,7 +19,7 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
 
     # Find Features
     finder = stitcher.detector
-    features = [finder.detect_features(img) for img in imgs]
+    features = stitcher.find_features(imgs, feature_masks)
     for idx, img_features in enumerate(features):
         img_with_features = finder.draw_keypoints(imgs[idx], img_features)
         write_verbose_result(_dir, f"01_features_img{idx+1}.jpg", img_with_features)
@@ -123,8 +123,8 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
         low_corners, low_sizes = cropper.crop_rois(low_corners, low_sizes)
 
         lir_aspect = images.get_ratio(Images.Resolution.LOW, Images.Resolution.FINAL)
-        cropped_final_masks = list(cropper.crop_images(final_masks, lir_aspect))
-        cropped_final_imgs = list(cropper.crop_images(final_imgs, lir_aspect))
+        final_masks = list(cropper.crop_images(final_masks, lir_aspect))
+        final_imgs = list(cropper.crop_images(final_imgs, lir_aspect))
         final_corners, final_sizes = cropper.crop_rois(
             final_corners, final_sizes, lir_aspect
         )
@@ -132,7 +132,7 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
         timelapser = Timelapser("as_is")
         timelapser.initialize(final_corners, final_sizes)
 
-        for idx, (img, corner) in enumerate(zip(cropped_final_imgs, final_corners)):
+        for idx, (img, corner) in enumerate(zip(final_imgs, final_corners)):
             timelapser.process_frame(img, corner)
             frame = timelapser.get_frame()
             write_verbose_result(_dir, f"07_timelapse_cropped_img{idx+1}.jpg", frame)
@@ -143,11 +143,11 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
     seam_masks = seam_finder.find(low_imgs, low_corners, low_masks)
     seam_masks = [
         seam_finder.resize(seam_mask, mask)
-        for seam_mask, mask in zip(seam_masks, cropped_final_masks)
+        for seam_mask, mask in zip(seam_masks, final_masks)
     ]
     seam_masks_plots = [
         SeamFinder.draw_seam_mask(img, seam_mask)
-        for img, seam_mask in zip(cropped_final_imgs, seam_masks)
+        for img, seam_mask in zip(final_imgs, seam_masks)
     ]
 
     for idx, seam_mask in enumerate(seam_masks_plots):
@@ -161,7 +161,7 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
     compensated_imgs = [
         compensator.apply(idx, corner, img, mask)
         for idx, (img, mask, corner) in enumerate(
-            zip(cropped_final_imgs, cropped_final_masks, final_corners)
+            zip(final_imgs, final_masks, final_corners)
         )
     ]
 

@@ -138,6 +138,13 @@ class Images(ABC):
     def check_list_element_types(list_, type_):
         return all([isinstance(element, type_) for element in list_])
 
+    @staticmethod
+    def to_binary(img):
+        if len(img.shape) == 3:
+            img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        _, binary = cv.threshold(img, 0.5, 255.0, cv.THRESH_BINARY)
+        return binary.astype(np.uint8)
+
 
 class _NumpyImages(Images):
     def __init__(self, images, medium_megapix, low_megapix, final_megapix):
