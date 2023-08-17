@@ -3,7 +3,7 @@ import unittest
 import cv2 as cv
 import numpy as np
 
-from .context import Stitcher, load_output_img, test_input, test_output
+from .context import Stitcher, test_input, test_output
 
 
 class TestImageComposition(unittest.TestCase):
