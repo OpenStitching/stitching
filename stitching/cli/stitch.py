@@ -3,7 +3,6 @@ Command line tool for the stitching package
 """
 
 import argparse
-import glob
 import os
 import sys
 from datetime import datetime
