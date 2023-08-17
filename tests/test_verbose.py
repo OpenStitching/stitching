@@ -8,7 +8,9 @@ from .context import VERBOSE_DIR, Stitcher, test_input
 class TestStitcherVerbose(unittest.TestCase):
     def test_verbose(self):
         stitcher = Stitcher()
-        panorama = stitcher.stitch_verbose([test_input("weir*")], verbose_dir=VERBOSE_DIR)
+        panorama = stitcher.stitch_verbose(
+            [test_input("weir*")], verbose_dir=VERBOSE_DIR
+        )
 
         # Check only that the result is correct.
         # Mostly this test is for checking that no error occurs during verbose mode.

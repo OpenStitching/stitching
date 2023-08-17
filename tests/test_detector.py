@@ -38,7 +38,7 @@ class TestFeatureDetector(unittest.TestCase):
             x, y = point.pt
             self.assertTrue(left <= x < right)
             self.assertTrue(top <= y < bottom)
-            
+
 
 def start_test():
     unittest.main()
