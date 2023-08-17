@@ -27,7 +27,7 @@ class TestStitcher(unittest.TestCase):
         imgs = [test_input("weir*.jpg")]
         name = "weir_from_filenames"
 
-        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
+        self.stitch_test_with_warning(stitcher, imgs, expected_shape, max_derivation, name, StitchingWarning, "Not all images are included")
 
         # from loaded numpy arrays
         imgs = [
@@ -38,7 +38,7 @@ class TestStitcher(unittest.TestCase):
         ]
         name = "weir_from_numpy_images"
 
-        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
+        self.stitch_test_with_warning(stitcher, imgs, expected_shape, max_derivation, name, StitchingWarning, "Not all images are included")
 
     def test_stitcher_with_not_matching_images(self):
         stitcher = Stitcher()
@@ -49,9 +49,10 @@ class TestStitcher(unittest.TestCase):
             imgs,
             (),
             0,
-            "error",
+            "",
             StitchingError,
             "No match exceeds the given confidence threshold",
+            verbose=False
         )
 
     def test_stitcher_aquaduct(self):
@@ -84,7 +85,7 @@ class TestStitcher(unittest.TestCase):
         expected_shape = (14488, 7556)
         name = "boat_fisheye"
 
-        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name, verbose=False)
 
     def test_stitcher_boat2(self):
         settings = {
@@ -106,7 +107,7 @@ class TestStitcher(unittest.TestCase):
         expected_shape = (7400, 12340)
         name = "boat_fisheye"
 
-        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name, verbose=False)
 
     def test_stitcher_boat_aquaduct_subset(self):
         graph = test_output("boat_subset_matches_graph.txt")
@@ -176,18 +177,19 @@ class TestStitcher(unittest.TestCase):
         )
 
     def stitch_test(
-        self, stitcher, imgs, expected_shape, max_derivation, name, feature_masks=[]
+        self, stitcher, imgs, expected_shape, max_derivation, name, feature_masks=[], verbose=True
     ):
-        verbose_dir_name = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + name
-        verbose_dir = os.path.join(VERBOSE_DIR, verbose_dir_name)
-        os.makedirs(verbose_dir)
-
         result = stitcher.stitch(imgs, feature_masks)
-        result_verbose = stitcher.stitch_verbose(imgs, feature_masks, verbose_dir)
-
-        np.testing.assert_allclose(
-            result.shape, result_verbose.shape, atol=max_derivation
-        )
+        
+        if verbose:
+            verbose_dir_name = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + name
+            verbose_dir = os.path.join(VERBOSE_DIR, verbose_dir_name)
+            os.makedirs(verbose_dir)
+            result_verbose = stitcher.stitch_verbose(imgs, feature_masks, verbose_dir)
+            np.testing.assert_allclose(
+                result.shape, result_verbose.shape, atol=max_derivation
+            )
+            
         np.testing.assert_allclose(
             result.shape[:2], expected_shape, atol=max_derivation
         )
@@ -204,10 +206,11 @@ class TestStitcher(unittest.TestCase):
         expected_warning_type,
         expected_warning_message,
         feature_masks=[],
+        verbose=True
     ):
         with self.assertWarns(expected_warning_type) as cm:
             self.stitch_test(
-                stitcher, imgs, expected_shape, max_derivation, name, feature_masks
+                stitcher, imgs, expected_shape, max_derivation, name, feature_masks, verbose
             )
         self.assertTrue(str(cm.warning).startswith(expected_warning_message))
 
@@ -221,10 +224,11 @@ class TestStitcher(unittest.TestCase):
         expected_error_type,
         expected_error_message,
         feature_masks=[],
+        verbose=True
     ):
         with self.assertRaises(expected_error_type) as cm:
             self.stitch_test(
-                stitcher, imgs, expected_shape, max_derivation, name, feature_masks
+                stitcher, imgs, expected_shape, max_derivation, name, feature_masks, verbose
             )
         self.assertTrue(str(cm.exception).startswith(expected_error_message))
 

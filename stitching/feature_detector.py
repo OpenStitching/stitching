@@ -36,7 +36,7 @@ class FeatureDetector:
                     f"Resolution of mask '{idx+1}' ({mask.shape}) does not match"
                     f" the resolution of image '{idx+1}' ({img.shape[:2]})."
                 )
-            features.append(self.detector.detect_features(img, mask=mask))
+            features.append(self.detect_features(img, mask=mask))
         return features
 
     @staticmethod

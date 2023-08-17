@@ -58,6 +58,27 @@ class TestCLI(unittest.TestCase):
                 img.shape[:2], (150, 590), atol=max_image_shape_derivation
             )
 
+    def test_main_feature_masks(self):
+        output = test_output("features_with_mask_from_cli.jpg")
+        test_args = [
+            "stitch.py",
+            test_input("barcode1.png"),
+            test_input("barcode2.png"),
+            "--feature_masks",
+            test_input("mask1.png"),
+            test_input("mask2.png"),
+            "--output",
+            output,
+        ]
+        with patch.object(sys, "argv", test_args):
+            main()
+
+            img = cv.imread(output)
+            max_image_shape_derivation = 15
+            np.testing.assert_allclose(
+                img.shape[:2], (716, 1852), atol=max_image_shape_derivation
+            )
+
 
 def start_test():
     unittest.main()
