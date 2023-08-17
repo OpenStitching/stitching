@@ -1,4 +1,7 @@
 import unittest
+import os
+from datetime import datetime
+
 
 import numpy as np
 
@@ -11,55 +14,47 @@ from .context import (
     test_input,
     test_output,
     write_test_result,
+    VERBOSE_DIR
 )
 
 
 class TestStitcher(unittest.TestCase):
     def test_stitcher_weir(self):
         stitcher = Stitcher()
-        max_image_shape_derivation = 15
+        max_derivation = 30
         expected_shape = (673, 2636)
 
-        # from filenames
-        images = [test_input("weir*.jpg")]
-        result = stitcher.stitch(images)
-        write_test_result("weir_from_filenames.jpg", result)
+        # from image filenames
+        imgs = [test_input("weir*.jpg")]
+        name = "weir_from_filenames"
 
-        np.testing.assert_allclose(
-            result.shape[:2], expected_shape, atol=max_image_shape_derivation
-        )
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
 
         # from loaded numpy arrays
-        images = [
+        imgs = [
             load_test_img("weir_1.jpg"),
             load_test_img("weir_2.jpg"),
             load_test_img("weir_3.jpg"),
             load_test_img("weir_noise.jpg"),
         ]
-        result = stitcher.stitch(images)
-        write_test_result("weir_from_numpy_images.jpg", result)
+        name = "weir_from_numpy_images"
 
-        np.testing.assert_allclose(
-            result.shape[:2], expected_shape, atol=max_image_shape_derivation
-        )
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
 
     def test_stitcher_with_not_matching_images(self):
         stitcher = Stitcher()
-        with self.assertRaises(StitchingError) as cm:
-            stitcher.stitch([test_input("s1.jpg"), test_input("boat1.jpg")])
-        self.assertTrue(
-            "No match exceeds the given confidence threshold" in str(cm.exception)
-        )
+        imgs = [test_input("s1.jpg"), test_input("boat1.jpg")]
+        
+        self.stitch_test_with_error(stitcher, imgs, (), 0, "error", StitchingError, "No match exceeds the given confidence threshold")
 
     def test_stitcher_aquaduct(self):
         stitcher = Stitcher(nfeatures=250, crop=False)
-        result = stitcher.stitch([test_input("s?.jpg")])
-        write_test_result("s_result.jpg", result)
+        imgs = [test_input("s?.jpg")]
+        max_derivation = 3
+        expected_shape = (700, 1811)
+        name = "s_result"
 
-        max_image_shape_derivation = 3
-        np.testing.assert_allclose(
-            result.shape[:2], (700, 1811), atol=max_image_shape_derivation
-        )
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
 
     def test_stitcher_boat1(self):
         settings = {
@@ -69,10 +64,8 @@ class TestStitcher(unittest.TestCase):
             "compensator": "no",
             "crop": False,
         }
-
         stitcher = Stitcher(**settings)
-        result = stitcher.stitch(
-            [
+        imgs = [
                 test_input("boat5.jpg"),
                 test_input("boat2.jpg"),
                 test_input("boat3.jpg"),
@@ -80,14 +73,11 @@ class TestStitcher(unittest.TestCase):
                 test_input("boat1.jpg"),
                 test_input("boat6.jpg"),
             ]
-        )
+        max_derivation = 600
+        expected_shape = (14488, 7556)
+        name = "boat_fisheye"
 
-        write_test_result("boat_fisheye.jpg", result)
-
-        max_image_shape_derivation = 600
-        np.testing.assert_allclose(
-            result.shape[:2], (14488, 7556), atol=max_image_shape_derivation
-        )
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
 
     def test_stitcher_boat2(self):
         settings = {
@@ -96,10 +86,8 @@ class TestStitcher(unittest.TestCase):
             "compensator": "channel_blocks",
             "crop": False,
         }
-
         stitcher = Stitcher(**settings)
-        result = stitcher.stitch(
-            [
+        imgs = [
                 test_input("boat5.jpg"),
                 test_input("boat2.jpg"),
                 test_input("boat3.jpg"),
@@ -107,43 +95,31 @@ class TestStitcher(unittest.TestCase):
                 test_input("boat1.jpg"),
                 test_input("boat6.jpg"),
             ]
-        )
-
-        write_test_result("boat_plane.jpg", result)
-
-        max_image_shape_derivation = 600
-        np.testing.assert_allclose(
-            result.shape[:2], (7400, 12340), atol=max_image_shape_derivation
-        )
+        max_derivation = 600
+        expected_shape = (7400, 12340)
+        name = "boat_fisheye"
+        
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
 
     def test_stitcher_boat_aquaduct_subset(self):
         graph = test_output("boat_subset_matches_graph.txt")
         settings = {"final_megapix": 1, "matches_graph_dot_file": graph}
-
         stitcher = Stitcher(**settings)
+        imgs = [
+                test_input("boat5.jpg"),
+                test_input("s1.jpg"),
+                test_input("s2.jpg"),
+                test_input("boat2.jpg"),
+                test_input("boat3.jpg"),
+                test_input("boat4.jpg"),
+                test_input("boat1.jpg"),
+                test_input("boat6.jpg"),
+            ]
+        max_derivation = 100
+        expected_shape = (705, 3374)
+        name = "boat_subset_low_res"
 
-        with self.assertWarns(StitchingWarning) as cm:
-            result = stitcher.stitch(
-                [
-                    test_input("boat5.jpg"),
-                    test_input("s1.jpg"),
-                    test_input("s2.jpg"),
-                    test_input("boat2.jpg"),
-                    test_input("boat3.jpg"),
-                    test_input("boat4.jpg"),
-                    test_input("boat1.jpg"),
-                    test_input("boat6.jpg"),
-                ]
-            )
-
-        self.assertTrue(str(cm.warning).startswith("Not all images are included"))
-
-        write_test_result("boat_subset_low_res.jpg", result)
-
-        max_image_shape_derivation = 100
-        np.testing.assert_allclose(
-            result.shape[:2], (705, 3374), atol=max_image_shape_derivation
-        )
+        self.stitch_test_with_warning(stitcher, imgs, expected_shape, max_derivation, name, StitchingWarning, "Not all images are included")
 
         with open(graph, "r") as file:
             graph_content = file.read()
@@ -156,15 +132,55 @@ class TestStitcher(unittest.TestCase):
         }
 
         stitcher = AffineStitcher(**settings)
-        result = stitcher.stitch([test_input("budapest?.jpg")])
+        imgs = [test_input("budapest?.jpg")]
+        max_derivation = 50
+        expected_shape = (1155, 2310)
+        name = "budapest"
+        
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
 
-        write_test_result("budapest.jpg", result)
+    def test_stitcher_feature_masks(self):
+        stitcher = Stitcher(crop=False)
+        
+        # without masks
+        imgs = [test_input("barcode1.png"), test_input("barcode2.png")]
+        max_derivation = 25
+        expected_shape = (905, 2124)
+        name = "features_without_mask"
 
-        max_image_shape_derivation = 50
-        np.testing.assert_allclose(
-            result.shape[:2], (1155, 2310), atol=max_image_shape_derivation
-        )
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name)
 
+        # with masks
+        masks = [test_input("mask1.png"), test_input("mask2.png")]
+        max_derivation = 15
+        expected_shape = (716, 1852)
+        name = "features_with_mask"
+
+        self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name, feature_masks=masks)
+
+    def stitch_test(self, stitcher, imgs, expected_shape, max_derivation, name, feature_masks=[]):
+        verbose_dir_name = datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + name
+        verbose_dir = os.path.join(VERBOSE_DIR, verbose_dir_name)
+        os.makedirs(verbose_dir)
+        
+        result = stitcher.stitch(imgs, feature_masks)
+        result_verbose = stitcher.stitch_verbose(imgs, feature_masks, verbose_dir)
+        
+        np.testing.assert_allclose(result.shape, result_verbose.shape, atol=max_derivation)
+        np.testing.assert_allclose(result.shape[:2], expected_shape, atol=max_derivation)
+        
+        write_test_result(name + ".jpg", result)
+        
+    def stitch_test_with_warning(self, stitcher, imgs, expected_shape, max_derivation, name, expected_warning_type, expected_warning_message, feature_masks=[]):
+        with self.assertWarns(expected_warning_type) as cm:
+            self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name, feature_masks)
+        self.assertTrue(str(cm.warning).startswith(expected_warning_message))
+    
+    def stitch_test_with_error(self, stitcher, imgs, expected_shape, max_derivation, name, expected_error_type, expected_error_message, feature_masks=[]):
+        with self.assertRaises(expected_error_type) as cm:
+            self.stitch_test(stitcher, imgs, expected_shape, max_derivation, name, feature_masks)
+        self.assertTrue(str(cm.exception).startswith(expected_error_message))
+    
     def test_use_of_a_stitcher_for_multiple_image_sets(self):
         # the scale should not be fixed by the first run but set dynamically
         # based on every input image set.
@@ -174,7 +190,7 @@ class TestStitcher(unittest.TestCase):
         _ = stitcher.stitch([test_input("boat1.jpg"), test_input("boat2.jpg")])
         self.assertEqual(round(stitcher.images._scalers["MEDIUM"].scale, 2), 0.24)
 
-
+    
 def start_test():
     unittest.main()
 
