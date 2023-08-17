@@ -1,5 +1,7 @@
 import unittest
 
+import numpy as np
+
 from .context import FeatureDetector, load_test_img
 
 
@@ -16,6 +18,26 @@ class TestFeatureDetector(unittest.TestCase):
         detector = FeatureDetector("orb", nfeatures=other_keypoints)
         features = detector.detect_features(img1)
         self.assertEqual(len(features.getKeypoints()), other_keypoints)
+
+    def test_feature_masking(self):
+        img1 = load_test_img("s1.jpg")
+
+        # creating the image mask and setting only the middle 20% as enabled
+        height, width = img1.shape[:2]
+        top, bottom, left, right = map(
+            int, (0.4 * height, 0.6 * height, 0.4 * width, 0.6 * width)
+        )
+        mask = np.zeros(shape=(height, width), dtype=np.uint8)
+        mask[top:bottom, left:right] = 255
+
+        num_features = 1000
+        detector = FeatureDetector("orb", nfeatures=num_features)
+        keypoints = detector.detect_features(img1, mask=mask).getKeypoints()
+        self.assertTrue(len(keypoints) > 0)
+        for point in keypoints:
+            x, y = point.pt
+            self.assertTrue(left <= x < right)
+            self.assertTrue(top <= y < bottom)
 
 
 def start_test():
