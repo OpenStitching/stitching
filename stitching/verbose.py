@@ -7,7 +7,7 @@ from .seam_finder import SeamFinder
 from .timelapser import Timelapser
 
 
-def verbose_stitching(stitcher, images, verbose_dir=None):
+def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     _dir = "." if verbose_dir is None else verbose_dir
 
     images = Images.of(
@@ -19,7 +19,7 @@ def verbose_stitching(stitcher, images, verbose_dir=None):
 
     # Find Features
     finder = stitcher.detector
-    features = [finder.detect_features(img) for img in imgs]
+    features = stitcher.find_features(imgs, feature_masks)
     for idx, img_features in enumerate(features):
         img_with_features = finder.draw_keypoints(imgs[idx], img_features)
         write_verbose_result(_dir, f"01_features_img{idx+1}.jpg", img_with_features)

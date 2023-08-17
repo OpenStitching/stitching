@@ -29,7 +29,7 @@ from stitching.warper import Warper
 
 def create_parser():
     parser = argparse.ArgumentParser(prog="stitch.py")
-    parser.add_argument("img_names", nargs="+", help="Files to stitch", type=str)
+    parser.add_argument("images", nargs="+", help="Files to stitch", type=str)
     parser.add_argument(
         "-v",
         "--verbose",
@@ -73,6 +73,13 @@ def create_parser():
         "Only used for the detectors 'orb' and 'sift'. "
         "The default is 500.",
         type=int,
+    )
+    parser.add_argument(
+        "--feature_masks",
+        nargs="*",
+        default=[],
+        help="Masks for selecting where features should be detected.",
+        type=str,
     )
     parser.add_argument(
         "--matcher_type",
@@ -280,9 +287,9 @@ def main():
     args_dict = vars(args)
 
     # Extract In- and Output
-    img_names = args_dict.pop("img_names")
-    if len(img_names) == 1:
-        img_names = glob.glob(img_names[0])
+    images = args_dict.pop("images")
+    feature_masks = args_dict.pop("feature_masks")
+    
     verbose = args_dict.pop("verbose")
     verbose_dir = args_dict.pop("verbose_dir")
     preview = args_dict.pop("preview")
@@ -297,12 +304,12 @@ def main():
         stitcher = Stitcher(**args_dict)
 
     if verbose:
-        print("stitching " + " ".join(img_names) + " into " + verbose_dir)
+        print("stitching " + " ".join(images) + " into " + verbose_dir)
         os.makedirs(verbose_dir)
-        stitcher.stitch_verbose(img_names, verbose_dir)
+        panorama = stitcher.stitch_verbose(images, feature_masks, verbose_dir)
     else:
-        print("stitching " + " ".join(img_names) + " into " + output)
-        panorama = stitcher.stitch(img_names)
+        print("stitching " + " ".join(images) + " into " + output)
+        panorama = stitcher.stitch(images, feature_masks)
         cv.imwrite(output, panorama)
 
     if preview:

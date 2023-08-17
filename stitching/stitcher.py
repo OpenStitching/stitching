@@ -86,16 +86,16 @@ class Stitcher:
         self.blender = Blender(args.blender_type, args.blend_strength)
         self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
 
-    def stitch_verbose(self, images, verbose_dir=None):
-        return verbose_stitching(self, images, verbose_dir)
+    def stitch_verbose(self, images, feature_masks=[], verbose_dir=None):
+        return verbose_stitching(self, images, feature_masks, verbose_dir)
 
-    def stitch(self, images):
+    def stitch(self, images, feature_masks=[]):
         self.images = Images.of(
             images, self.medium_megapix, self.low_megapix, self.final_megapix
         )
 
         imgs = self.resize_medium_resolution()
-        features = self.find_features(imgs)
+        features = self.find_features(imgs, feature_masks)
         matches = self.match_features(features)
         imgs, features, matches = self.subset(imgs, features, matches)
         cameras = self.estimate_camera_parameters(features, matches)
@@ -128,8 +128,16 @@ class Stitcher:
     def resize_medium_resolution(self):
         return list(self.images.resize(Images.Resolution.MEDIUM))
 
-    def find_features(self, imgs):
-        return [self.detector.detect_features(img) for img in imgs]
+    def find_features(self, imgs, feature_masks=[]):
+        if len(feature_masks) == 0:
+            return self.detector.detect(imgs)
+        else:
+            feature_masks = Images.of(
+                feature_masks, self.medium_megapix, self.low_megapix, self.final_megapix
+            )
+            feature_masks = list(feature_masks.resize(Images.Resolution.MEDIUM))
+            feature_masks = [Images.to_binary(mask) for mask in feature_masks]
+            return self.detector.detect_with_masks(imgs, feature_masks)
 
     def match_features(self, features):
         return self.matcher.match_features(features)
