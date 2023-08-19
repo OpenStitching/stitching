@@ -1,7 +1,6 @@
 import unittest
 
 import numpy as np
-import cv2 as cv
 
 from .context import FeatureDetector, load_test_img, StitchingError
 
