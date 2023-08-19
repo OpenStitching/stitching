@@ -37,26 +37,48 @@ starting with "IMG" and ending with ".jpg"
 `stitch img1.jpg img2.jpg img3.jpg`
 stitches the 3 explicit files of the current directory
 
-Or use the Stitcher class in your script
+Enable verbose mode with `stitch * -v`. This will create a folder where all intermediate results are stored so that you can find out where there are problems with your images, if any
+
+You can also use the Stitcher class in your script
 
 ```python
-import stitching
-
-stitcher = stitching.Stitcher()
-panorama = stitcher.stitch(["img1.jpg", "img2.jpg", "img3.jpg"])
-```
-
-You can also use a single item list with a wildcard
-
-```python
-panorama = stitcher.stitch(["img?.jpg"])
+from stitching import Stitcher
+stitcher = Stitcher()
 ```
 
 Specify your custom settings as
 
 ```python
+stitcher = Stitcher(detector="sift", confidence_threshold=0.2)
+```
+
+or 
+
+```python
 settings = {"detector": "sift", "confidence_threshold": 0.2}
 stitcher = Stitcher(**settings)
+```
+
+Create a Panorama from your Images:
+
+```python
+panorama = stitcher.stitch(["img1.jpg", "img2.jpg", "img3.jpg"])            # from a list of filenames
+panorama = stitcher.stitch(["img?.jpg"])                                    # from a single item list with a wildcard
+panorama = stitcher.stitch([cv.imread("img1.jpg"), cv.imread("img2.jpg")])  # from a list of already loaded images
+```
+
+The equivalent of the `--affine` cli parameter within the script is 
+
+```python
+from stitching import AffineStitcher
+stitcher = AffineStitcher()
+panorama = stitcher.stitch(...)   
+```
+
+The equivalent of the `-v`/`--verbose` cli parameter within the script is 
+
+```python
+panorama = stitcher.stitch_verbose(...)   
 ```
 
 ## Questions
