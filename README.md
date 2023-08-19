@@ -64,14 +64,19 @@ stitcher = Stitcher(**settings)
 Create a Panorama from your Images:
 
 - from a list of filenames
+
 ```python
 panorama = stitcher.stitch(["img1.jpg", "img2.jpg", "img3.jpg"])
 ```
+
 - from a single item list with a wildcard
+
 ```python
 panorama = stitcher.stitch(["img?.jpg"])
 ```
+
 - from a list of already loaded images
+
 ```python
 panorama = stitcher.stitch([cv.imread("img1.jpg"), cv.imread("img2.jpg")])
 ```
