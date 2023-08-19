@@ -32,9 +32,7 @@ class FeatureDetector:
         for idx, (img, mask) in enumerate(zip(imgs, masks)):
             assert len(img.shape) == 3 and len(mask.shape) == 2
             if not len(imgs) == len(masks):
-                raise StitchingError(
-                    "image and mask lists must be of same length"
-                )
+                raise StitchingError("image and mask lists must be of same length")
             if not np.array_equal(img.shape[:2], mask.shape):
                 raise StitchingError(
                     f"Resolution of mask {idx+1} {mask.shape} does not match"
