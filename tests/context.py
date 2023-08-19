@@ -37,8 +37,8 @@ OUT_DIR = os.path.join(TEST_DIR, "results")
 VERBOSE_DIR = os.path.join(OUT_DIR, "verbose")
 
 
-def load_test_img(img_name):
-    return cv.imread(test_input(img_name))
+def load_test_img(img_name, *args, **kwargs):
+    return cv.imread(test_input(img_name), *args, **kwargs)
 
 
 def test_input(file):
