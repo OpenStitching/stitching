@@ -52,7 +52,7 @@ Specify your custom settings as
 stitcher = Stitcher(detector="sift", confidence_threshold=0.2)
 ```
 
-or 
+or
 
 ```python
 settings = {"detector": "sift", "confidence_threshold": 0.2}
@@ -67,18 +67,18 @@ panorama = stitcher.stitch(["img?.jpg"])                                    # fr
 panorama = stitcher.stitch([cv.imread("img1.jpg"), cv.imread("img2.jpg")])  # from a list of already loaded images
 ```
 
-The equivalent of the `--affine` cli parameter within the script is 
+The equivalent of the `--affine` cli parameter within the script is
 
 ```python
 from stitching import AffineStitcher
 stitcher = AffineStitcher()
-panorama = stitcher.stitch(...)   
+panorama = stitcher.stitch(...)
 ```
 
-The equivalent of the `-v`/`--verbose` cli parameter within the script is 
+The equivalent of the `-v`/`--verbose` cli parameter within the script is
 
 ```python
-panorama = stitcher.stitch_verbose(...)   
+panorama = stitcher.stitch_verbose(...)
 ```
 
 ## Questions
