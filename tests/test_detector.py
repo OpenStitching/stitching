@@ -1,9 +1,9 @@
 import unittest
 
-import numpy as np
 import cv2 as cv
+import numpy as np
 
-from .context import FeatureDetector, load_test_img, StitchingError
+from .context import FeatureDetector, StitchingError, load_test_img
 
 
 class TestFeatureDetector(unittest.TestCase):
@@ -39,7 +39,7 @@ class TestFeatureDetector(unittest.TestCase):
             x, y = point.pt
             self.assertTrue(left <= x < right)
             self.assertTrue(top <= y < bottom)
-            
+
     def test_feature_mask_validation(self):
         img1 = load_test_img("barcode1.png")
         img2 = load_test_img("barcode2.png")
@@ -57,7 +57,7 @@ class TestFeatureDetector(unittest.TestCase):
 
         features = detector.detect_with_masks([img1, img2], [mask1, mask2])
         self.assertEqual(len(features), 2)
-        
+
 
 def start_test():
     unittest.main()
