@@ -37,8 +37,8 @@ starting with "IMG" and ending with ".jpg"
 `stitch img1.jpg img2.jpg img3.jpg`
 stitches the 3 explicit files of the current directory
 
-Enable verbose mode with `stitch * -v`. 
-This will create a folder where all intermediate results are stored so that 
+Enable verbose mode with `stitch * -v`.
+This will create a folder where all intermediate results are stored so that
 you can find out where there are problems with your images, if any
 
 You can also use the Stitcher class in your script
@@ -69,11 +69,11 @@ panorama = stitcher.stitch(["img1.jpg", "img2.jpg", "img3.jpg"])
 ```
 - from a single item list with a wildcard
 ```python
-panorama = stitcher.stitch(["img?.jpg"])   
+panorama = stitcher.stitch(["img?.jpg"])
 ```
 - from a list of already loaded images
 ```python
-panorama = stitcher.stitch([cv.imread("img1.jpg"), cv.imread("img2.jpg")]) 
+panorama = stitcher.stitch([cv.imread("img1.jpg"), cv.imread("img2.jpg")])
 ```
 
 The equivalent of the `--affine` cli parameter within the script is
