@@ -286,8 +286,8 @@ def main():
     args_dict = vars(args)
 
     # Extract In- and Output
-    images = args_dict.pop("images")
-    feature_masks = args_dict.pop("feature_masks")
+    images = Images.resolve_wildcards(args_dict.pop("images"))
+    feature_masks = Images.resolve_wildcards(args_dict.pop("feature_masks"))
 
     verbose = args_dict.pop("verbose")
     verbose_dir = args_dict.pop("verbose_dir")
