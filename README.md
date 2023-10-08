@@ -23,6 +23,8 @@ pip install stitching
 
 ## Usage
 
+### Python CLI
+
 The command line interface
 ([cli](https://github.com/lukasalexanderweber/stitching/tree/main/stitching/cli/stitch.py))
 is available after installation
@@ -40,6 +42,21 @@ stitches the 3 explicit files of the current directory
 Enable verbose mode with `stitch * -v`.
 This will create a folder where all intermediate results are stored so that
 you can find out where there are problems with your images, if any
+
+### Docker CLI
+
+If you are familiar with Docker and don't feel like
+setting up Python and an environment, you can also use the
+[openstitching/stitch](https://hub.docker.com/r/openstitching/stitch)
+Docker image
+
+`docker container run --rm -v
+/path/to/data:/data openstitching/stitch:{version} -h`
+
+You can use the CLI as described above
+(read "current directory" as "/data directory")
+
+### Python Script
 
 You can also use the Stitcher class in your script
 
