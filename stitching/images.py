@@ -1,7 +1,7 @@
 import os
-from glob import glob
 from abc import ABC, abstractmethod
 from enum import Enum
+from glob import glob
 
 import cv2 as cv
 import numpy as np

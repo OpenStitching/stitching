@@ -28,7 +28,7 @@ from stitching.warper import Warper
 
 def create_parser():
     parser = argparse.ArgumentParser(prog="stitch.py")
-    parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("images", nargs="+", help="Files to stitch", type=str)
     parser.add_argument(
         "-v",
