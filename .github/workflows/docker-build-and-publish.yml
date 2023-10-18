@@ -30,4 +30,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: openstitching/stitch:latest
+          tags: ${{ steps.meta.outputs.tags }}, openstitching/stitch:latest
