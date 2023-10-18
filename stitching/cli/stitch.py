@@ -10,7 +10,7 @@ from datetime import datetime
 import cv2 as cv
 import numpy as np
 
-from stitching import AffineStitcher, Stitcher
+from stitching import AffineStitcher, Stitcher, __version__
 from stitching.blender import Blender
 from stitching.camera_adjuster import CameraAdjuster
 from stitching.camera_estimator import CameraEstimator
@@ -28,6 +28,7 @@ from stitching.warper import Warper
 
 def create_parser():
     parser = argparse.ArgumentParser(prog="stitch.py")
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("images", nargs="+", help="Files to stitch", type=str)
     parser.add_argument(
         "-v",

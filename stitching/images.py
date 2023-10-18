@@ -1,6 +1,7 @@
-import glob
+import os
 from abc import ABC, abstractmethod
 from enum import Enum
+from glob import glob
 
 import cv2 as cv
 import numpy as np
@@ -131,7 +132,7 @@ class Images(ABC):
     @staticmethod
     def resolve_wildcards(img_names):
         if len(img_names) == 1:
-            img_names = glob.glob(img_names[0])
+            img_names = [i for i in glob(img_names[0]) if not os.path.isdir(i)]
         return img_names
 
     @staticmethod
