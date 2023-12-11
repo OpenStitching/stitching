@@ -13,8 +13,9 @@ python command line tool.
 ![result](https://github.com/lukasalexanderweber/stitching_tutorial/blob/master/docs/static_files/panorama.png?raw=true)
 
 ## Installation
+Use the [docker image](#docker-cli)
 
-Use pip to install stitching from
+or pip to install stitching from
 [PyPI](https://pypi.org/project/stitching/).
 
 ```bash
