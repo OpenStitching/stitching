@@ -10,9 +10,9 @@ class ExposureErrorCompensator:
     COMPENSATOR_CHOICES["gain_blocks"] = cv.detail.ExposureCompensator_GAIN_BLOCKS
     COMPENSATOR_CHOICES["gain"] = cv.detail.ExposureCompensator_GAIN
     COMPENSATOR_CHOICES["channel"] = cv.detail.ExposureCompensator_CHANNELS
-    COMPENSATOR_CHOICES[
-        "channel_blocks"
-    ] = cv.detail.ExposureCompensator_CHANNELS_BLOCKS
+    COMPENSATOR_CHOICES["channel_blocks"] = (
+        cv.detail.ExposureCompensator_CHANNELS_BLOCKS
+    )
     COMPENSATOR_CHOICES["no"] = cv.detail.ExposureCompensator_NO
 
     DEFAULT_COMPENSATOR = list(COMPENSATOR_CHOICES.keys())[0]
