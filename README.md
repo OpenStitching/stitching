@@ -14,7 +14,7 @@ python command line tool.
 
 ## Installation
 
-use the [docker image](#docker-cli) 
+use the [docker image](#docker-cli)
 
 or `pip` to install `stitching` from
 [PyPI](https://pypi.org/project/stitching/).
