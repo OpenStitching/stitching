@@ -49,9 +49,11 @@ class Subsetter:
         return cv.detail.matchesGraphAsString(
             img_names,
             pairwise_matches,
-            0.00001  # see issue #56
-            if (self.confidence_threshold == 0)
-            else self.confidence_threshold,
+            (
+                0.00001  # see issue #56
+                if (self.confidence_threshold == 0)
+                else self.confidence_threshold
+            ),
         )
 
     def get_indices_to_keep(self, features, pairwise_matches):
