@@ -33,7 +33,7 @@ class FeatureMatcher:
         matches_matrix = FeatureMatcher.get_matches_matrix(matches)
         for idx1, idx2 in FeatureMatcher.get_all_img_combinations(len(imgs)):
             match = matches_matrix[idx1, idx2]
-            if match.confidence < conf_thresh:
+            if match.confidence < conf_thresh or len(match.matches) == 0:
                 continue
             if inliers:
                 kwargs["matchesMask"] = match.getInliers()
