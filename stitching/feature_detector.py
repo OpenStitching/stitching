@@ -35,8 +35,8 @@ class FeatureDetector:
                 raise StitchingError("image and mask lists must be of same length")
             if not np.array_equal(img.shape[:2], mask.shape):
                 raise StitchingError(
-                    f"Resolution of mask {idx+1} {mask.shape} does not match"
-                    f" the resolution of image {idx+1} {img.shape[:2]}."
+                    f"Resolution of mask {idx + 1} {mask.shape} does not match"
+                    f" the resolution of image {idx + 1} {img.shape[:2]}."
                 )
             features.append(self.detect_features(img, mask=mask))
         return features
