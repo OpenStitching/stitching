@@ -22,7 +22,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     features = stitcher.find_features(imgs, feature_masks)
     for idx, img_features in enumerate(features):
         img_with_features = finder.draw_keypoints(imgs[idx], img_features)
-        write_verbose_result(_dir, f"01_features_img{idx+1}.jpg", img_with_features)
+        write_verbose_result(_dir, f"01_features_img{idx + 1}.jpg", img_with_features)
 
     # Match Features
     matcher = stitcher.matcher
@@ -42,7 +42,9 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
         )
     )
     for idx1, idx2, img in all_relevant_matches:
-        write_verbose_result(_dir, f"02_matches_img{idx1+1}_to_img{idx2+1}.jpg", img)
+        write_verbose_result(
+            _dir, f"02_matches_img{idx1 + 1}_to_img{idx2 + 1}.jpg", img
+        )
 
     # Subset
     subsetter = stitcher.subsetter
@@ -90,7 +92,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     final_corners, final_sizes = warper.warp_rois(final_sizes, cameras, camera_aspect)
 
     for idx, warped_img in enumerate(final_imgs):
-        write_verbose_result(_dir, f"04_warped_img{idx+1}.jpg", warped_img)
+        write_verbose_result(_dir, f"04_warped_img{idx + 1}.jpg", warped_img)
 
     # Excursion: Timelapser
     timelapser = Timelapser("as_is")
@@ -99,7 +101,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     for idx, (img, corner) in enumerate(zip(final_imgs, final_corners)):
         timelapser.process_frame(img, corner)
         frame = timelapser.get_frame()
-        write_verbose_result(_dir, f"05_timelapse_img{idx+1}.jpg", frame)
+        write_verbose_result(_dir, f"05_timelapse_img{idx + 1}.jpg", frame)
 
     # Crop
     cropper = stitcher.cropper
@@ -135,7 +137,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
         for idx, (img, corner) in enumerate(zip(final_imgs, final_corners)):
             timelapser.process_frame(img, corner)
             frame = timelapser.get_frame()
-            write_verbose_result(_dir, f"07_timelapse_cropped_img{idx+1}.jpg", frame)
+            write_verbose_result(_dir, f"07_timelapse_cropped_img{idx + 1}.jpg", frame)
 
     # Seam Masks
     seam_finder = stitcher.seam_finder
@@ -151,7 +153,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     ]
 
     for idx, seam_mask in enumerate(seam_masks_plots):
-        write_verbose_result(_dir, f"08_seam_mask{idx+1}.jpg", seam_mask)
+        write_verbose_result(_dir, f"08_seam_mask{idx + 1}.jpg", seam_mask)
 
     # Exposure Error Compensation
     compensator = stitcher.compensator
@@ -166,7 +168,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     ]
 
     for idx, compensated_img in enumerate(compensated_imgs):
-        write_verbose_result(_dir, f"08_compensated{idx+1}.jpg", compensated_img)
+        write_verbose_result(_dir, f"08_compensated{idx + 1}.jpg", compensated_img)
 
     # Blending
     blender = stitcher.blender
