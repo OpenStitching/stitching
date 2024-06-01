@@ -42,7 +42,9 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
         )
     )
     for idx1, idx2, img in all_relevant_matches:
-        write_verbose_result(_dir, f"02_matches_img{idx1 + 1}_to_img{idx2 + 1}.jpg", img)
+        write_verbose_result(
+            _dir, f"02_matches_img{idx1 + 1}_to_img{idx2 + 1}.jpg", img
+        )
 
     # Subset
     subsetter = stitcher.subsetter
