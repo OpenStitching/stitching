@@ -275,6 +275,21 @@ def create_parser():
         help="The default is 'result.jpg'",
         type=str,
     )
+    parser.add_argument(
+        "--output_params",
+        action="store",
+        default=[],
+        help="Flags that will be passed to OpenCV's imwrite() for saving the "
+        "final output image. This allows overriding default quality and "
+        "compression of the final image. It should be a series of integer "
+        "pairs representing imwrite() flags and values. For example, to "
+        " output an uncompressed TIFF image, use: '--output_params 259 1' "
+        "where 259 corresponds to the 'IMWRITE_TIFF_COMPRESSION' flag, and 1 "
+        "corresponds to a flag value of 'IMWRITE_TIFF_COMPRESSION_NONE'. See "
+        "OpenCV documentation for all available options.",
+        nargs="+",
+        type=int,
+    )
     return parser
 
 
@@ -294,6 +309,7 @@ def main():
     verbose_dir = args_dict.pop("verbose_dir")
     preview = args_dict.pop("preview")
     output = args_dict.pop("output")
+    output_params = args_dict.pop("output_params")
 
     # Create Stitcher
     affine_mode = args_dict.pop("affine")
@@ -310,7 +326,7 @@ def main():
     else:
         print("stitching " + " ".join(images) + " into " + output)
         panorama = stitcher.stitch(images, feature_masks)
-        cv.imwrite(output, panorama)
+        cv.imwrite(output, panorama, output_params)
 
     if preview:
         zoom_x = 600.0 / panorama.shape[1]
