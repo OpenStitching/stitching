@@ -52,6 +52,7 @@ class Stitcher:
     def initialize_stitcher(self, **kwargs):
         self.settings = self.DEFAULT_SETTINGS.copy()
         self.validate_kwargs(kwargs)
+        self.kwargs = kwargs
         self.settings.update(kwargs)
 
         args = SimpleNamespace(**self.settings)

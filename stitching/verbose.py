@@ -9,6 +9,9 @@ from .timelapser import Timelapser
 
 def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     _dir = "." if verbose_dir is None else verbose_dir
+    
+    with open(verbose_output(_dir, "00_stitcher.txt"), "w") as file:
+        file.write(type(stitcher).__name__ + "(**" + str(stitcher.kwargs) + ")")
 
     images = Images.of(
         images, stitcher.medium_megapix, stitcher.low_megapix, stitcher.final_megapix
