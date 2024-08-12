@@ -15,7 +15,7 @@ WORKDIR /stitching
 COPY --from=builder /stitching/dist/stitching-*.whl .
 RUN pip install --no-cache-dir stitching-*.whl && \
     rm stitching-*.whl
-	
+
 # compile largestinteriorrectangle (JIT)
 RUN python -c "import largestinteriorrectangle"
 
