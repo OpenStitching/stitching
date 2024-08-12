@@ -2,7 +2,7 @@ FROM python:3.11 AS builder
 
 WORKDIR /stitching
 
-COPY setup.cfg pyproject.toml README.md /stitching/
+COPY setup.cfg pyproject.toml README.md .
 COPY stitching/ ./stitching/
 
 RUN pip install --no-cache-dir build && \
