@@ -33,7 +33,7 @@ is available after installation
 
 `stitch -h`               show the help
 
-`stitch *`                stitches all files in the current directory
+`stitch *.jpg`            stitches all jpg files in the current directory
 
 `stitch img_dir/IMG*.jpg` stitches all files in the img_dir directory
 starting with "IMG" and ending with ".jpg"
@@ -41,7 +41,7 @@ starting with "IMG" and ending with ".jpg"
 `stitch img1.jpg img2.jpg img3.jpg`
 stitches the 3 explicit files of the current directory
 
-Enable verbose mode with `stitch * -v`.
+Enable verbose mode with `stitch *.jpg -v`.
 This will create a folder where all intermediate results are stored so that
 you can find out where there are problems with your images, if any
 
