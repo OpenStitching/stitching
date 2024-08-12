@@ -1,8 +1,1 @@
-# Ignore everything
-*
-
-# But not these files...
-!README.md
-!stitching/
-!pyproject.toml
-!setup.cfg
+__pycache__/
