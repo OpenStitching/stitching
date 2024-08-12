@@ -56,9 +56,7 @@ Docker image
 /path/to/data:/data openstitching/stitch:{version} -h`
 
 You can use the Python CLI as described above
-(read "current directory" as "/data directory"). NOTE a single `*` wont
-work in linux because of the host shell expansion, you must use more
-explicit file pattern / file names.
+(read "current directory" as "/data directory").
 
 ### Python Script
 
