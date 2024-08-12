@@ -1,18 +1,21 @@
 FROM python:3.11 AS builder
 
 WORKDIR /stitching
-COPY . .
-RUN pip install build
-# we use opencv headless within docker, otherwise we get errors
-RUN sed -i 's/opencv-python/opencv-python-headless/g' setup.cfg
-RUN python -m build
+
+COPY setup.cfg pyproject.toml README.md /stitching/
+COPY stitching/ ./stitching/
+
+RUN pip install --no-cache-dir build && \
+    sed -i 's/opencv-python/opencv-python-headless/g' setup.cfg && \
+    python -m build
 
 FROM python:3.11-slim
 
 WORKDIR /stitching
 COPY --from=builder /stitching/dist/stitching-*.whl .
-RUN pip install stitching-*.whl
-
+RUN pip install --no-cache-dir stitching-*.whl && \
+    rm stitching-*.whl
+	
 # compile largestinteriorrectangle (JIT)
 RUN python -c "import largestinteriorrectangle"
 
