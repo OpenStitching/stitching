@@ -315,6 +315,7 @@ def main():
     affine_mode = args_dict.pop("affine")
 
     if affine_mode:
+        args_dict.update(AffineStitcher.AFFINE_DEFAULTS)
         stitcher = AffineStitcher(**args_dict)
     else:
         stitcher = Stitcher(**args_dict)
