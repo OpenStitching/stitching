@@ -61,7 +61,9 @@ class Subsetter:
         indices = indices.flatten()
 
         if len(indices) < 2:
-            raise StitchingError("No match exceeds the given confidence threshold. Do your images have enough overlap and common features? If yes, you might want to lower the 'confidence_threshold' or try another 'detector'.")
+            raise StitchingError(
+                "No match exceeds the given confidence threshold. Do your images have enough overlap and common features? If yes, you might want to lower the 'confidence_threshold' or try another 'detector'."
+            )
 
         return indices
 
