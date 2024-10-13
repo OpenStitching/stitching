@@ -282,7 +282,7 @@ class AffineStitcher(Stitcher):
             if key in self.AFFINE_DEFAULTS and value != self.AFFINE_DEFAULTS[key]:
                 warnings.warn(
                     f"""You are overwriting an affine default ({key}=
-                    {self.AFFINE_DEFAULTS[key]}) with another value ({value}). Make 
+                    {self.AFFINE_DEFAULTS[key]}) with another value ({value}). Make
                 sure this is intended""",
                     StitchingWarning,
                 )
