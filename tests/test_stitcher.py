@@ -164,7 +164,11 @@ class TestStitcher(unittest.TestCase):
     def test_affine_stitcher_warning(self):
         with self.assertWarns(StitchingWarning) as cm:
             AffineStitcher(estimator="homography")
-        self.assertTrue(str(cm.warning).startswith("""You are overwriting an affine default (estimator=affine) with another value (homography)"""))
+        self.assertTrue(
+            str(cm.warning).startswith(
+                """You are overwriting an affine default (estimator=affine) with another value (homography)"""
+            )
+        )
 
     def test_affine_stitcher_budapest(self):
         settings = {

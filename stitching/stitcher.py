@@ -1,5 +1,5 @@
-from types import SimpleNamespace
 import warnings
+from types import SimpleNamespace
 
 from .blender import Blender
 from .camera_adjuster import CameraAdjuster
@@ -280,5 +280,8 @@ class AffineStitcher(Stitcher):
     def initialize_stitcher(self, **kwargs):
         for key, value in kwargs.items():
             if key in self.AFFINE_DEFAULTS and value != self.AFFINE_DEFAULTS[key]:
-                warnings.warn(f"""You are overwriting an affine default ({key}={self.AFFINE_DEFAULTS[key]}) with another value ({value}). Make sure this is intended""", StitchingWarning)        
+                warnings.warn(
+                    f"""You are overwriting an affine default ({key}={self.AFFINE_DEFAULTS[key]}) with another value ({value}). Make sure this is intended""",
+                    StitchingWarning,
+                )
         super().initialize_stitcher(**kwargs)

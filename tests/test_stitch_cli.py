@@ -57,7 +57,7 @@ class TestCLI(unittest.TestCase):
             np.testing.assert_allclose(
                 img.shape[:2], (150, 590), atol=max_image_shape_derivation
             )
-            
+
     def test_main_affine(self):
         output = test_output("budapest_from_cli.jpg")
         test_args = [
