@@ -280,10 +280,7 @@ class AffineStitcher(Stitcher):
     def initialize_stitcher(self, **kwargs):
         for key, value in kwargs.items():
             if key in self.AFFINE_DEFAULTS and value != self.AFFINE_DEFAULTS[key]:
-                warnings.warn(
-                    f"""You are overwriting an affine default ({key}=
-                    {self.AFFINE_DEFAULTS[key]}) with another value ({value}). Make
-                sure this is intended""",
+                warnings.warn(f"You are overwriting an affine default ({key}={self.AFFINE_DEFAULTS[key]}) with another value ({value}). Make sure this is intended",
                     StitchingWarning,
                 )
         super().initialize_stitcher(**kwargs)
