@@ -30,11 +30,7 @@ class Subsetter:
 
         if len(indices) < len(img_names):
             warnings.warn(
-                """Not all images are included in the final panorama.
-                          If this is not intended, use the 'matches_graph_dot_file'
-                          parameter to analyze your matches. You might want to
-                          lower the 'confidence_threshold' or try another 'detector'
-                          to include all your images.""",
+                "Not all images are included in the final panorama. If this is not intended, use the 'matches_graph_dot_file' parameter to analyze your matches. You might want to lower the 'confidence_threshold' or try another 'detector' to include all your images.",  # noqa: E501
                 StitchingWarning,
             )
 
@@ -66,11 +62,7 @@ class Subsetter:
 
         if len(indices) < 2:
             raise StitchingError(
-                """No match exceeds the given confidence threshold.
-                                 Do your images have enough overlap and common
-                                 features? If yes, you might want to lower the
-                                 'confidence_threshold' or try another
-                                 'detector'."""
+                "No match exceeds the given confidence threshold. Do your images have enough overlap and common features? If yes, you might want to lower the 'confidence_threshold' or try another 'detector'."  # noqa: E501
             )
 
         return indices

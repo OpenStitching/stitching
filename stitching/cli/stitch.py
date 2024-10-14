@@ -46,7 +46,8 @@ def create_parser():
         "--affine",
         action="store_true",
         help="Overwrites multiple parameters to optimize the stitching for "
-        "scans and images captured by specialized devices.",
+        "scans and images captured by specialized devices. The follwing parameters "
+        "are set: " + str(AffineStitcher.AFFINE_DEFAULTS),
     )
     parser.add_argument(
         "--medium_megapix",
@@ -315,6 +316,7 @@ def main():
     affine_mode = args_dict.pop("affine")
 
     if affine_mode:
+        args_dict.update(AffineStitcher.AFFINE_DEFAULTS)
         stitcher = AffineStitcher(**args_dict)
     else:
         stitcher = Stitcher(**args_dict)
