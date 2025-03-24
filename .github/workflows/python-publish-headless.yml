@@ -1,0 +1,37 @@
+# This workflow combines the building by https://github.com/OpenStitching/stitching/blob/main/.github/workflows/python-publish.yml
+# with the new trusted publishing by https://github.com/marketplace/actions/pypi-publish
+name: Upload Python Package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/stitching-headless
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build
+    - name: Modify setup.cfg for headless version
+      run: |
+        sed -i 's/name = stitching/name = stitching-headless/' setup.cfg
+        sed -i 's/opencv-python/opencv-python-headless/' setup.cfg
+    - name: Build package
+      run: python -m build
+    - name: Publish package distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
