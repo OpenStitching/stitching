@@ -1,10 +1,8 @@
 # This workflow combines the building by https://github.com/OpenStitching/stitching/blob/main/.github/workflows/python-publish.yml
 # with the new trusted publishing by https://github.com/marketplace/actions/pypi-publish
-name: Upload Python Package
+name: Upload Python Package (headless)
 
-on:
-  release:
-    types: [published]
+on: workflow_dispatch
 
 permissions:
   contents: read
