@@ -48,9 +48,17 @@ class Stitcher:
     }
 
     def __init__(self, **kwargs):
+        """
+        初始化Stitcher类
+        :param kwargs: 其他参数
+        """
         self.initialize_stitcher(**kwargs)
 
     def initialize_stitcher(self, **kwargs):
+        """
+        初始化拼接器
+        :param kwargs: 其他参数
+        """
         self.settings = self.DEFAULT_SETTINGS.copy()
         self.validate_kwargs(kwargs)
         self.kwargs = kwargs
@@ -89,9 +97,22 @@ class Stitcher:
         self.timelapser = Timelapser(args.timelapse, args.timelapse_prefix)
 
     def stitch_verbose(self, images, feature_masks=[], verbose_dir=None):
+        """
+        详细拼接图像
+        :param images: 图像列表
+        :param feature_masks: 特征掩码列表
+        :param verbose_dir: 详细结果���存目录
+        :return: 拼接结果
+        """
         return verbose_stitching(self, images, feature_masks, verbose_dir)
 
     def stitch(self, images, feature_masks=[]):
+        """
+        拼接图像
+        :param images: 图像列表
+        :param feature_masks: 特征掩码列表
+        :return: 拼接结果
+        """
         self.images = Images.of(
             images, self.medium_megapix, self.low_megapix, self.final_megapix
         )
@@ -128,9 +149,19 @@ class Stitcher:
         return self.create_final_panorama()
 
     def resize_medium_resolution(self):
+        """
+        调整图像到中等分辨率
+        :return: 调整后的图像列表
+        """
         return list(self.images.resize(Images.Resolution.MEDIUM))
 
     def find_features(self, imgs, feature_masks=[]):
+        """
+        查找图像特征
+        :param imgs: 图像列表
+        :param feature_masks: 特征掩码列表
+        :return: 特征列表
+        """
         if len(feature_masks) == 0:
             return self.detector.detect(imgs)
         else:
@@ -142,9 +173,21 @@ class Stitcher:
             return self.detector.detect_with_masks(imgs, feature_masks)
 
     def match_features(self, features):
+        """
+        匹配图像特征
+        :param features: 特征列表
+        :return: 匹配结果
+        """
         return self.matcher.match_features(features)
 
     def subset(self, imgs, features, matches):
+        """
+        获取图像子集
+        :param imgs: 图像列表
+        :param features: 特征列表
+        :param matches: 匹配结果
+        :return: 子集图像、特征和匹配结果
+        """
         indices = self.subsetter.subset(self.images.names, features, matches)
         imgs = Subsetter.subset_list(imgs, indices)
         features = Subsetter.subset_list(features, indices)
@@ -153,21 +196,54 @@ class Stitcher:
         return imgs, features, matches
 
     def estimate_camera_parameters(self, features, matches):
+        """
+        估计相机参数
+        :param features: 特征列表
+        :param matches: 匹配结果
+        :return: 相机参数
+        """
         return self.camera_estimator.estimate(features, matches)
 
     def refine_camera_parameters(self, features, matches, cameras):
+        """
+        调整相机参数
+        :param features: 特征列表
+        :param matches: 匹配结果
+        :param cameras: 相机参数
+        :return: 调整后的相机参数
+        """
         return self.camera_adjuster.adjust(features, matches, cameras)
 
     def perform_wave_correction(self, cameras):
+        """
+        执行波形校正
+        :param cameras: 相机参数
+        :return: 校正后的相机参数
+        """
         return self.wave_corrector.correct(cameras)
 
     def estimate_scale(self, cameras):
+        """
+        估计图像缩放比例
+        :param cameras: 相机参数
+        """
         self.warper.set_scale(cameras)
 
     def resize_low_resolution(self, imgs=None):
+        """
+        调整图像到低分辨率
+        :param imgs: 图像列表
+        :return: 调整后的图像列表
+        """
         return list(self.images.resize(Images.Resolution.LOW, imgs))
 
     def warp_low_resolution(self, imgs, cameras):
+        """
+        扭曲低分辨率图像
+        :param imgs: 图像列表
+        :param cameras: 相机参数
+        :return: 扭曲后的图像、掩码、角点和尺寸
+        """
         sizes = self.images.get_scaled_img_sizes(Images.Resolution.LOW)
         camera_aspect = self.images.get_ratio(
             Images.Resolution.MEDIUM, Images.Resolution.LOW
@@ -176,6 +252,12 @@ class Stitcher:
         return list(imgs), list(masks), corners, sizes
 
     def warp_final_resolution(self, imgs, cameras):
+        """
+        扭曲最终分辨率图像
+        :param imgs: 图像列表
+        :param cameras: 相机参数
+        :return: 扭曲后的图像、掩码、角点和尺寸
+        """
         sizes = self.images.get_scaled_img_sizes(Images.Resolution.FINAL)
         camera_aspect = self.images.get_ratio(
             Images.Resolution.MEDIUM, Images.Resolution.FINAL
@@ -183,52 +265,129 @@ class Stitcher:
         return self.warp(imgs, cameras, sizes, camera_aspect)
 
     def warp(self, imgs, cameras, sizes, aspect=1):
+        """
+        扭曲图像
+        :param imgs: 图像列表
+        :param cameras: 相机参数
+        :param sizes: 图像尺寸
+        :param aspect: 缩放比例
+        :return: 扭曲后的图像、掩码、角点和尺寸
+        """
         imgs = self.warper.warp_images(imgs, cameras, aspect)
         masks = self.warper.create_and_warp_masks(sizes, cameras, aspect)
         corners, sizes = self.warper.warp_rois(sizes, cameras, aspect)
         return imgs, masks, corners, sizes
 
     def prepare_cropper(self, imgs, masks, corners, sizes):
+        """
+        准备裁剪器
+        :param imgs: 图像列表
+        :param masks: 掩码列表
+        :param corners: 角点列表
+        :param sizes: 尺寸列表
+        """
         self.cropper.prepare(imgs, masks, corners, sizes)
 
     def crop_low_resolution(self, imgs, masks, corners, sizes):
+        """
+        裁剪低分辨率图像
+        :param imgs: 图像列表
+        :param masks: 掩码列表
+        :param corners: 角点列表
+        :param sizes: 尺寸列表
+        :return: 裁剪后的图像、掩码、角点和尺寸
+        """
         imgs, masks, corners, sizes = self.crop(imgs, masks, corners, sizes)
         return list(imgs), list(masks), corners, sizes
 
     def crop_final_resolution(self, imgs, masks, corners, sizes):
+        """
+        裁剪最终分辨率图像
+        :param imgs: 图像列表
+        :param masks: 掩码列表
+        :param corners: 角点列表
+        :param sizes: 尺寸列表
+        :return: 裁剪后的图像、掩码、角点和尺寸
+        """
         lir_aspect = self.images.get_ratio(
             Images.Resolution.LOW, Images.Resolution.FINAL
         )
         return self.crop(imgs, masks, corners, sizes, lir_aspect)
 
     def crop(self, imgs, masks, corners, sizes, aspect=1):
+        """
+        裁剪图像
+        :param imgs: 图像列表
+        :param masks: 掩码列表
+        :param corners: 角点列表
+        :param sizes: 尺寸列表
+        :param aspect: 缩放比例
+        :return: 裁剪后的图像、掩码、角点和尺寸
+        """
         masks = self.cropper.crop_images(masks, aspect)
         imgs = self.cropper.crop_images(imgs, aspect)
         corners, sizes = self.cropper.crop_rois(corners, sizes, aspect)
         return imgs, masks, corners, sizes
 
     def estimate_exposure_errors(self, corners, imgs, masks):
+        """
+        估计曝光误差
+        :param corners: 角点列表
+        :param imgs: 图像列表
+        :param masks: 掩码列表
+        """
         self.compensator.feed(corners, imgs, masks)
 
     def find_seam_masks(self, imgs, corners, masks):
+        """
+        查找接缝掩码
+        :param imgs: 图像列表
+        :param corners: 角点列表
+        :param masks: 掩码列表
+        :return: 接缝掩码列表
+        """
         return self.seam_finder.find(imgs, corners, masks)
 
     def resize_final_resolution(self):
+        """
+        调整图像到最终分辨率
+        :return: 调整后的图像列表
+        """
         return self.images.resize(Images.Resolution.FINAL)
 
     def compensate_exposure_errors(self, corners, imgs):
+        """
+        补偿曝光误差
+        :param corners: 角点列表
+        :param imgs: 图像列表
+        :return: 补偿后的图像生成器
+        """
         for idx, (corner, img) in enumerate(zip(corners, imgs)):
             yield self.compensator.apply(idx, corner, img, self.get_mask(idx))
 
     def resize_seam_masks(self, seam_masks):
+        """
+        调整接缝掩码大小
+        :param seam_masks: 接缝掩码列表
+        :return: 调整大小后的接缝掩码生成器
+        """
         for idx, seam_mask in enumerate(seam_masks):
             yield SeamFinder.resize(seam_mask, self.get_mask(idx))
 
     def set_masks(self, mask_generator):
+        """
+        设置掩码生成器
+        :param mask_generator: 掩码生成器
+        """
         self.masks = mask_generator
         self.mask_index = -1
 
     def get_mask(self, idx):
+        """
+        获取掩码
+        :param idx: 掩码索引
+        :return: 掩码
+        """
         if idx == self.mask_index + 1:
             self.mask_index += 1
             self.mask = next(self.masks)
@@ -239,12 +398,23 @@ class Stitcher:
             raise StitchingError("Invalid Mask Index!")
 
     def initialize_composition(self, corners, sizes):
+        """
+        初始化图像合成
+        :param corners: 角点列表
+        :param sizes: 尺寸列表
+        """
         if self.timelapser.do_timelapse:
             self.timelapser.initialize(corners, sizes)
         else:
             self.blender.prepare(corners, sizes)
 
     def blend_images(self, imgs, masks, corners):
+        """
+        混合图像
+        :param imgs: 图像列表
+        :param masks: 掩码列表
+        :param corners: 角点列表
+        """
         for idx, (img, mask, corner) in enumerate(zip(imgs, masks, corners)):
             if self.timelapser.do_timelapse:
                 self.timelapser.process_and_save_frame(
@@ -254,11 +424,19 @@ class Stitcher:
                 self.blender.feed(img, mask, corner)
 
     def create_final_panorama(self):
+        """
+        创建最终全景图
+        :return: 全景图
+        """
         if not self.timelapser.do_timelapse:
             panorama, _ = self.blender.blend()
             return panorama
 
     def validate_kwargs(self, kwargs):
+        """
+        验证参数
+        :param kwargs: 参数字典
+        """
         for arg in kwargs:
             if arg not in self.DEFAULT_SETTINGS:
                 raise StitchingError("Invalid Argument: " + arg)
@@ -278,6 +456,10 @@ class AffineStitcher(Stitcher):
     DEFAULT_SETTINGS.update(AFFINE_DEFAULTS)
 
     def initialize_stitcher(self, **kwargs):
+        """
+        初始化仿射拼接器
+        :param kwargs: 其他参数
+        """
         for key, value in kwargs.items():
             if key in self.AFFINE_DEFAULTS and value != self.AFFINE_DEFAULTS[key]:
                 warnings.warn(

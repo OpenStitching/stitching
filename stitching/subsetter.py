@@ -21,10 +21,22 @@ class Subsetter:
         confidence_threshold=DEFAULT_CONFIDENCE_THRESHOLD,
         matches_graph_dot_file=DEFAULT_MATCHES_GRAPH_DOT_FILE,
     ):
+        """
+        初始化Subsetter类
+        :param confidence_threshold: 置信度阈值
+        :param matches_graph_dot_file: 匹配图DOT文件
+        """
         self.confidence_threshold = confidence_threshold
         self.save_file = matches_graph_dot_file
 
     def subset(self, img_names, features, matches):
+        """
+        获取图像子集
+        :param img_names: 图像名称列表
+        :param features: 特征列表
+        :param matches: 匹配结果
+        :return: 子集索引列表
+        """
         self.save_matches_graph_dot_file(img_names, matches)
         indices = self.get_indices_to_keep(features, matches)
 
@@ -37,11 +49,22 @@ class Subsetter:
         return indices
 
     def save_matches_graph_dot_file(self, img_names, pairwise_matches):
+        """
+        保存匹配图DOT文件
+        :param img_names: 图像名称列表
+        :param pairwise_matches: 成对匹配
+        """
         if self.save_file:
             with open(self.save_file, "w") as filehandler:
                 filehandler.write(self.get_matches_graph(img_names, pairwise_matches))
 
     def get_matches_graph(self, img_names, pairwise_matches):
+        """
+        获取匹配图
+        :param img_names: 图像名称列表
+        :param pairwise_matches: 成对匹配
+        :return: 匹配图字符串
+        """
         return cv.detail.matchesGraphAsString(
             img_names,
             pairwise_matches,
@@ -53,6 +76,12 @@ class Subsetter:
         )
 
     def get_indices_to_keep(self, features, pairwise_matches):
+        """
+        获取要保留的索引
+        :param features: 特征列表
+        :param pairwise_matches: 成对匹配
+        :return: 要保留的索引列表
+        """
         indices = cv.detail.leaveBiggestComponent(
             features, pairwise_matches, self.confidence_threshold
         )
@@ -69,10 +98,22 @@ class Subsetter:
 
     @staticmethod
     def subset_list(list_to_subset, indices):
+        """
+        获取子集列表
+        :param list_to_subset: 要获取子集的列表
+        :param indices: 索引列表
+        :return: 子集列表
+        """
         return [list_to_subset[i] for i in indices]
 
     @staticmethod
     def subset_matches(pairwise_matches, indices):
+        """
+        获取子集匹配结果
+        :param pairwise_matches: 成对匹配
+        :param indices: 索引列表
+        :return: 子集匹配结果
+        """
         matches_matrix = FeatureMatcher.get_matches_matrix(pairwise_matches)
         matches_matrix_subset = matches_matrix[np.ix_(indices, indices)]
         matches_subset_list = list(chain.from_iterable(matches_matrix_subset.tolist()))

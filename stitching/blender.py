@@ -16,11 +16,21 @@ class Blender:
     def __init__(
         self, blender_type=DEFAULT_BLENDER, blend_strength=DEFAULT_BLEND_STRENGTH
     ):
+        """
+        初始化Blender类
+        :param blender_type: 混合器类型
+        :param blend_strength: 混合强度
+        """
         self.blender_type = blender_type
         self.blend_strength = blend_strength
         self.blender = None
 
     def prepare(self, corners, sizes):
+        """
+        准备混合器
+        :param corners: 图像的角点
+        :param sizes: 图像的尺寸
+        """
         dst_sz = cv.detail.resultRoi(corners=corners, sizes=sizes)
         blend_width = np.sqrt(dst_sz[2] * dst_sz[3]) * self.blend_strength / 100
 
@@ -38,9 +48,19 @@ class Blender:
         self.blender.prepare(dst_sz)
 
     def feed(self, img, mask, corner):
+        """
+        向混合器中添加图像
+        :param img: 图像
+        :param mask: 掩码
+        :param corner: 角点
+        """
         self.blender.feed(cv.UMat(img.astype(np.int16)), mask, corner)
 
     def blend(self):
+        """
+        混合图像
+        :return: 混合后的图像和掩码
+        """
         result = None
         result_mask = None
         result, result_mask = self.blender.blend(result, result_mask)
@@ -49,6 +69,14 @@ class Blender:
 
     @classmethod
     def create_panorama(cls, imgs, masks, corners, sizes):
+        """
+        创建全景图
+        :param imgs: 图像列表
+        :param masks: 掩码列表
+        :param corners: 角点列表
+        :param sizes: 尺寸列表
+        :return: 全景图和掩码
+        """
         blender = cls("no")
         blender.prepare(corners, sizes)
         for img, mask, corner in zip(imgs, masks, corners):

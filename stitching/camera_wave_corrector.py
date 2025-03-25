@@ -16,9 +16,18 @@ class WaveCorrector:
     DEFAULT_WAVE_CORRECTION = list(WAVE_CORRECT_CHOICES.keys())[0]
 
     def __init__(self, wave_correct_kind=DEFAULT_WAVE_CORRECTION):
+        """
+        初始化WaveCorrector类
+        :param wave_correct_kind: 波形校正类型
+        """
         self.wave_correct_kind = WaveCorrector.WAVE_CORRECT_CHOICES[wave_correct_kind]
 
     def correct(self, cameras):
+        """
+        校正相机波形
+        :param cameras: 相机参数列表
+        :return: 校正后的相机参数列表
+        """
         if self.wave_correct_kind is not None:
             rmats = [np.copy(cam.R) for cam in cameras]
             rmats = cv.detail.waveCorrect(rmats, self.wave_correct_kind)
