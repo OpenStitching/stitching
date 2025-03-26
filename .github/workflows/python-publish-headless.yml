@@ -2,7 +2,9 @@
 # with the new trusted publishing by https://github.com/marketplace/actions/pypi-publish
 name: Upload Python Package (headless)
 
-on: workflow_dispatch
+on:
+  release:
+    types: [published]
 
 permissions:
   contents: read
