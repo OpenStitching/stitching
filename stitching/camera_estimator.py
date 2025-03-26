@@ -16,9 +16,20 @@ class CameraEstimator:
     DEFAULT_CAMERA_ESTIMATOR = list(CAMERA_ESTIMATOR_CHOICES.keys())[0]
 
     def __init__(self, estimator=DEFAULT_CAMERA_ESTIMATOR, **kwargs):
+        """
+        初始化CameraEstimator类
+        :param estimator: 估计器类型
+        :param kwargs: 其他参数
+        """
         self.estimator = CameraEstimator.CAMERA_ESTIMATOR_CHOICES[estimator](**kwargs)
 
     def estimate(self, features, pairwise_matches):
+        """
+        估计相机参数
+        :param features: 特征点
+        :param pairwise_matches: 成对匹配
+        :return: 估计的相机参数
+        """
         b, cameras = self.estimator.apply(features, pairwise_matches, None)
         if not b:
             raise StitchingError("Homography estimation failed.")

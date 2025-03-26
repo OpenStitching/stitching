@@ -8,6 +8,14 @@ from .timelapser import Timelapser
 
 
 def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
+    """
+    详细拼接图像
+    :param stitcher: 拼接器对象
+    :param images: 图像列表
+    :param feature_masks: 特征掩码列表
+    :param verbose_dir: 详细结果保存目录
+    :return: 拼接结果
+    """
     _dir = "." if verbose_dir is None else verbose_dir
 
     with open(verbose_output(_dir, "00_stitcher.txt"), "w") as file:
@@ -17,21 +25,21 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
         images, stitcher.medium_megapix, stitcher.low_megapix, stitcher.final_megapix
     )
 
-    # Resize Images
+    # 调整图像到中等分辨率
     imgs = list(images.resize(Images.Resolution.MEDIUM))
 
-    # Find Features
+    # 查找图像特征
     finder = stitcher.detector
     features = stitcher.find_features(imgs, feature_masks)
     for idx, img_features in enumerate(features):
         img_with_features = finder.draw_keypoints(imgs[idx], img_features)
         write_verbose_result(_dir, f"01_features_img{idx + 1}.jpg", img_with_features)
 
-    # Match Features
+    # 匹配图像特征
     matcher = stitcher.matcher
     matches = matcher.match_features(features)
 
-    # Subset
+    # 获取图像子集
     subsetter = stitcher.subsetter
 
     all_relevant_matches = list(
@@ -49,7 +57,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
             _dir, f"02_matches_img{idx1 + 1}_to_img{idx2 + 1}.jpg", img
         )
 
-    # Subset
+    # 获取图像子集
     subsetter = stitcher.subsetter
     subsetter.save_file = verbose_output(_dir, "03_matches_graph.txt")
     subsetter.save_matches_graph_dot_file(images.names, matches)
@@ -61,7 +69,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     matches = subsetter.subset_matches(matches, indices)
     images.subset(indices)
 
-    # Camera Estimation, Adjustion and Correction
+    # 估计、调整和校正相机参数
     camera_estimator = stitcher.camera_estimator
     camera_adjuster = stitcher.camera_adjuster
     wave_corrector = stitcher.wave_corrector
@@ -70,9 +78,9 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     cameras = camera_adjuster.adjust(features, matches, cameras)
     cameras = wave_corrector.correct(cameras)
 
-    # Warp Images
+    # 扭曲图像
     low_imgs = list(images.resize(Images.Resolution.LOW, imgs))
-    imgs = None  # free memory
+    imgs = None  # 释放内存
 
     warper = stitcher.warper
     warper.set_scale(cameras)
@@ -97,7 +105,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     for idx, warped_img in enumerate(final_imgs):
         write_verbose_result(_dir, f"04_warped_img{idx + 1}.jpg", warped_img)
 
-    # Excursion: Timelapser
+    # 延时处理
     timelapser = Timelapser("as_is")
     timelapser.initialize(final_corners, final_sizes)
 
@@ -106,7 +114,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
         frame = timelapser.get_frame()
         write_verbose_result(_dir, f"05_timelapse_img{idx + 1}.jpg", frame)
 
-    # Crop
+    # 裁剪图像
     cropper = stitcher.cropper
 
     if cropper.do_crop:
@@ -142,7 +150,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
             frame = timelapser.get_frame()
             write_verbose_result(_dir, f"07_timelapse_cropped_img{idx + 1}.jpg", frame)
 
-    # Seam Masks
+    # 查找接缝掩码
     seam_finder = stitcher.seam_finder
 
     seam_masks = seam_finder.find(low_imgs, low_corners, low_masks)
@@ -158,7 +166,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     for idx, seam_mask in enumerate(seam_masks_plots):
         write_verbose_result(_dir, f"08_seam_mask{idx + 1}.jpg", seam_mask)
 
-    # Exposure Error Compensation
+    # 曝光误差补偿
     compensator = stitcher.compensator
 
     compensator.feed(low_corners, low_imgs, low_masks)
@@ -173,7 +181,7 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
     for idx, compensated_img in enumerate(compensated_imgs):
         write_verbose_result(_dir, f"08_compensated{idx + 1}.jpg", compensated_img)
 
-    # Blending
+    # 混合图像
     blender = stitcher.blender
     blender.prepare(final_corners, final_sizes)
     for img, mask, corner in zip(compensated_imgs, seam_masks, final_corners):
@@ -197,8 +205,20 @@ def verbose_stitching(stitcher, images, feature_masks=[], verbose_dir=None):
 
 
 def write_verbose_result(dir_name, img_name, img):
+    """
+    保存详细结果
+    :param dir_name: 目录名称
+    :param img_name: 图像名称
+    :param img: 图像
+    """
     cv.imwrite(verbose_output(dir_name, img_name), img)
 
 
 def verbose_output(dir_name, file):
+    """
+    获取详细结果输出路径
+    :param dir_name: 目录名称
+    :param file: 文件名称
+    :return: 详细结果输出路径
+    """
     return os.path.join(dir_name, file)

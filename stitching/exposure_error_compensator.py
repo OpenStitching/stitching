@@ -25,6 +25,12 @@ class ExposureErrorCompensator:
         nr_feeds=DEFAULT_NR_FEEDS,
         block_size=DEFAULT_BLOCK_SIZE,
     ):
+        """
+        初始化ExposureErrorCompensator类
+        :param compensator: 曝光补偿器类型
+        :param nr_feeds: 曝光补偿器的数量
+        :param block_size: 块大小
+        """
         if compensator == "channel":
             self.compensator = cv.detail_ChannelsCompensator(nr_feeds)
         elif compensator == "channel_blocks":
@@ -37,9 +43,16 @@ class ExposureErrorCompensator:
             )
 
     def feed(self, *args):
-        """https://docs.opencv.org/4.x/d2/d37/classcv_1_1detail_1_1ExposureCompensator.html#ae6b0cc69a7bc53818ddea53eddb6bdba"""  # noqa
+        """
+        向曝光补偿器提供数据
+        :param args: 数据参数
+        """
         self.compensator.feed(*args)
 
     def apply(self, *args):
-        """https://docs.opencv.org/4.x/d2/d37/classcv_1_1detail_1_1ExposureCompensator.html#a473eaf1e585804c08d77c91e004f93aa"""  # noqa
+        """
+        应用曝光补偿
+        :param args: 数据参数
+        :return: 曝光补偿后的结果
+        """
         return self.compensator.apply(*args)

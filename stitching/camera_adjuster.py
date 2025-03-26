@@ -24,11 +24,21 @@ class CameraAdjuster:
         refinement_mask=DEFAULT_REFINEMENT_MASK,
         confidence_threshold=1.0,
     ):
+        """
+        初始化CameraAdjuster类
+        :param adjuster: 调整器类型
+        :param refinement_mask: 精细化掩码
+        :param confidence_threshold: 置信度阈值
+        """
         self.adjuster = CameraAdjuster.CAMERA_ADJUSTER_CHOICES[adjuster]()
         self.set_refinement_mask(refinement_mask)
         self.adjuster.setConfThresh(confidence_threshold)
 
     def set_refinement_mask(self, refinement_mask):
+        """
+        设置精细化掩码
+        :param refinement_mask: 精细化掩码
+        """
         mask_matrix = np.zeros((3, 3), np.uint8)
         if refinement_mask[0] == "x":
             mask_matrix[0, 0] = 1
@@ -43,6 +53,13 @@ class CameraAdjuster:
         self.adjuster.setRefinementMask(mask_matrix)
 
     def adjust(self, features, pairwise_matches, estimated_cameras):
+        """
+        调整相机参数
+        :param features: 特征点
+        :param pairwise_matches: 成对匹配
+        :param estimated_cameras: 估计的相机参数
+        :return: 调整后的相机参数
+        """
         b, cameras = self.adjuster.apply(features, pairwise_matches, estimated_cameras)
         if not b:
             raise StitchingError("Camera parameters adjusting failed.")
