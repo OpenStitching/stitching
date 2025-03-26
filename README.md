@@ -22,6 +22,11 @@ or `pip` to install `stitching` from
 ```bash
 pip install stitching
 ```
+for server (headless) environments (such as Docker, cloud environments etc.) use `stitching-headless`
+
+```bash
+pip install stitching
+```
 
 ## Usage
 
