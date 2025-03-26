@@ -23,7 +23,7 @@ or `pip` to install `stitching` from
 pip install stitching
 ```
 
-for server (headless) environments (such as Docker, cloud environments etc.) 
+for server (headless) environments (such as Docker, cloud environments etc.)
 use `stitching-headless`
 
 ```bash
