@@ -33,10 +33,8 @@ class Images(ABC):
         elif Images.check_list_element_types(images, str):
             return _FilenameImages(images, medium_megapix, low_megapix, final_megapix)
         else:
-            raise StitchingError(
-                """invalid images list:
-                    must be numpy arrays (loaded images) or filename strings"""
-            )
+            raise StitchingError("""invalid images list:
+                    must be numpy arrays (loaded images) or filename strings""")
 
     @abstractmethod
     def __init__(self, images, medium_megapix, low_megapix, final_megapix):
