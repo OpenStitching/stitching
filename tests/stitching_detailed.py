@@ -39,13 +39,13 @@ try:
 except AttributeError:
     pass
 try:
-    cv.xfeatures2d_BRISK.create() # check if the function can be called
-    FEATURES_FIND_CHOICES['brisk'] = cv.xfeatures2d_BRISK.create
+    cv.xfeatures2d_BRISK.create()  # check if the function can be called
+    FEATURES_FIND_CHOICES["brisk"] = cv.xfeatures2d_BRISK.create
 except AttributeError:
     print("BRISK not available")
 try:
-    cv.xfeatures2d_AKAZE.create() # check if the function can be called
-    FEATURES_FIND_CHOICES['akaze'] = cv.xfeatures2d_AKAZE.create
+    cv.xfeatures2d_AKAZE.create()  # check if the function can be called
+    FEATURES_FIND_CHOICES["akaze"] = cv.xfeatures2d_AKAZE.create
 except AttributeError:
     print("AKAZE not available")
 
