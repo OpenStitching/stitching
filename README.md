@@ -135,9 +135,8 @@ like finding and fixing bugs and improving / maintaining this package.
 
 This package provides utility functions to deeply analyse what's
 happening behind the stitching. A tutorial was created as [Jupyter
-Notebook](https://github.com/lukasalexanderweber/stitching_tutorial). The
-preview is
-[here](https://github.com/lukasalexanderweber/stitching_tutorial/blob/master/docs/Stitching%20Tutorial.md).
+Notebook](https://github.com/lukasalexanderweber/stitching_tutorial) and has a
+[rendered preview](https://github.com/lukasalexanderweber/stitching_tutorial/blob/master/docs/Stitching%20Tutorial.md).
 
 You can e.g. visualize the RANSAC matches between the images or the
 seam lines where the images are blended:
