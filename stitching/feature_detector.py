@@ -13,8 +13,6 @@ class FeatureDetector:
 
     DETECTOR_CHOICES["orb"] = cv.ORB.create
     DETECTOR_CHOICES["sift"] = cv.SIFT_create
-    DETECTOR_CHOICES["brisk"] = cv.BRISK_create
-    DETECTOR_CHOICES["akaze"] = cv.AKAZE_create
 
     DEFAULT_DETECTOR = list(DETECTOR_CHOICES.keys())[0]
 
