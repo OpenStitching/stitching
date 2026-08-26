@@ -47,6 +47,7 @@ class Cropper:
 
     def __init__(self, crop=DEFAULT_CROP):
         self.do_crop = crop
+        self.overlapping_indices = []
         self.overlapping_rectangles = []
         self.cropping_rectangles = []
 
@@ -56,14 +57,20 @@ class Cropper:
             lir = self.estimate_largest_interior_rectangle(mask)
             corners = self.get_zero_center_corners(corners)
             rectangles = self.get_rectangles(corners, sizes)
+            self.overlapping_indices = self.get_overlapping_indices(rectangles, lir)
+            rectangles = [rectangles[idx] for idx in self.overlapping_indices]
             self.overlapping_rectangles = self.get_overlaps(rectangles, lir)
             self.intersection_rectangles = self.get_intersections(
                 rectangles, self.overlapping_rectangles
             )
 
     def crop_images(self, imgs, aspect=1):
+        crop_idx = 0
+        overlapping_indices = set(self.overlapping_indices)
         for idx, img in enumerate(imgs):
-            yield self.crop_img(img, idx, aspect)
+            if not self.do_crop or idx in overlapping_indices:
+                yield self.crop_img(img, crop_idx, aspect)
+                crop_idx += 1
 
     def crop_img(self, img, idx, aspect=1):
         if self.do_crop:
@@ -118,6 +125,20 @@ class Cropper:
         return rectangles
 
     @staticmethod
+    def get_overlapping_indices(rectangles, lir):
+        return [
+            idx
+            for idx, rectangle in enumerate(rectangles)
+            if Cropper.has_overlap(rectangle, lir)
+        ]
+
+    @staticmethod
+    def has_overlap(rectangle1, rectangle2):
+        overlap_x = rectangle1.x < rectangle2.x2 and rectangle2.x < rectangle1.x2
+        overlap_y = rectangle1.y < rectangle2.y2 and rectangle2.y < rectangle1.y2
+        return overlap_x and overlap_y
+
+    @staticmethod
     def get_overlaps(rectangles, lir):
         return [Cropper.get_overlap(r, lir) for r in rectangles]
 
@@ -127,7 +148,7 @@ class Cropper:
         y1 = max(rectangle1.y, rectangle2.y)
         x2 = min(rectangle1.x2, rectangle2.x2)
         y2 = min(rectangle1.y2, rectangle2.y2)
-        if x2 < x1 or y2 < y1:
+        if x2 <= x1 or y2 <= y1:
             raise StitchingError("Rectangles do not overlap!")
         return Rectangle(x1, y1, x2 - x1, y2 - y1)
 

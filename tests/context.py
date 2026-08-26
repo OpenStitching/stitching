@@ -11,7 +11,7 @@ from stitching.camera_adjuster import CameraAdjuster  # noqa: F401, E402
 from stitching.camera_estimator import CameraEstimator  # noqa: F401, E402
 from stitching.camera_wave_corrector import WaveCorrector  # noqa: F401, E402
 from stitching.cli.stitch import create_parser, main  # noqa: F401, E402
-from stitching.cropper import Cropper  # noqa: F401, E402
+from stitching.cropper import Cropper, Rectangle  # noqa: F401, E402
 from stitching.exposure_error_compensator import (  # noqa: F401, E402
     ExposureErrorCompensator,
 )
